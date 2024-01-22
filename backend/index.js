@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import matchHistory from './routes/matchHistoryRoutes.js'
 
 // Middleware for parsing requests 
 const app = express();
