@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import matchHistory from './routes/matchHistoryRoutes.js'
+import summoner from './routes/summonerRoutes.js'
 
 // Middleware for parsing requests 
 const app = express();
@@ -20,6 +20,10 @@ app.get('/', (req, res) => {
     console.log(req);
     return res.status(234).send("Welcome to League Nemesis");
 });
+
+// If there is ever a route in the frontend that starts the url with /summoner/.. then
+// these are the routes we're going to use in the backend
+app.use('/summoner', summoner);
 
 mongoose
     .connect(process.env.MONGO_URI)
