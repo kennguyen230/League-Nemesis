@@ -6,7 +6,7 @@ const router = express.Router();
 // Route for saving a new summoner to the db
 router.post('/', async (req, res) => {
     try {
-        if (!req.body.summonerName || !req.body.puuid ||
+        if (!req.body.summonerName || !req.body.PUUID ||
             !req.body.lossRateMap || !req.body.totalLossMap ||
             !req.body.lastGameTimestamp) {
             return res.status(400).json({
@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 
         const newSummoner = {
             summonerName: req.body.summonerName,
-            PUUID: req.body.puuid,
+            PUUID: req.body.PUUID,
             lossRateMap: req.body.lossRateMap,
             totalLossMap: req.body.totalLossMap,
             lastGameTimestamp: req.body.lastGameTimestamp,
