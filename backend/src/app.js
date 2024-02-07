@@ -1,3 +1,8 @@
+/* 
+    @brief Purpose of this file is be the base for accessing the endpoints and routes
+    in the backend. 
+*/
+
 import express from 'express';
 import cors from 'cors';
 import summonerRoutes from './routes/summonerRoutes.js';
