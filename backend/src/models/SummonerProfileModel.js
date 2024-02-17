@@ -1,3 +1,8 @@
+/*
+    @brief Purpose of this file is to supply a schema for Mongoose.
+    The schema will be a blueprint for how the DB will take in the documents
+    for the playerProfile document. 
+*/
 import mongoose from "mongoose";
 
 const championStatsSchema = new mongoose.Schema({

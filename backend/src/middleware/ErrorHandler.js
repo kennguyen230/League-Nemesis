@@ -1,3 +1,7 @@
+/*
+    @brief Purpose of this file is supply a centralized error logging
+    method. 
+*/
 class ErrorHandler extends Error {
     constructor(statusCode, message) {
         super();

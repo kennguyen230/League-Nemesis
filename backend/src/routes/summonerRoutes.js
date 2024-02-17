@@ -1,3 +1,7 @@
+/*
+    @brief Purpose of this file is to create HTTP routes for CRUD
+    operations
+*/
 import express from 'express';
 import { SummonerProfile } from '../models/SummonerProfileModel.js';
 
