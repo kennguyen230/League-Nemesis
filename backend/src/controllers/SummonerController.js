@@ -22,15 +22,36 @@
 import RiotClient from "../services/RiotGamesService"
 
 function getDataFromDB() {
-
+    // Get puuid from Shieldbow
+    // Get lastGameTimeStamp and pass it to Shieldbow to grab recent games
+    // Send Shieldbow match history data to DataProcessor to turn into maps
+    // Send recent game maps to DataProcessor as well as DB map to merge
+    // Update DB with new map + new lastGameTimestamp
+    // Send to frontend
 }
 
 function getDataFromShieldBow(summonerName) {
-    
+    // Get last 100 games from shieldbow
+
+    // Put through DataProcessor to get back maps
+    // Send to frontend
 }
 
+function mergeData() {
+    // After getting data from Shieldbow & DB, merge the data together
+}
+
+function sendToUser() {
+    // Send back to frontend
+}
+
+function updateDB() {
+    // Update the data in the database with new maps + last endgame timestamp
+}
+
+// Our 'portal' to the frontend. Request for data come through here and we send the maps
+// back through this same 'portal'
 app.get('/getMaps', (req, res) => {
     const summonerName = req.query.summonerName;
-    PUUID = getPUUID(summonerName);
 
 })
