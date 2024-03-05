@@ -53,5 +53,4 @@ function updateDB() {
 // back through this same 'portal'
 app.get('/getMaps', (req, res) => {
     const summonerName = req.query.summonerName;
-
 })
