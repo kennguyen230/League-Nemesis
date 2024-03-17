@@ -1,3 +1,6 @@
+import { getRecentGames } from './SummonerController';
+import app from '../app'
+
 /*
     @brief Purpose of this file is to grab summonerName from frontend then pass that forward
     to grab user data from DB and Riot API. File should ultimately gather necessary maps to return
@@ -19,7 +22,8 @@
         3. Possibly continue querying for more games in the background & populate
             the database with the new games. 
 */
-import RiotClient from "../services/RiotGamesService"
+export { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService'
+
 
 function getDataFromDB() {
     // Get puuid from Shieldbow
@@ -30,11 +34,10 @@ function getDataFromDB() {
     // Send to frontend
 }
 
-function getDataFromShieldBow(summonerName) {
+async function getDataFromShieldBow(summonerName) {
     // Get last 100 games from shieldbow
-
-    // Put through DataProcessor to get back maps
-    // Send to frontend
+    const matchList = await getRecentGames(summonerName, -1);
+    return matchList;
 }
 
 function mergeData() {
@@ -51,6 +54,14 @@ function updateDB() {
 
 // Our 'portal' to the frontend. Request for data come through here and we send the maps
 // back through this same 'portal'
-app.get('/getMaps', (req, res) => {
-    const summonerName = req.query.summonerName;
-})
+// app.get('/getMatchlist', async (req, res) => {
+//     res.status(200).send('Welcome to get matchlist');
+//     const summonerName = req.query.userName;
+//     try {
+//         const matchList = await getDataFromShieldBow(summonerName);
+//         res.json(matchList);
+//     } catch (error) {
+//         console.error("Error fetching match list:", error);
+//         res.status(500).send("An error occurred while fetching match list");
+//     }
+// })

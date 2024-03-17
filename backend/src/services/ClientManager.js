@@ -5,7 +5,7 @@
     By default, the region will be NA if a region is not provided.
 */
 
-import config from './src/config.js'
+import config from '../config.js'
 import { Client } from 'shieldbow';
 
 // Object to hold initialized client instances by region
@@ -15,11 +15,46 @@ async function initializeClient(region) {
     // Check if a client for the specified region already exists
     if (!clientsByRegion[region]) {
         // If not, create a new client instance for the region
-        const client = new Client(config.API_KEY);
+        const client = new Client(config.apiKey);
+
         await client.initialize({
             region: region,
-            cache: true,
-            storage: true,
+            cache: {
+                enable: {
+                    api: {
+                        summoner: true,
+                        match: false,
+                        championMastery: false,
+                        clash: false,
+                        currentGame: false,
+                        league: false,
+                    },
+                    dragon: {
+                        champions: true,
+                        items: false,
+                        runes: false,
+                        summonerSpells: false,
+                    }
+                }
+            },
+            storage: {
+                enable: {
+                    api: {
+                        summoner: true,
+                        match: false,
+                        championMastery: false,
+                        clash: false,
+                        currentGame: false,
+                        league: false,
+                    },
+                    dragon: {
+                        champions: true,
+                        items: false,
+                        runes: false,
+                        summonerSpells: false,
+                    }
+                }
+            },
             fetch: {
                 champions: true,
                 items: false,

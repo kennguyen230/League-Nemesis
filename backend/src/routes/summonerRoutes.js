@@ -1,9 +1,9 @@
 /*
-    @brief Purpose of this file is to create HTTP routes for CRUD
-    operations
+    @brief Purpose of this file is to create HTTP routes for CRUD operations
 */
 import express from 'express';
 import { SummonerProfile } from '../models/SummonerProfileModel.js';
+import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 
 const router = express.Router();
 
@@ -36,26 +36,26 @@ router.post('/', async (req, res) => {
 
 })
 
-// Route for getting a summoner's maps
-router.get('/:puuid', async (req, res) => {
-    try {
-        const { puuid } = req.params;
+// Route for getting a summoner's maps in db
+// router.get('/:puuid', async (req, res) => {
+//     try {
+//         const { puuid } = req.params;
 
-        // NOTE: If the player has not been added to the DB yet then findOne() will return
-        // null. Make sure we check if(null) in middleware after we return from this
-        // call so that we don't try to access or append empty info. 
-        const player = await SummonerProfile.findOne({ PUUID: puuid });
-        if (!player) {
-            return res.status(404).json({ message: 'Summoner not found' });
-        }
-        return res.status(200).json(player);
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send({ message: error.message });
-    }
-})
+//         // NOTE: If the player has not been added to the DB yet then findOne() will return
+//         // null. Make sure we check if(null) in middleware after we return from this
+//         // call so that we don't try to access or append empty info. 
+//         const player = await SummonerProfile.findOne({ PUUID: puuid });
+//         if (!player) {
+//             return res.status(404).json({ message: 'Summoner not found' });
+//         }
+//         return res.status(200).json(player);
+//     } catch (error) {
+//         console.log(error.message);
+//         res.status(500).send({ message: error.message });
+//     }
+// })
 
-// Route for updating summoner data after we append new matches
+// Route for updating summoner data in db after we append new matches
 router.put('/updateByPUUID/:puuid', async (req, res) => {
     try {
         const { puuid } = req.params;
@@ -92,6 +92,30 @@ router.delete('/deleteByPUUID/:puuid', async (req, res) => {
     } catch (error) {
         console.log(error.message);
         res.status(500).send({ message: error.message });
+    }
+})
+
+router.get('/getMatchlist', async (req, res) => {
+    console.log("IN MATCHLIST ROUTE!");
+    const summonerName = req.query.summoner;
+    try {
+        const matchList = await getRecentGames(summonerName, -1);
+        res.status(200).json(matchList);
+    } catch (error) {
+        console.error("Error with matchlist route:", error);
+        res.status(500).send("Error with matchlist route");
+    }
+})
+
+router.get('/getPUUID', async (req, res) => {
+    console.log("IN PUUID ROUTE");
+    const summonerName = req.query.summoner;
+    try {
+        const puuid = await getPUUID(summonerName);
+        res.status(200).json(puuid);
+    } catch (error) {
+        console.error("Error with fetching PUUID", error);
+        res.status(500).send("Error with fetching PUUID");
     }
 })
 

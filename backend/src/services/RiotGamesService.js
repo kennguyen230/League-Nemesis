@@ -2,16 +2,20 @@
     @brief Purpose of this file is to make api calls to Riot Games via ShieldBow wrapper 
 */
 
-import { getClient } from './ClientManager'
+import { getClient } from './ClientManager.js'
 
 /* CONSTANTS */
-const COUNT = 100; // How many game we fetch per call
-const NEW_USER_ML_SIZE = 800; // How many games we hope to fetch for a new user's match list array
+const COUNT = 5; // How many game we fetch per call
+const NEW_USER_ML_SIZE = 10; // How many games we hope to fetch for a new user's match list array
+const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
-
-/* FUNCTIONS */
-async function getPUUID(summonerName, region) {
-    const client = await getClient(region);
+/**
+ * 
+ * @param {string} summonerName A user's summoner name
+ * @param {string} region The user's region. Defaults to NA
+ * @returns A user's PUUID
+ */
+async function getPUUID(summonerName, region = 'na') {
     const summoner = await client.summoners.fetchBySummonerName(summonerName);
     return summoner.playerId;
 }
@@ -28,11 +32,12 @@ async function getPUUID(summonerName, region) {
 async function getRecentGames(summonerName, lastGameTimestamp) {
     let matchList
     if (lastGameTimestamp === -1) {
-        matchList = getNewUserMatchlist(summonerName);
+        matchList = await getNewUserMatchlist(summonerName);
     } else {
-        matchList = getExistingUserMatchlist(summonerName);
+        matchList = await getExistingUserMatchlist(summonerName);
     }
 
+    return matchList;
     // TODO: Pass matchlist onto DataProcessing.js to get the maps
 }
 
@@ -44,59 +49,89 @@ async function getRecentGames(summonerName, lastGameTimestamp) {
  * @returns The most recent matches from the lastGameTimestamp onwards
  */
 async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
-    // const client = await getClient(region);
-    const summoner = await client.summoners.fetchBySummonerName(summonerName);
+    try {
+        const summoner = await client.summoners.fetchBySummonerName(summonerName);
 
-    let matchList = await summoner.fetchMatchList({ count: COUNT, startTime: lastGameTimestamp });
-    let lastMatchInList = await client.matches.fetch(matchList[matchList.length - 1]);
-    let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
+        let matchList = await summoner.fetchMatchList({ count: COUNT, startTime: lastGameTimestamp });
+        let lastMatchInList = await client.matches.fetch(matchList[matchList.length - 1]);
+        let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
 
-    // Loop until matchList has appended all games starting from the most recent game the user has played
-    // until lastGameTimestamp is hit
-    // If the user has played less games than 'count' in fetch options, then this loop will not be entered
-    while (currLastGameTimestamp != lastGameTimestamp) {
-        const appendingMatchList = await summoner.fetchMatchList({ startTime: lastGameTimestamp, endTime: currLastGameTimestamp });
-        matchList.push(...appendingMatchList);
-        lastMatchInList = await client.matches.fetch(matchList[matchList.length - 1]);
-        currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
+        // Loop until matchList has appended all games starting from the most recent game the user has played
+        // until lastGameTimestamp is hit
+        // If the user has played less games than 'count' in fetch options, then this loop will not be entered
+        while (currLastGameTimestamp != lastGameTimestamp) {
+            try {
+                const appendingMatchList = await summoner.fetchMatchList({ startTime: lastGameTimestamp, endTime: currLastGameTimestamp });
+                matchList.push(...appendingMatchList);
+                lastMatchInList = await client.matches.fetch(matchList[matchList.length - 1]);
+                currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
+            } catch (innerError) {
+                if (innerError.response && innerError.response.status === 404) {
+                    console.error("Fetched an invalid match. Exiting with remaining match list.", innerError)
+                    break;
+                } else {
+                    throw innerError; // Rethrows error we encountered an erorr that wasnt 404
+                }
+            }
+        }
+
+        return matchList.slice(0, -1) // Returns every element except the last one because it will be the same game as lastGameTimestamp
+    } catch (error) {
+        console.error("Error in getExistingUserMatchlist:", error)
     }
 
-    return matchList.slice(0, -1) // Returns every element except the last one because it will be the same game as lastGameTimestamp
 }
 
 /**
- * Fetches up to a max of 892 matches for a new user due to the fact that we loop until
- * matchList.length < 800. Each iteration of the loop appends more matches to matchList,
+ * Fetches up to a max of NEW_USER_ML_SIZE matches for a new user due to the fact that we loop until
+ * matchList.length < NEW_USER_ML_SIZE. Each iteration of the loop appends more matches to matchList,
  * however we omit the first element of the appendingArray because it would be a duplicate
- * of the last element in matchList. That leaves us with the peculiar number of 892.
+ * of the last element in matchList. 
  * 
  * @param {string} summonerName The user's summoner name
- * @returns matchList with 0 to 892 matches
+ * @returns matchList 
  */
 async function getNewUserMatchlist(summonerName) {
-    // const client = await getClient(region);
-    const summoner = await client.summoners.fetchBySummonerName(summonerName);
-    let matchList = await summoner.fetchMatchList({ count: COUNT });
-    let length = matchList.length;
-    let lastMatchInList = await client.matches.fetch(matchList[length - 1]);
-    let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
+    try {
+        // const client = await getClient();
+        console.log("In getNewUserMatchlist");
+        const summoner = await client.summoners.fetchBySummonerName(summonerName);
 
-    // NEW_USER_ML_SIZE is 800* (may change) so the loop can run a max of 8 times to produce a
-    // matchList of size 892. If the user has a new account then this loop will break on first cycle
-    while (matchList.length < NEW_USER_ML_SIZE) {
-        const appendingMatchList = await summoner.fetchMatchList({ endTime: currLastGameTimestamp, count: COUNT });
-        matchList.push(...appendingMatchList.slice(1)); // Append everything except first element because it would be a duplicate
+        let matchList = await summoner.fetchMatchList({ count: COUNT });
+        let length = matchList.length;
+        let lastMatchInList = await client.matches.fetch(matchList[length - 1]);
+        let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
 
-        if (matchList.length === length) { // If there was no change after appending then we've fetched as many games as we could
-            break;
+        // This loop iterates until we've fetched NEW_USER_ML_SIZE number of games for a new user
+        while (matchList.length < NEW_USER_ML_SIZE) {
+            try {
+                const appendingMatchList = await summoner.fetchMatchList({ endTime: currLastGameTimestamp, count: COUNT });
+                matchList.push(...appendingMatchList.slice(1)); // Append everything except first element because it would be a duplicate
+
+                if (matchList.length === length) { // If there was no change after appending then we've fetched as many games as we could
+                    break;
+                }
+
+                length = matchList.length;
+                lastMatchInList = await client.matches.fetch(matchList[length - 1]);
+                currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
+            }
+            catch (innerError) {
+                if (innerError.response && innerError.response.status === 404) {
+                    console.error("Fetched an invalid match. Exiting with remaining match list.", innerError)
+                    break;
+                } else {
+                    throw innerError; // Rethrows error we encountered an erorr that wasnt 404
+                }
+            }
         }
 
-        length = matchList.length;
-        lastMatchInList = await client.matches.fetch(matchList[length - 1]);
-        currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
+        console.log("Returning with matchlist successfully!");
+        console.log("Matchlist size:", matchList.length)
+        return matchList;
+    } catch (error) {
+        console.error("Error in getNewUserMatchlist:", error)
     }
-
-    return matchList;
 }
 
 /**
@@ -113,6 +148,6 @@ async function getLastGameTimestamp(matchList) {
     return match.endTimestamp;
 }
 
-
+export { getPUUID, getRecentGames, getLastGameTimestamp }
 
 
