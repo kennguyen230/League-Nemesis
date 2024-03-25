@@ -2,22 +2,58 @@
     @brief Purpose of this file is to perform all calculations necessary
     for creating maps that get passed to the frontend
 */
-import { getClient } from './ClientManager'
+import { getClient } from '../services/ClientManager.js'
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
-function createMaps(matchList, summonerName) {
-    let losingMatchups = new Map();
+/**
+ * Takes in a user's recent games and creates 6 maps. One overall map that maps champion names
+ * to [losses, encounters, loss ratio] tuple. Then 5 maps that separate the info by lane.
+ * 
+ * @param {Array} matchList A user's matchlist
+ * @param {String} summonerName A user's summoner name
+ */
+async function createMaps(matchList, summonerName) {
+    console.log("Inside createMaps");
+    // TODO: Consider creating a map for ranked vs normal games vs ARAM games
+    let losingMatchups = new Map(); // overall
     let losingMatchupsTOP = new Map();
     let losingMatchupsJNG = new Map();
     let losingMatchupsMID = new Map();
     let losingMatchupsBOT = new Map();
     let losingMatchupsSUP = new Map();
 
-    getLosingMatchups(summonerName, matchList, losingMatchups, losingMatchupsTOP,
+    await getLosingMatchups(summonerName, matchList, losingMatchups, losingMatchupsTOP,
         losingMatchupsJNG, losingMatchupsMID, losingMatchupsBOT, losingMatchupsSUP);
 
+    console.log(losingMatchups);
+    console.log(Object.fromEntries(losingMatchupsTOP));
+    console.log(Object.fromEntries(losingMatchupsJNG));
+    console.log(Object.fromEntries(losingMatchupsMID));
+    console.log(Object.fromEntries(losingMatchupsBOT));
+    console.log(Object.fromEntries(losingMatchupsSUP));
+
+    calculateNemesis(losingMatchups);
+
+    let allMatchups = {
+        overall: losingMatchups,
+        top: losingMatchupsTOP,
+        jng: losingMatchupsJNG,
+        mid: losingMatchupsMID,
+        bot: losingMatchupsBOT,
+        sup: losingMatchupsSUP
+    }
+
+    return allMatchups;
 }
 
+/**
+ * Increments the encounter variable for the champion passed in. If the user lost this game as well, then
+ * increment the losses variable for this champion. Recalculate the lossRatio. Update the map entry for this champ
+ * 
+ * @param {Map} map Either overall or lane specific map that maps champion names to [losses, encounters, lossRatio]
+ * @param {String} champName The name for a champion on the opposing side
+ * @param {Boolean} userTeamWon Bool indicating if the user won that game. Used to determine if function needs to increment 'losses' var
+ */
 const updateMatchupStatistics = (map, champName, userTeamWon) => {
     let matchup = map.get(champName) || { losses: 0, encounters: 0, lossRatio: 0 };
 
@@ -36,8 +72,28 @@ const updateMatchupStatistics = (map, champName, userTeamWon) => {
     map.set(champName, matchup);
 };
 
+/**
+ * Fetches match details for every match in the match list. For each match:
+ * 1. If undefined, return
+ * 2. If remake, dont consider and return
+ * 3. Find which side the user/opponents are on, then which side won
+ * 4. For each champion on the opponent's side:
+ *      a. Update the overall map
+ *      b. Update the lane specific map
+ * 
+ * @param {String} summonerName A user's summoner name
+ * @param {Array} matchList A user's match list
+ * @param {Map} losingMatchups Maps champion name to [losses, encounters, lossRatio]
+ * @param {Map} TOP Maps champion name to [losses, encounters, lossRatio], specifically only for top lane encounters
+ * @param {Map} JNG Maps champion name to [losses, encounters, lossRatio], specifically only for jng lane encounters
+ * @param {Map} MID Maps champion name to [losses, encounters, lossRatio], specifically only for mid lane encounters
+ * @param {Map} BOT Maps champion name to [losses, encounters, lossRatio], specifically only for AD carry lane encounters
+ * @param {Map} SUP Maps champion name to [losses, encounters, lossRatio], specifically only for sup lane encounters
+ */
 async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, JNG, MID, BOT, SUP) {
+    console.log("Inside getLosingMatchups");
     try {
+        // TODO: Skip if Areanas match OR alternatively, skip if not a ranked, norms, aram game
         const matchDetails = await Promise.all(matchList.map(matchId =>
             client.matches.fetch(matchId).catch(error => {
                 console.error(`Failed to fetch match ${matchId}:`, error);
@@ -65,6 +121,7 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
                 // Update the overall losingMatchups map
                 updateMatchupStatistics(losingMatchups, champName, userTeamWon);
 
+                // TODO: Consider skipping this part if the game is NOT summoner's rift
                 // Determine the participant's role and update the corresponding role-specific map
                 switch (participant.position.team) {
                     case 'TOP':
@@ -92,6 +149,7 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
 
 /**
  * Merge recent games matchlist into existing database matchlist and updating lossRatio accordingly
+ * 
  * @param {Map} matchList Matchlist map with user's most recent games with champion names mapped to losses, encounters, lossRatio 
  * @param {*} databaseList Matchlist map for a user from the database with champion names mapped to losses, encounters, lossRatio
  */
@@ -128,3 +186,5 @@ function calculateNemesis(losingMatchups) {
 
     console.log(`Nemesis: ${nemesis}, Loss Ratio: ${highestLossRatio}, Total Losses: ${highestLosses}`);
 }
+
+export { createMaps, mergeMatchlistAndDB, calculateNemesis }

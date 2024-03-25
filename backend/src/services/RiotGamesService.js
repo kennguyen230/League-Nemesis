@@ -3,10 +3,11 @@
 */
 
 import { getClient } from './ClientManager.js'
+import { createMaps } from '../utils/DataProcessing.js'
 
 /* CONSTANTS */
-const COUNT = 5; // How many game we fetch per call
-const NEW_USER_ML_SIZE = 10; // How many games we hope to fetch for a new user's match list array
+const COUNT = 20; // How many game we fetch per call
+const NEW_USER_ML_SIZE = 20; // How many games we hope to fetch for a new user's match list array
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
 /**
@@ -30,7 +31,8 @@ async function getPUUID(summonerName, region = 'na') {
  * @param {number} lastGameTimestamp The endTimestamp of the last game we fetched for existing users
  */
 async function getRecentGames(summonerName, lastGameTimestamp) {
-    let matchList
+    let matchList;
+
     if (lastGameTimestamp === -1) {
         matchList = await getNewUserMatchlist(summonerName);
     } else {
@@ -38,7 +40,11 @@ async function getRecentGames(summonerName, lastGameTimestamp) {
     }
 
     return matchList;
-    // TODO: Pass matchlist onto DataProcessing.js to get the maps
+}
+
+async function getMaps(summonerName, matchList) {
+    const allMatchups = await createMaps(matchList, summonerName);
+    return allMatchups;
 }
 
 /**
@@ -97,7 +103,8 @@ async function getNewUserMatchlist(summonerName) {
         console.log("In getNewUserMatchlist");
         const summoner = await client.summoners.fetchBySummonerName(summonerName);
 
-        let matchList = await summoner.fetchMatchList({ count: COUNT });
+        // TODO: Make a matchHistoryOption object
+        let matchList = await summoner.fetchMatchList({ count: COUNT, type: 'normal' });
         let length = matchList.length;
         let lastMatchInList = await client.matches.fetch(matchList[length - 1]);
         let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
@@ -148,6 +155,6 @@ async function getLastGameTimestamp(matchList) {
     return match.endTimestamp;
 }
 
-export { getPUUID, getRecentGames, getLastGameTimestamp }
+export { getPUUID, getRecentGames, getLastGameTimestamp, getMaps }
 
 
