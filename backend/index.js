@@ -1,7 +1,8 @@
-/*
-    @brief Purpose of this file is to be the starting point of the backend
-    & database.
-*/
+/**
+ * @brief This file is the starting point for the backend server. When npm start is called, the database gets
+ * connected to from here.
+ */
+
 import app from './src/app.js'
 import config from './src/config.js'
 import mongoose from 'mongoose';

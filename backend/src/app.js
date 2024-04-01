@@ -1,11 +1,11 @@
-/* 
-    @brief Purpose of this file is be the base for accessing the endpoints and routes
-    in the backend. 
-*/
+/**
+ * @brief Middleware file for setting up express, cors, as well as /summoner endpoint.
+ */
 
 import express from 'express';
 import cors from 'cors';
-import summonerRoutes from './routes/summonerRoutes.js';
+// import summonerRoutes from './routes/summonerRoutes.js';
+import summonerRoutes from './routes/SummonerRoutes.js';
 
 const app = express();
 

@@ -1,6 +1,6 @@
-/*
-    @brief Purpose of this file is to make api calls to Riot Games via ShieldBow wrapper 
-*/
+/**
+ * @brief This file holds all methods that make API calls to Riot Games via Shieldbow.
+ */
 
 import { getClient } from './ClientManager.js'
 import { createMaps } from '../utils/DataProcessing.js'
@@ -16,7 +16,7 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @param {string} region The user's region. Defaults to NA
  * @returns A user's PUUID
  */
-async function getPUUID(summonerName, region = 'na') {
+async function getPUUID(summonerName) {
     const summoner = await client.summoners.fetchBySummonerName(summonerName);
     return summoner.playerId;
 }
@@ -31,18 +31,21 @@ async function getPUUID(summonerName, region = 'na') {
  * @param {number} lastGameTimestamp The endTimestamp of the last game we fetched for existing users
  */
 async function getRecentGames(summonerName, lastGameTimestamp) {
+    console.log("Inside getRecentGames");
     let matchList;
 
     if (lastGameTimestamp === -1) {
         matchList = await getNewUserMatchlist(summonerName);
+        // return await getNewUserMatchlist(summonerName);
     } else {
-        matchList = await getExistingUserMatchlist(summonerName);
+        matchList = await getExistingUserMatchlist(summonerName, lastGameTimestamp);
+        // return await getExistingUserMatchlist(summonerName, lastGameTimestamp);
     }
 
     return matchList;
 }
 
-async function getMaps(summonerName, matchList) {
+async function createMapsWithML(summonerName, matchList) {
     const allMatchups = await createMaps(matchList, summonerName);
     return allMatchups;
 }
@@ -56,16 +59,27 @@ async function getMaps(summonerName, matchList) {
  */
 async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
     try {
+        console.log("Inside getExistingUserML");
         const summoner = await client.summoners.fetchBySummonerName(summonerName);
-
         let matchList = await summoner.fetchMatchList({ count: COUNT, startTime: lastGameTimestamp });
+        console.log(matchList);
+
+        // Existing user but they have not played any new games since the last time we fetched data
+        if (matchList.length < 2) {
+            console.log("No new games from existing user");
+            return null;
+        }
+
         let lastMatchInList = await client.matches.fetch(matchList[matchList.length - 1]);
+        console.log("1")
         let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
+        console.log("2")
 
         // Loop until matchList has appended all games starting from the most recent game the user has played
         // until lastGameTimestamp is hit
         // If the user has played less games than 'count' in fetch options, then this loop will not be entered
-        while (currLastGameTimestamp != lastGameTimestamp) {
+        while (currLastGameTimestamp > lastGameTimestamp) {
+            console.log("INside loop");
             try {
                 const appendingMatchList = await summoner.fetchMatchList({ startTime: lastGameTimestamp, endTime: currLastGameTimestamp });
                 matchList.push(...appendingMatchList);
@@ -99,7 +113,6 @@ async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
  */
 async function getNewUserMatchlist(summonerName) {
     try {
-        // const client = await getClient();
         console.log("In getNewUserMatchlist");
         const summoner = await client.summoners.fetchBySummonerName(summonerName);
 
@@ -152,9 +165,9 @@ async function getNewUserMatchlist(summonerName) {
  */
 async function getLastGameTimestamp(matchList) {
     const match = await client.matches.fetch(matchList[0]);
-    return match.endTimestamp;
+    return Math.trunc(match.endTimestamp / 1000);
 }
 
-export { getPUUID, getRecentGames, getLastGameTimestamp, getMaps }
+export { getPUUID, getRecentGames, getLastGameTimestamp, createMapsWithML }
 
 

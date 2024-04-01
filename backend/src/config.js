@@ -1,8 +1,6 @@
-/* 
-    @brief Purpose of this file is to hold all variables held in config.env in an export
-    called config. config is used in index.js to connect to MongoDB, start the server with 
-    the port, and connect to Riot with the API key. 
-*/
+/**
+ * @brief This file provides a config object that lets other files access data from the config.env file
+ */
 
 import dotenv from 'dotenv';
 

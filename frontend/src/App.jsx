@@ -47,6 +47,19 @@ function App() {
       });
   }
 
+  function queryMaps() {
+    axios
+      .get(`http://localhost:5000/summoner/queryMaps`, {
+        params: { summoner: summonerName },
+      })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
   function renderTable() {
     const rows = [];
     for (const [champion, stats] of Object.entries(lossRateMap)) {
@@ -69,6 +82,7 @@ function App() {
       <button onClick={() => getMatchlist()}>Get match list</button>
       <button onClick={() => getPUUID()}>Get PUUID</button>
       <button onClick={() => getLN()}>League Nemesis</button>
+      <button onClick={() => queryMaps()}>Query maps</button>
       <ul>
         {matchList.map((match, index) => (
           <li key={index}>{match}</li>

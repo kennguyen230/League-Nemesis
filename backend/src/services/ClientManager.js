@@ -1,9 +1,8 @@
-/*
-    @brief Purpose of this file is to create a map that holds a singleton of our client for every region.
-    This way the client doesn't need to be initialize in every call from SummonerController if it has already
-    been created. We solved the problem of having users from different regions by creating a variable for regions.
-    By default, the region will be NA if a region is not provided.
-*/
+/**
+ * @brief The purpose of this file is to create a Client singleton that can only be instantiated once per region.
+ * There is a region map that keeps track of a Client object has been instantiated for that region. By default,
+ * a Client will be instantiated to the 'NA' region. 
+ */
 
 import config from '../config.js'
 import { Client } from 'shieldbow';

@@ -1,7 +1,7 @@
-/*
-    @brief This file provides methods to accessing database
-*/
-
+/**
+ * @brief This file provides methods for accessing the MongoDB database.
+ */
+// TODO: Create better way to handle errors. Potentially want to throw the errors to SummonerRoutes page so we can send a res msg
 import { SummonerProfile } from '../models/SummonerProfileModel.js';
 
 async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchups) {
@@ -30,29 +30,18 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchu
     }
 }
 
-async function getSummonerByPUUID(PUUID) {
-    try {
-        const player = await SummonerProfile.findOne({ PUUID });
-        if (!player) {
-            throw new Error('Player not found in database');
-        }
-        return player;
-    } catch (error) {
-        console.error('Error fetching player from databaes: ', error.message);
-        return null;
-    }
-}
-
-async function updateSummonerByPUUID(PUUID, updatedMaps) {
+async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, updatedMaps) {
     try {
         const update = {
             $set: {
-                overallStats: Object.fromEntries(updatedMaps.overall),
-                topStats: Object.fromEntries(updatedMaps.top),
-                jungleStats: Object.fromEntries(updatedMaps.jng),
-                midStats: Object.fromEntries(updatedMaps.mid),
-                botStats: Object.fromEntries(updatedMaps.bot),
-                supportStats: Object.fromEntries(updatedMaps.sup),
+                summonerName: summonerName,
+                lastGameTimestamp: lastGameTimestamp,
+                overallStats: updatedMaps.overall,
+                topStats: updatedMaps.top,
+                jungleStats: updatedMaps.jng,
+                midStats: updatedMaps.mid,
+                botStats: updatedMaps.bot,
+                supportStats: updatedMaps.sup,
             }
         };
 
@@ -72,9 +61,24 @@ async function updateSummonerByPUUID(PUUID, updatedMaps) {
     }
 }
 
+async function getSummonerByPUUID(PUUID) {
+    try {
+        const player = await SummonerProfile.findOne({ PUUID });
+        if (!player) {
+            console.log('No player found in database')
+            return null
+        }
+        console.log('Player found in database')
+        return player;
+    } catch (error) {
+        console.error('Error fetching player from database: ', error.message);
+        return null;
+    }
+}
 
 async function deleteSummonerByPUUID(PUUID) {
     try {
+        console.log("Inside delete:", PUUID);
         const result = await SummonerProfile.findOneAndDelete({ PUUID });
 
         // TODO: Return something instead of console logging

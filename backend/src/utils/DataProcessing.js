@@ -1,7 +1,9 @@
-/*
-    @brief Purpose of this file is to perform all calculations necessary
-    for creating maps that get passed to the frontend
-*/
+/**
+ * @brief This is a catch-all class that provides methods for data processing. Majority of data
+ * proccessing comes in the form of creating or updating maps. There are also methods for calculating
+ * the League Nemesis.
+ */
+
 import { getClient } from '../services/ClientManager.js'
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
@@ -151,7 +153,7 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
  * Merge recent games matchlist into existing database matchlist and updating lossRatio accordingly
  * 
  * @param {Map} matchList Matchlist map with user's most recent games with champion names mapped to losses, encounters, lossRatio 
- * @param {*} databaseList Matchlist map for a user from the database with champion names mapped to losses, encounters, lossRatio
+ * @param {Map} databaseList Matchlist map for a user from the database with champion names mapped to losses, encounters, lossRatio
  */
 function mergeMatchlistAndDB(matchList, databaseList) {
     matchList.forEach((MLmatchup, champName) => {
@@ -165,6 +167,7 @@ function mergeMatchlistAndDB(matchList, databaseList) {
             databaseList.set(champName, MLmatchup);
         }
     });
+    return databaseList;
 }
 
 function calculateNemesis(losingMatchups) {

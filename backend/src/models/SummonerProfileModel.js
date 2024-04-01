@@ -1,8 +1,8 @@
-/*
-    @brief Purpose of this file is to supply a schema for Mongoose.
-    The schema will be a blueprint for how the DB will take in the documents
-    for the playerProfile document. 
-*/
+/**
+ * @brief The purpose of this file is to provide a schema for Mongoose. The schema will
+ * be a blueprint for how the data should be saved to the database. This schema is specifically
+ * for the playerprofiles collection.
+ */
 
 import mongoose from "mongoose";
 
@@ -52,4 +52,6 @@ const summonerSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export const SummonerProfile = mongoose.model('SummonerProfile', summonerSchema); // SummonerProfile is the name of the collection
+// summonerprofiles is the name of the collection, as collections are the lowercased plural form of what
+// we call it here
+export const SummonerProfile = mongoose.model('SummonerProfile', summonerSchema); 

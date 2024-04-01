@@ -1,0 +1,5763 @@
+{
+  "Characters/Skarner/Spells/SkarnerVirulentSlashSlow": {
+    "mScriptName": "SkarnerVirulentSlashSlow",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerVirulentSlashSlow",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerTurretAttack2": {
+    "mScriptName": "SkarnerTurretAttack2",
+    "mSpell": {
+      "mAffectsTypeFlags": 5327,
+      "mAlternateName": "SkarnerBasicAttack",
+      "mAnimationName": "Attack_turret2",
+      "cooldownTime": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "delayCastOffsetPercent": -0.3077000081539154,
+      "mApplyMaterialOnHitSound": true,
+      "bHaveHitEffect": true,
+      "castRadius": [
+        385,
+        385,
+        385,
+        385,
+        385,
+        385,
+        385
+      ],
+      "castConeDistance": 100,
+      "castFrame": 10,
+      "mHitEffectKey": "Skarner_BA_tar_01",
+      "bHaveHitBone": true,
+      "mHitBoneName": "C_BUFFBONE_GLB_CHEST_LOC",
+      "mClientData": {
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerFractureAbility": {
+    "mRootSpell": "Characters/Skarner/Spells/SkarnerFractureAbility/SkarnerFracture",
+    "mChildSpells": [
+      "Characters/Skarner/Spells/SkarnerFractureAbility/SkarnerFracture"
+    ],
+    "mName": "SkarnerFractureAbility",
+    "AbilityTraits": 2048,
+    "__type": "AbilityObject"
+  },
+  "Characters/Skarner/Spells/SkarnerFractureAbility/SkarnerFracture": {
+    "mScriptName": "SkarnerFracture",
+    "mSpell": {
+      "flags": 4,
+      "mAffectsTypeFlags": 15375,
+      "mAlternateName": "SkarnerFracture",
+      "mSpellTags": [
+        "Trait_ImmobilizingCCSpell"
+      ],
+      "mEffectAmount": [
+        {
+          "value": [
+            40,
+            40,
+            65,
+            90,
+            115,
+            140,
+            165
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            30,
+            30,
+            50,
+            70,
+            90,
+            110,
+            130
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            1.25,
+            1.25,
+            1.25,
+            1.25,
+            1.25,
+            1.25,
+            1.25
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            2.5,
+            2.5,
+            2.5,
+            2.5,
+            2.5,
+            2.5,
+            2.5
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            25,
+            30,
+            35,
+            40,
+            45,
+            50,
+            55
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        }
+      ],
+      "mDataValues": [
+        {
+          "mName": "StunDuration",
+          "mValues": [
+            1.25,
+            1.25,
+            1.25,
+            1.25,
+            1.25,
+            1.25,
+            1.25
+          ],
+          "__type": "SpellDataValue"
+        }
+      ],
+      "{fb56608c}": {
+        "{497ae878}": {
+          "SpellDataValues": [
+            {
+              "mName": "StunDuration",
+              "mValues": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "__type": "SpellDataValue"
+            }
+          ],
+          "__type": "SpellDataValueVector"
+        }
+      },
+      "mSpellCalculations": {
+        "TotalMagicDamage": {
+          "tooltipOnly": true,
+          "mFormulaParts": [
+            {
+              "mEffectIndex": 1,
+              "__type": "EffectValueCalculationPart"
+            },
+            {
+              "mCoefficient": 0.20000000298023224,
+              "__type": "StatByCoefficientCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        }
+      },
+      "mCoefficient": 0.20000000298023224,
+      "mCoefficient2": 0.6000000238418579,
+      "mAnimationName": "Spell3",
+      "mImgIconName": [
+        "ASSETS/Characters/Skarner/HUD/Icons2D/Skarner_E.dds"
+      ],
+      "mCastTime": 0.25,
+      "cooldownTime": [
+        14.5,
+        14,
+        13.5,
+        13,
+        12.5,
+        12,
+        12
+      ],
+      "delayCastOffsetPercent": -0.5,
+      "delayTotalTimePercent": -0.5,
+      "mCantCancelWhileWindingUp": true,
+      "useAnimatorFramerate": true,
+      "castRange": [
+        10000,
+        10000,
+        10000,
+        10000,
+        10000,
+        10000,
+        10000
+      ],
+      "castRangeDisplayOverride": [
+        980,
+        980,
+        980,
+        980,
+        980,
+        980,
+        980
+      ],
+      "castRadius": [
+        210,
+        210,
+        210,
+        210,
+        210,
+        210,
+        210
+      ],
+      "castConeDistance": 100,
+      "castFrame": 0.5,
+      "missileSpeed": 1200,
+      "mLineWidth": 60,
+      "mFloatVarsDecimals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mana": [
+        55,
+        55,
+        55,
+        55,
+        55,
+        55
+      ],
+      "selectionPriority": 2,
+      "mTargetingTypeData": {
+        "__type": "Location"
+      },
+      "{00f7e5bc}": true,
+      "mClientData": {
+        "mTooltipData": {
+          "mObjectName": "SkarnerFracture",
+          "mFormat": "{89fef2a8}",
+          "mLocKeys": {
+            "keyName": "Spell_SkarnerFracture_Name",
+            "keySummary": "Spell_SkarnerFracture_Summary",
+            "keyTooltip": "Spell_SkarnerFracture_Tooltip"
+          },
+          "mLists": {
+            "LevelUp": {
+              "levelCount": 5,
+              "elements": [
+                {
+                  "type": "Effect%dAmount",
+                  "typeIndex": 1,
+                  "nameOverride": "Spell_SkarnerFracture_MagicDamage",
+                  "__type": "TooltipInstanceListElement"
+                },
+                {
+                  "type": "Effect%dAmount",
+                  "typeIndex": 2,
+                  "nameOverride": "Spell_ListType_SkarnerBlastDamage/AttackDamage",
+                  "__type": "TooltipInstanceListElement"
+                },
+                {
+                  "type": "Effect%dAmount",
+                  "typeIndex": 8,
+                  "nameOverride": "Spell_ListType_Slow",
+                  "Style": 1,
+                  "__type": "TooltipInstanceListElement"
+                },
+                {
+                  "type": "Cooldown",
+                  "__type": "TooltipInstanceListElement"
+                }
+              ],
+              "__type": "TooltipInstanceList"
+            }
+          },
+          "__type": "TooltipInstanceSpell"
+        },
+        "mTargeterDefinitions": [
+          {
+            "hideWithLineIndicator": true,
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          },
+          {
+            "endLocator": {
+              "basePosition": 3,
+              "__type": "DrawablePositionLocator"
+            },
+            "lineStopsAtEndPosition": false,
+            "lineWidth": {
+              "mPerLevelValues": [
+                60,
+                60,
+                60,
+                60,
+                60,
+                60
+              ],
+              "mValueType": 2,
+              "__type": "FloatPerSpellLevel"
+            },
+            "__type": "TargeterDefinitionLine"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerFracture",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerImpaleBuff": {
+    "mScriptName": "SkarnerImpaleBuff",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerImpaleBuff",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerImpaleVO": {
+    "mScriptName": "SkarnerImpaleVO",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SionWPassive",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveCrystalMSMax": {
+    "mScriptName": "SkarnerPassiveCrystalMSMax",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerPassiveCrystalMSMax",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerImpaleAbility": {
+    "mRootSpell": "Characters/Skarner/Spells/SkarnerImpaleAbility/SkarnerImpale",
+    "mChildSpells": [
+      "Characters/Skarner/Spells/SkarnerImpaleAbility/SkarnerImpale"
+    ],
+    "mName": "SkarnerImpaleAbility",
+    "mType": 2,
+    "AbilityTraits": 2560,
+    "__type": "AbilityObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveBuff": {
+    "mScriptName": "SkarnerPassiveBuff",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerPassiveBuff",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerFractureMissile": {
+    "mScriptName": "SkarnerFractureMissile",
+    "mSpell": {
+      "mAffectsTypeFlags": 6154,
+      "mAlternateName": "SkarnerFracture",
+      "mEffectAmount": [
+        {
+          "value": [
+            75,
+            250,
+            425,
+            600,
+            0,
+            0,
+            175
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        }
+      ],
+      "mCoefficient": 1,
+      "mAnimationName": "Spell3",
+      "mImgIconName": [
+        "ASSETS/Spells/Icons2D/Bowmaster_EnchantedArrow.dds"
+      ],
+      "mCastTime": 0.25,
+      "cooldownTime": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "delayCastOffsetPercent": -0.5,
+      "delayTotalTimePercent": -0.5,
+      "mCantCancelWhileWindingUp": true,
+      "useAnimatorFramerate": true,
+      "castRange": [
+        1000,
+        1000,
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "castRadius": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "castConeDistance": 100,
+      "luaOnMissileUpdateDistanceInterval": 60,
+      "mMissileSpec": {
+        "mMissileWidth": 70,
+        "movementComponent": {
+          "mUseHeightOffsetAtEnd": true,
+          "mTracksTarget": false,
+          "mOffsetInitialTargetHeight": 100,
+          "mStartBoneName": "Root",
+          "mProjectTargetToCastRange": true,
+          "mSpeed": 1500,
+          "__type": "FixedSpeedMovement"
+        },
+        "heightSolver": {
+          "__type": "BlendedLinearHeightSolver"
+        },
+        "verticalFacing": {
+          "__type": "VerticalFacingFaceTarget"
+        },
+        "behaviors": [
+          {
+            "__type": "CastOnHit"
+          },
+          {
+            "__type": "DestroyOnMovementComplete"
+          }
+        ],
+        "__type": "MissileSpecification"
+      },
+      "mCastType": 3,
+      "castFrame": 7.5,
+      "missileSpeed": 1500,
+      "mMissileEffectKey": "Skarner_E_mis",
+      "mLineWidth": 70,
+      "bHaveHitBone": true,
+      "mHitBoneName": "root",
+      "selectionPriority": 1,
+      "mTargetingTypeData": {
+        "__type": "Location"
+      },
+      "mClientData": {
+        "{375656dd}": "{1956b782}",
+        "mTargeterDefinitions": [
+          {
+            "hideWithLineIndicator": true,
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          },
+          {
+            "endLocator": {
+              "basePosition": 3,
+              "__type": "DrawablePositionLocator"
+            },
+            "lineStopsAtEndPosition": false,
+            "lineWidth": {
+              "mPerLevelValues": [
+                70,
+                70,
+                70,
+                70,
+                70,
+                70
+              ],
+              "mValueType": 2,
+              "__type": "FloatPerSpellLevel"
+            },
+            "__type": "TargeterDefinitionLine"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerFractureMissile",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveAttack": {
+    "mScriptName": "SkarnerPassiveAttack",
+    "mSpell": {
+      "mAffectsTypeFlags": 5327,
+      "mAlternateName": "SkarnerPassiveAttack",
+      "mAnimationName": "Crit",
+      "mImgIconName": [
+        "ASSETS/Characters/Skarner/HUD/Icons2D/Skarner_Passive.dds"
+      ],
+      "cooldownTime": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "delayCastOffsetPercent": -0.3077000081539154,
+      "canCastWhileDisabled": true,
+      "bHaveHitEffect": true,
+      "castConeDistance": 100,
+      "castFrame": 10,
+      "mHitEffectKey": "Skarner_BA_tar_crit_01",
+      "bHaveHitBone": true,
+      "mHitBoneName": "C_BUFFBONE_GLB_CHEST_LOC",
+      "mClientData": {
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerBrushCheck": {
+    "mScriptName": "SkarnerBrushCheck",
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerTurretAttack": {
+    "mScriptName": "SkarnerTurretAttack",
+    "mSpell": {
+      "mAffectsTypeFlags": 5327,
+      "mAlternateName": "SkarnerBasicAttack",
+      "mAnimationName": "Attack_Turret1",
+      "cooldownTime": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "delayCastOffsetPercent": -0.3077000081539154,
+      "mApplyMaterialOnHitSound": true,
+      "bHaveHitEffect": true,
+      "castRadius": [
+        385,
+        385,
+        385,
+        385,
+        385,
+        385,
+        385
+      ],
+      "castConeDistance": 100,
+      "castFrame": 10,
+      "mHitEffectKey": "Skarner_BA_tar_01",
+      "bHaveHitBone": true,
+      "mHitBoneName": "C_BUFFBONE_GLB_CHEST_LOC",
+      "mClientData": {
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerCritAttack": {
+    "mScriptName": "SkarnerCritAttack",
+    "mSpell": {
+      "mAffectsTypeFlags": 5327,
+      "mAlternateName": "SkarnerCritAttack",
+      "mAnimationName": "Crit",
+      "delayCastOffsetPercent": -0.3077000081539154,
+      "mApplyMaterialOnHitSound": true,
+      "bHaveHitEffect": true,
+      "castConeDistance": 100,
+      "castFrame": 10,
+      "mHitEffectKey": "Skarner_BA_tar_crit_01",
+      "bHaveHitBone": true,
+      "mHitBoneName": "C_BUFFBONE_GLB_CHEST_LOC",
+      "mClientData": {
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveCrystalManager": {
+    "mScriptName": "SkarnerPassiveCrystalManager",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerPassiveCrystalManager",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerBasicAttack3": {
+    "mScriptName": "SkarnerBasicAttack3",
+    "mSpell": {
+      "mAffectsTypeFlags": 5327,
+      "mAlternateName": "SkarnerBasicAttack2",
+      "mAnimationName": "Attack3",
+      "delayCastOffsetPercent": -0.3077000081539154,
+      "mApplyMaterialOnHitSound": true,
+      "bHaveHitEffect": true,
+      "castConeDistance": 100,
+      "castFrame": 10,
+      "mHitEffectKey": "Skarner_BA_tar_01",
+      "bHaveHitBone": true,
+      "mHitBoneName": "C_BUFFBONE_GLB_CHEST_LOC",
+      "mClientData": {
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerBasicAttack2": {
+    "mScriptName": "SkarnerBasicAttack2",
+    "mSpell": {
+      "mAffectsTypeFlags": 5327,
+      "mAlternateName": "SkarnerBasicAttack2",
+      "mAnimationName": "Attack2",
+      "delayCastOffsetPercent": -0.3077000081539154,
+      "mApplyMaterialOnHitSound": true,
+      "bHaveHitEffect": true,
+      "castConeDistance": 100,
+      "castFrame": 10,
+      "mHitEffectKey": "Skarner_BA_tar_01",
+      "bHaveHitBone": true,
+      "mHitBoneName": "C_BUFFBONE_GLB_CHEST_LOC",
+      "mClientData": {
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerFractureSlow": {
+    "mScriptName": "SkarnerFractureSlow",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerFractureSlow",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerVirulentSlashAbility": {
+    "mRootSpell": "Characters/Skarner/Spells/SkarnerVirulentSlashAbility/SkarnerVirulentSlash",
+    "mChildSpells": [
+      "Characters/Skarner/Spells/SkarnerVirulentSlashAbility/SkarnerVirulentSlash"
+    ],
+    "mName": "SkarnerVirulentSlashAbility",
+    "__type": "AbilityObject"
+  },
+  "Characters/Skarner/Spells/SkarnerExoskeletonAbility": {
+    "mRootSpell": "Characters/Skarner/Spells/SkarnerExoskeletonAbility/SkarnerExoskeleton",
+    "mChildSpells": [
+      "Characters/Skarner/Spells/SkarnerExoskeletonAbility/SkarnerExoskeleton"
+    ],
+    "mName": "SkarnerExoskeletonAbility",
+    "__type": "AbilityObject"
+  },
+  "Characters/Skarner/Spells/SkarnerExoskeletonAbility/SkarnerExoskeleton": {
+    "mScriptName": "SkarnerExoskeleton",
+    "mSpell": {
+      "flags": 4,
+      "mAffectsTypeFlags": 15567,
+      "mAlternateName": "SkarnerExoskeleton",
+      "mEffectAmount": [
+        {
+          "value": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            25,
+            30,
+            35,
+            40,
+            45,
+            50,
+            55
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            12,
+            16,
+            20,
+            24,
+            28,
+            32,
+            36
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        }
+      ],
+      "mDataValues": [
+        {
+          "mName": "TooltipMaxHealthShieldRatio",
+          "mValues": [
+            0.07999999821186066,
+            0.09000000357627869,
+            0.10000000149011612,
+            0.10999999940395355,
+            0.11999999731779099,
+            0.12999999523162842,
+            0.14000000059604645
+          ],
+          "__type": "SpellDataValue"
+        }
+      ],
+      "mSpellCalculations": {
+        "TotalShield": {
+          "mFormulaParts": [
+            {
+              "mStat": 11,
+              "mDataValue": "{b6541a5c}",
+              "__type": "StatByNamedDataValueCalculationPart"
+            },
+            {
+              "mCoefficient": 0.800000011920929,
+              "__type": "StatByCoefficientCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        }
+      },
+      "mCoefficient": 0.800000011920929,
+      "mAnimationName": "Spell2",
+      "mImgIconName": [
+        "ASSETS/Characters/Skarner/HUD/Icons2D/Skarner_W.dds"
+      ],
+      "mCastTime": 0.25,
+      "cooldownTime": [
+        13.5,
+        13,
+        12.5,
+        12,
+        11.5,
+        11,
+        11
+      ],
+      "mCantCancelWhileWindingUp": true,
+      "useAnimatorFramerate": true,
+      "castRange": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "castRadius": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "castConeDistance": 100,
+      "castFrame": 7.5,
+      "missileSpeed": 20,
+      "bHaveHitBone": true,
+      "mHitBoneName": "head",
+      "mFloatVarsDecimals": [
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mana": [
+        60,
+        60,
+        60,
+        60,
+        60,
+        60
+      ],
+      "selectionPriority": 1,
+      "mTargetingTypeData": {
+        "__type": "Self"
+      },
+      "mClientData": {
+        "mTooltipData": {
+          "mObjectName": "SkarnerExoskeleton",
+          "mFormat": "{89fef2a8}",
+          "mLocKeys": {
+            "keyName": "Spell_SkarnerExoskeleton_Name",
+            "keySummary": "Spell_SkarnerExoskeleton_Summary",
+            "keyTooltip": "Spell_SkarnerExoskeleton_Tooltip"
+          },
+          "mLists": {
+            "LevelUp": {
+              "levelCount": 5,
+              "elements": [
+                {
+                  "type": "Effect%dAmount",
+                  "typeIndex": 1,
+                  "nameOverride": "Spell_ListType_SkarnerMaxHealthDamageAbsorption",
+                  "Style": 1,
+                  "__type": "TooltipInstanceListElement"
+                },
+                {
+                  "type": "Effect%dAmount",
+                  "typeIndex": 5,
+                  "nameOverride": "Spell_ListType_MovementSpeed",
+                  "Style": 1,
+                  "__type": "TooltipInstanceListElement"
+                },
+                {
+                  "type": "Cooldown",
+                  "__type": "TooltipInstanceListElement"
+                }
+              ],
+              "__type": "TooltipInstanceList"
+            }
+          },
+          "__type": "TooltipInstanceSpell"
+        },
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerExoskeleton",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveAbility": {
+    "mRootSpell": "Characters/Skarner/Spells/SkarnerPassiveAbility/SkarnerPassive",
+    "mChildSpells": [
+      "Characters/Skarner/Spells/SkarnerPassiveAbility/SkarnerPassive"
+    ],
+    "mName": "SkarnerPassiveAbility",
+    "mType": 3,
+    "__type": "AbilityObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveAbility/SkarnerPassive": {
+    "mScriptName": "SkarnerPassive",
+    "mSpell": {
+      "mDataValues": [
+        {
+          "mName": "CrystalRestore",
+          "mValues": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "__type": "SpellDataValue"
+        }
+      ],
+      "mSpellCalculations": {
+        "CrystalAS": {
+          "mFormulaParts": [
+            {
+              "mLevel1Value": 43,
+              "{02deb550}": 5,
+              "mBreakpoints": [
+                {
+                  "mLevel": 9,
+                  "{d5fd07ed}": 2,
+                  "{57fdc438}": 7,
+                  "__type": "Breakpoint"
+                },
+                {
+                  "mLevel": 15,
+                  "{d5fd07ed}": 2,
+                  "{57fdc438}": 9,
+                  "__type": "Breakpoint"
+                }
+              ],
+              "__type": "ByCharLevelBreakpointsCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        },
+        "CrystalMS": {
+          "mFormulaParts": [
+            {
+              "mLevel1Value": 70,
+              "{02deb550}": 2,
+              "mBreakpoints": [
+                {
+                  "mLevel": 9,
+                  "{d5fd07ed}": 1,
+                  "{57fdc438}": 3,
+                  "__type": "Breakpoint"
+                },
+                {
+                  "mLevel": 15,
+                  "{d5fd07ed}": 1,
+                  "{57fdc438}": 4,
+                  "__type": "Breakpoint"
+                }
+              ],
+              "__type": "ByCharLevelBreakpointsCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        }
+      },
+      "mImgIconName": [
+        "ASSETS/Characters/Skarner/HUD/Icons2D/Skarner_Passive.dds"
+      ],
+      "castRange": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mClientData": {
+        "mTooltipData": {
+          "mObjectName": "SkarnerPassive",
+          "mFormat": "{0b8004bb}",
+          "mLocKeys": {
+            "keyName": "Spell_SkarnerPassive_Name",
+            "keySummary": "Spell_SkarnerPassive_Summary",
+            "keyTooltip": "Spell_SkarnerPassive_Tooltip"
+          },
+          "__type": "TooltipInstanceSpell"
+        },
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerPassive",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveCrystalBuffCooldown": {
+    "mScriptName": "SkarnerPassiveCrystalBuffCooldown",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerPassiveCrystalBuffCooldown",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerVirulentSlashAbility/SkarnerVirulentSlash": {
+    "mScriptName": "SkarnerVirulentSlash",
+    "mSpell": {
+      "flags": 4,
+      "mAffectsTypeFlags": 15567,
+      "mAlternateName": "SkarnerVirulentSlash",
+      "mEffectAmount": [
+        {
+          "value": [
+            30,
+            33,
+            36,
+            39,
+            42,
+            45,
+            48
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "value": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        },
+        {
+          "__type": "SpellEffectAmount"
+        }
+      ],
+      "mDataValues": [
+        {
+          "mName": "QBaseDamage",
+          "mValues": [
+            15,
+            20,
+            25,
+            30,
+            35,
+            40,
+            45
+          ],
+          "__type": "SpellDataValue"
+        },
+        {
+          "mName": "QBonusDamage",
+          "mValues": [
+            0.5,
+            1,
+            1.5,
+            2,
+            2.5,
+            3,
+            3.5
+          ],
+          "__type": "SpellDataValue"
+        },
+        {
+          "mName": "MonsterDamageCap",
+          "mValues": [
+            200,
+            200,
+            200,
+            200,
+            200,
+            200,
+            200
+          ],
+          "__type": "SpellDataValue"
+        },
+        {
+          "mName": "TooltipMinionCDReducer",
+          "mValues": [
+            0.25,
+            0.25,
+            0.25,
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "__type": "SpellDataValue"
+        },
+        {
+          "mName": "TooltipChampionCDReducer",
+          "mValues": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "__type": "SpellDataValue"
+        },
+        {
+          "mName": "EmpoweredAPRatio",
+          "mValues": [
+            0.30000001192092896,
+            0.30000001192092896,
+            0.30000001192092896,
+            0.30000001192092896,
+            0.30000001192092896,
+            0.30000001192092896,
+            0.30000001192092896
+          ],
+          "__type": "SpellDataValue"
+        }
+      ],
+      "{fb56608c}": {
+        "{497ae878}": {
+          "SpellDataValues": [
+            {
+              "mName": "QBonusDamage",
+              "mValues": [
+                0.625,
+                1,
+                1.375,
+                1.75,
+                2.125,
+                2.5,
+                2.875
+              ],
+              "__type": "SpellDataValue"
+            },
+            {
+              "mName": "EmpoweredAPRatio",
+              "mValues": [
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645
+              ],
+              "__type": "SpellDataValue"
+            }
+          ],
+          "__type": "SpellDataValueVector"
+        }
+      },
+      "mSpellCalculations": {
+        "QDamageCalc": {
+          "mFormulaParts": [
+            {
+              "mStat": 2,
+              "mCoefficient": 0.20000000298023224,
+              "__type": "StatByCoefficientCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        },
+        "BonusQDamageCalc": {
+          "mFormulaParts": [
+            {
+              "mStat": 2,
+              "mCoefficient": 0.20000000298023224,
+              "__type": "StatByCoefficientCalculationPart"
+            },
+            {
+              "mDataValue": "{9800d91b}",
+              "__type": "StatByNamedDataValueCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        },
+        "QBADRatioTooltip": {
+          "mFormulaParts": [
+            {
+              "mStat": 2,
+              "mCoefficient": 0.20000000298023224,
+              "__type": "StatByCoefficientCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        },
+        "QAPRatioTooltip": {
+          "mFormulaParts": [
+            {
+              "mDataValue": "{9800d91b}",
+              "__type": "StatByNamedDataValueCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        }
+      },
+      "mCoefficient": 0.30000001192092896,
+      "mAnimationName": "Spell1",
+      "mImgIconName": [
+        "ASSETS/Characters/Skarner/HUD/Icons2D/Skarner_Q.dds"
+      ],
+      "mCastTime": 0.25,
+      "cooldownTime": [
+        3.75,
+        3.5,
+        3.25,
+        3,
+        2.75,
+        2.5,
+        2.5
+      ],
+      "delayCastOffsetPercent": -0.5,
+      "delayTotalTimePercent": -0.5,
+      "mCantCancelWhileWindingUp": true,
+      "useAnimatorFramerate": true,
+      "castRange": [
+        350,
+        350,
+        350,
+        350,
+        350,
+        350,
+        350
+      ],
+      "castRangeDisplayOverride": [
+        350,
+        350,
+        350,
+        350,
+        350,
+        350,
+        350
+      ],
+      "castRadius": [
+        350,
+        350,
+        350,
+        350,
+        350,
+        350,
+        350
+      ],
+      "castConeDistance": 100,
+      "castFrame": 7.5,
+      "missileSpeed": 0,
+      "mFloatVarsDecimals": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mana": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "mTargetingTypeData": {
+        "__type": "SelfAoe"
+      },
+      "{00f7e5bc}": true,
+      "mClientData": {
+        "mTooltipData": {
+          "mObjectName": "SkarnerVirulentSlash",
+          "mFormat": "{89fef2a8}",
+          "mLocKeys": {
+            "keyName": "Spell_SkarnerVirulentSlash_Name",
+            "keySummary": "Spell_SkarnerVirulentSlash_Summary",
+            "keyTooltip": "Spell_SkarnerVirulentSlash_Tooltip"
+          },
+          "mLists": {
+            "LevelUp": {
+              "levelCount": 5,
+              "elements": [
+                {
+                  "type": "QBonusDamage",
+                  "nameOverride": "Spell_ListType_PercentHealthDamage",
+                  "Style": 1,
+                  "__type": "TooltipInstanceListElement"
+                },
+                {
+                  "type": "Cooldown",
+                  "__type": "TooltipInstanceListElement"
+                }
+              ],
+              "__type": "TooltipInstanceList"
+            }
+          },
+          "__type": "TooltipInstanceSpell"
+        },
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerVirulentSlash",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveStun": {
+    "mScriptName": "SkarnerPassiveStun",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerPassiveStun",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerImpaleAbility/SkarnerImpale": {
+    "mScriptName": "SkarnerImpale",
+    "mSpell": {
+      "mAffectsTypeFlags": 4106,
+      "mRequiredUnitTags": {
+        "{a47810c1}": [
+          "{ea595ca6}"
+        ],
+        "__type": "ObjectTags"
+      },
+      "mAlternateName": "SkarnerImpale",
+      "mSpellTags": [
+        "Trait_Ultimate",
+        "Trait_ImmobilizingCCSpell"
+      ],
+      "mDataValues": [
+        {
+          "mName": "RBaseDamage",
+          "mValues": [
+            -20,
+            20,
+            60,
+            100,
+            140,
+            180,
+            220
+          ],
+          "__type": "SpellDataValue"
+        },
+        {
+          "mName": "RDuration",
+          "mValues": [
+            1.75,
+            1.75,
+            1.75,
+            1.75,
+            1.75,
+            1.75,
+            1.75
+          ],
+          "__type": "SpellDataValue"
+        }
+      ],
+      "mSpellCalculations": {
+        "MagicDamage": {
+          "mFormulaParts": [
+            {
+              "mDataValue": "RBaseDamage",
+              "__type": "NamedDataValueCalculationPart"
+            },
+            {
+              "mCoefficient": 0.5,
+              "__type": "StatByCoefficientCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        },
+        "PhysicalDamage": {
+          "mFormulaParts": [
+            {
+              "mStat": 2,
+              "mCoefficient": 0.6000000238418579,
+              "__type": "StatByCoefficientCalculationPart"
+            }
+          ],
+          "__type": "GameCalculation"
+        }
+      },
+      "mAnimationName": "Spell4",
+      "mAnimationLoopName": "Spell4_Loop",
+      "mAnimationWinddownName": "Spell4_Winddown",
+      "mImgIconName": [
+        "ASSETS/Characters/Skarner/HUD/Icons2D/Skarner_R.dds"
+      ],
+      "mCastTime": 0.25,
+      "cooldownTime": [
+        120,
+        120,
+        100,
+        80,
+        120,
+        120,
+        110
+      ],
+      "delayCastOffsetPercent": -0.5,
+      "delayTotalTimePercent": -0.5,
+      "mCantCancelWhileWindingUp": true,
+      "mCantCancelWhileChanneling": true,
+      "useAnimatorFramerate": true,
+      "castRange": [
+        350,
+        350,
+        350,
+        350,
+        350,
+        350,
+        350
+      ],
+      "castRadius": [
+        20,
+        20,
+        20,
+        20,
+        20,
+        20,
+        20
+      ],
+      "castConeDistance": 100,
+      "castFrame": 7.5,
+      "missileSpeed": 0,
+      "mana": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0
+      ],
+      "selectionPriority": 1,
+      "{00f7e5bc}": true,
+      "mClientData": {
+        "mTooltipData": {
+          "mObjectName": "SkarnerImpale",
+          "mFormat": "{89fef2a8}",
+          "mLocKeys": {
+            "keyName": "Spell_SkarnerImpale_Name",
+            "keySummary": "Spell_SkarnerImpale_Summary",
+            "keyTooltip": "Spell_SkarnerImpale_Tooltip"
+          },
+          "mLists": {
+            "LevelUp": {
+              "levelCount": 3,
+              "elements": [
+                {
+                  "type": "RBaseDamage",
+                  "typeIndex": 2,
+                  "nameOverride": "Spell_ListType_Damage",
+                  "__type": "TooltipInstanceListElement"
+                },
+                {
+                  "type": "Cooldown",
+                  "__type": "TooltipInstanceListElement"
+                }
+              ],
+              "__type": "TooltipInstanceList"
+            }
+          },
+          "__type": "TooltipInstanceSpell"
+        },
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerImpale",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerPassiveCooldown": {
+    "mScriptName": "SkarnerPassiveCooldown",
+    "mBuff": {
+      "mDescription": "game_buff_tooltip_SkarnerPassiveCooldown",
+      "__type": "BuffData"
+    },
+    "__type": "SpellObject"
+  },
+  "Characters/Skarner/Spells/SkarnerBasicAttack": {
+    "mScriptName": "SkarnerBasicAttack",
+    "mSpell": {
+      "mAffectsTypeFlags": 5327,
+      "mAlternateName": "SkarnerBasicAttack",
+      "delayCastOffsetPercent": -0.3077000081539154,
+      "mApplyMaterialOnHitSound": true,
+      "bHaveHitEffect": true,
+      "castRadius": [
+        385,
+        385,
+        385,
+        385,
+        385,
+        385,
+        385
+      ],
+      "castConeDistance": 100,
+      "castFrame": 10,
+      "mHitEffectKey": "Skarner_BA_tar_01",
+      "bHaveHitBone": true,
+      "mHitBoneName": "C_BUFFBONE_GLB_CHEST_LOC",
+      "mClientData": {
+        "mTargeterDefinitions": [
+          {
+            "useCasterBoundingBox": false,
+            "__type": "TargeterDefinitionRange"
+          }
+        ],
+        "__type": "SpellDataResourceClient"
+      },
+      "__type": "SpellDataResource"
+    },
+    "__type": "SpellObject"
+  },
+  "{0e8983f5}": {
+    "mOverrides": [
+      {
+        "mOverrideContexts": [
+          {
+            "mMapID": 11,
+            "{37b75f5c}": "CLASSIC",
+            "__type": "ItemRecommendationOverrideContext"
+          }
+        ],
+        "mStartingItemSets": [
+          {
+            "mStartingItems": [
+              "Items/1054",
+              "Items/1029",
+              "Items/2033"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemSet"
+          }
+        ],
+        "StartingItemBundles": [
+          {
+            "items": [
+              "Items/1054",
+              "Items/2003"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemBundle"
+          },
+          {
+            "items": [
+              "Items/1029",
+              "Items/2003",
+              "Items/2003",
+              "Items/2003",
+              "Items/2003"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemBundle"
+          },
+          {
+            "items": [
+              "Items/2033"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemBundle"
+          }
+        ],
+        "mRecItemRanges": [
+          {
+            "items": [
+              "Items/6662",
+              "Items/3078",
+              "Items/3084"
+            ],
+            "MaxCompletedItems": 1,
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/3047",
+              "Items/3111",
+              "Items/3009"
+            ],
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/6662",
+              "Items/3078",
+              "Items/3084"
+            ],
+            "MaxCompletedItems": 3,
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/6664",
+              "Items/3742",
+              "Items/3068",
+              "Items/4401",
+              "Items/3083",
+              "Items/3110",
+              "Items/3075"
+            ],
+            "MaxCompletedItems": 2,
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/3075",
+              "Items/3083",
+              "Items/3065",
+              "Items/8020",
+              "Items/3143",
+              "Items/8001"
+            ],
+            "__type": "{5a3bc52d}"
+          }
+        ],
+        "mRecommendedItems": [
+          {
+            "mItem": "Items/3068",
+            "mGroupId": 1,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/6662",
+            "mGroupId": 1,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/6664",
+            "mGroupId": 1,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3047",
+            "mGroupId": 2,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3111",
+            "mGroupId": 2,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3143",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3001",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3075",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3193",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3065",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3050",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3110",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3742",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/4401",
+            "__type": "ItemRecommendationCondition"
+          }
+        ],
+        "__type": "ItemRecommendationOverride"
+      },
+      {
+        "mOverrideContexts": [
+          {
+            "mMapID": 12,
+            "{37b75f5c}": "ARAM",
+            "__type": "ItemRecommendationOverrideContext"
+          }
+        ],
+        "mStartingItemSets": [
+          {
+            "mStartingItems": [
+              "Items/2051",
+              "Items/6660",
+              "Items/3105"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemSet"
+          }
+        ],
+        "StartingItemBundles": [
+          {
+            "items": [
+              "Items/2051"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemBundle"
+          },
+          {
+            "items": [
+              "Items/6660"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemBundle"
+          },
+          {
+            "items": [
+              "Items/3105"
+            ],
+            "__type": "ItemRecommendationOverrideStartingItemBundle"
+          }
+        ],
+        "mRecItemRanges": [
+          {
+            "items": [
+              "Items/3068",
+              "Items/6662",
+              "Items/6664"
+            ],
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/3047",
+              "Items/3111"
+            ],
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/3143",
+              "Items/3001",
+              "Items/3075",
+              "Items/4401"
+            ],
+            "MaxCompletedItems": 3,
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/3193",
+              "Items/4401",
+              "Items/3143",
+              "Items/3001"
+            ],
+            "MaxCompletedItems": 4,
+            "__type": "{5a3bc52d}"
+          },
+          {
+            "items": [
+              "Items/3083",
+              "Items/3065",
+              "Items/3075",
+              "Items/3143",
+              "Items/3001",
+              "Items/3050"
+            ],
+            "__type": "{5a3bc52d}"
+          }
+        ],
+        "mRecommendedItems": [
+          {
+            "mItem": "Items/3068",
+            "mGroupId": 1,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/6662",
+            "mGroupId": 1,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/6664",
+            "mGroupId": 1,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3047",
+            "mGroupId": 2,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3111",
+            "mGroupId": 2,
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3143",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3001",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3075",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3193",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3065",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3050",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3110",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/3742",
+            "__type": "ItemRecommendationCondition"
+          },
+          {
+            "mItem": "Items/4401",
+            "__type": "ItemRecommendationCondition"
+          }
+        ],
+        "__type": "ItemRecommendationOverride"
+      }
+    ],
+    "__type": "ItemRecommendationOverrideSet"
+  },
+  "{110341cf}": {
+    "{5e6e4063}": [
+      {
+        "MapId": 12,
+        "position": "{ada7afdb}",
+        "mEarlyLevelOverrides": [
+          0,
+          1,
+          2,
+          0
+        ],
+        "__type": "RecSpellRankUpInfo"
+      },
+      {
+        "MapId": 11,
+        "position": "{f0ef0c24}",
+        "{72e81a01}": true,
+        "mEarlyLevelOverrides": [
+          0,
+          2,
+          1,
+          0
+        ],
+        "__type": "RecSpellRankUpInfo"
+      },
+      {
+        "MapId": 11,
+        "position": "{a710dc3c}",
+        "mDefaultPriority": [
+          3,
+          2,
+          1,
+          0
+        ],
+        "mEarlyLevelOverrides": [
+          2,
+          1,
+          0,
+          2
+        ],
+        "__type": "RecSpellRankUpInfo"
+      }
+    ],
+    "__type": "{5933da7e}"
+  },
+  "{2208ce65}": {
+    "__type": "{56cec8e1}"
+  },
+  "{8a9a9140}": {
+    "mAllStartingItemIds": {
+      "11": {
+        "mItemList": [
+          1083,
+          1054,
+          1055,
+          1056,
+          3865,
+          1027,
+          1028,
+          1029,
+          1101,
+          2031,
+          1036,
+          1102,
+          1001,
+          1052,
+          1103,
+          2003,
+          3070,
+          1082,
+          2033
+        ],
+        "__type": "ItemRecommendationItemList"
+      },
+      "12": {
+        "mItemList": [
+          3051,
+          3145,
+          3044,
+          1011,
+          4642,
+          3147,
+          1042,
+          3067,
+          2051,
+          1043,
+          3801,
+          2022,
+          2031,
+          3802,
+          1036,
+          6670,
+          3112,
+          3803,
+          2003,
+          1038,
+          1053,
+          3006,
+          3057,
+          3108,
+          2020,
+          2021,
+          1026,
+          6660,
+          1027,
+          3133,
+          3184,
+          2015,
+          1028,
+          3134,
+          1029,
+          3177,
+          3076,
+          1001,
+          1052,
+          3077,
+          3070
+        ],
+        "__type": "ItemRecommendationItemList"
+      }
+    },
+    "{a109530e}": {
+      "11": {
+        "mItemList": [
+          3152,
+          6694,
+          6673,
+          3073,
+          7021,
+          3117,
+          3046,
+          3190,
+          4643,
+          6617,
+          7025,
+          6692,
+          7040,
+          7019,
+          3084,
+          3869,
+          7042,
+          3107,
+          7013,
+          4633,
+          3748,
+          7036,
+          7007,
+          6609,
+          3161,
+          3742,
+          3111,
+          6653,
+          4629,
+          3155,
+          6655,
+          7003,
+          3157,
+          6699,
+          3078,
+          3222,
+          6620,
+          3072,
+          7030,
+          3116,
+          7022,
+          7001,
+          6697,
+          3139,
+          3118,
+          3089,
+          3068,
+          2502,
+          7018,
+          3143,
+          3033,
+          6664,
+          7041,
+          7012,
+          3158,
+          3137,
+          3087,
+          8001,
+          3181,
+          4401,
+          6333,
+          3110,
+          6631,
+          6610,
+          7008,
+          2065,
+          7039,
+          6675,
+          3083,
+          3004,
+          3077,
+          3302,
+          4645,
+          3050,
+          6621,
+          3508,
+          7029,
+          3094,
+          3065,
+          6696,
+          3119,
+          3142,
+          3165,
+          3877,
+          3115,
+          6665,
+          6657,
+          3036,
+          3871,
+          3109,
+          3009,
+          3153,
+          3865,
+          7038,
+          7009,
+          3053,
+          3003,
+          6676,
+          7011,
+          3047,
+          3026,
+          7034,
+          7026,
+          7005,
+          3070,
+          4646,
+          6701,
+          3020,
+          6672,
+          7028,
+          3124,
+          6695,
+          3095,
+          3074,
+          6616,
+          4005,
+          3091,
+          6662,
+          3041,
+          3876,
+          3135,
+          2504,
+          7020,
+          3085,
+          3870,
+          3006,
+          7037,
+          7016,
+          3102,
+          3814,
+          3031,
+          4628,
+          3002,
+          7031,
+          3075,
+          3156,
+          3504,
+          6698,
+          8020,
+          7004,
+          3179,
+          3100,
+          3071
+        ],
+        "__type": "ItemRecommendationItemList"
+      },
+      "12": {
+        "mItemList": [
+          3152,
+          6694,
+          6673,
+          3073,
+          7021,
+          3117,
+          3046,
+          3190,
+          6617,
+          7025,
+          6692,
+          7040,
+          3084,
+          7042,
+          3107,
+          7013,
+          4633,
+          3748,
+          6609,
+          3161,
+          3742,
+          3111,
+          6653,
+          4629,
+          3155,
+          6655,
+          7003,
+          3157,
+          6699,
+          3078,
+          3222,
+          6620,
+          3072,
+          7030,
+          3116,
+          7001,
+          6697,
+          3139,
+          3118,
+          3089,
+          3068,
+          2502,
+          7018,
+          3143,
+          3033,
+          6664,
+          7041,
+          7012,
+          3158,
+          3137,
+          3087,
+          8001,
+          4401,
+          6333,
+          3110,
+          6631,
+          6610,
+          7008,
+          2065,
+          7039,
+          6675,
+          3083,
+          3004,
+          3077,
+          3302,
+          4645,
+          3050,
+          6621,
+          3508,
+          7029,
+          3094,
+          3065,
+          6696,
+          3119,
+          3142,
+          3165,
+          3115,
+          6665,
+          6657,
+          3036,
+          3109,
+          3009,
+          3153,
+          7038,
+          7009,
+          3053,
+          3003,
+          6676,
+          7011,
+          3047,
+          7034,
+          7026,
+          7005,
+          3070,
+          4646,
+          6701,
+          3020,
+          6672,
+          7028,
+          3124,
+          6695,
+          3095,
+          3074,
+          6616,
+          4005,
+          3091,
+          6662,
+          3135,
+          2504,
+          3085,
+          3006,
+          3102,
+          3814,
+          3031,
+          4628,
+          3002,
+          7031,
+          3075,
+          3156,
+          3504,
+          6698,
+          8020,
+          7004,
+          3179,
+          3100,
+          3071
+        ],
+        "__type": "ItemRecommendationItemList"
+      }
+    },
+    "mContexts": [
+      {
+        "mChampionId": 72,
+        "mMapID": 12,
+        "{37b75f5c}": "ARAM",
+        "mPosition": "{ada7afdb}",
+        "mIsDefaultPosition": true,
+        "mStartingItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    1011,
+                    1028,
+                    2003,
+                    2003,
+                    2003,
+                    2051,
+                    3070,
+                    1001,
+                    2031,
+                    2051
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "mStartingItemBundles": [
+          {
+            "mItemList": [
+              1011,
+              1028,
+              2003,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              2003,
+              2051,
+              3070
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              1001,
+              2031,
+              2051
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        ],
+        "mPopularItems": [
+          "Items/3111",
+          "Items/3084",
+          "Items/3068",
+          "Items/3075",
+          "Items/6662",
+          "Items/3047",
+          "Items/4401",
+          "Items/3083",
+          "Items/2504",
+          "Items/3119",
+          "Items/6665",
+          "Items/3742",
+          "Items/3077",
+          "Items/6664",
+          "Items/2502"
+        ],
+        "mCompletedItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    3084,
+                    3111,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AgR": {
+                  "mChoices": [
+                    3111,
+                    3009
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnG": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnI": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Au6": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvB": {
+                  "mChoices": [
+                    3742,
+                    3084
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Avn": {
+                  "mChoices": [
+                    6662,
+                    3084,
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av5": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+": {
+                  "mChoices": [
+                    3084,
+                    6662,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwB": {
+                  "mChoices": [
+                    3111,
+                    3009,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwD": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwF": {
+                  "mChoices": [
+                    3748,
+                    6631
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwG": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwL": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwM": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Awm": {
+                  "mChoices": [
+                    3047,
+                    3111,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Awn": {
+                  "mChoices": [
+                    3084,
+                    6662,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Awv": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxW": {
+                  "mChoices": [
+                    6662,
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxZ": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "A6e": {
+                  "mChoices": [
+                    3111,
+                    4401,
+                    3009
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "A6k": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BEx": {
+                  "mChoices": [
+                    3111,
+                    3009
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BnS": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BoG": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BoI": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BoJ": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Bok": {
+                  "mChoices": [
+                    3119,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AnGAvn": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnGAwM": {
+                  "mChoices": [
+                    3047,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnGAwn": {
+                  "mChoices": [
+                    3119,
+                    2504,
+                    3065
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnGAwv": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3065
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAvn": {
+                  "mChoices": [
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwM": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwn": {
+                  "mChoices": [
+                    6662,
+                    6664,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwv": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIBoG": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Au6Awn": {
+                  "mChoices": [
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBAwB": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBAwM": {
+                  "mChoices": [
+                    3068,
+                    6662,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBA6e": {
+                  "mChoices": [
+                    4401,
+                    3073
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv8": {
+                  "mChoices": [
+                    3075,
+                    2504,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwD": {
+                  "mChoices": [
+                    3068,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwG": {
+                  "mChoices": [
+                    6610,
+                    3077,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwL": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwM": {
+                  "mChoices": [
+                    3068,
+                    3075,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwm": {
+                  "mChoices": [
+                    3075,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwv": {
+                  "mChoices": [
+                    6662,
+                    3075,
+                    2502
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnBoG": {
+                  "mChoices": [
+                    3119,
+                    3075,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnBoJ": {
+                  "mChoices": [
+                    3119,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwD": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwM": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8Awn": {
+                  "mChoices": [
+                    3075,
+                    2504,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8BoG": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AwM": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+BoG": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwBAwn": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwDAwM": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwDAwn": {
+                  "mChoices": [
+                    2504,
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwM": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwn": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFA6k": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAwn": {
+                  "mChoices": [
+                    2504,
+                    3742,
+                    6610
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwLAwM": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwLAwn": {
+                  "mChoices": [
+                    2504,
+                    3068,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwn": {
+                  "mChoices": [
+                    3068,
+                    4401,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwv": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMBoG": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMBoI": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMBoJ": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwmAwn": {
+                  "mChoices": [
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnAwv": {
+                  "mChoices": [
+                    6662,
+                    2504,
+                    2502
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnA6e": {
+                  "mChoices": [
+                    4401,
+                    2504,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBEx": {
+                  "mChoices": [
+                    3742,
+                    2504,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBnS": {
+                  "mChoices": [
+                    3119,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBoG": {
+                  "mChoices": [
+                    3119,
+                    2504,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBoI": {
+                  "mChoices": [
+                    6662,
+                    2504,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBoJ": {
+                  "mChoices": [
+                    3075,
+                    2504,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBok": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwvBoG": {
+                  "mChoices": [
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwvBok": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "A6eBEx": {
+                  "mChoices": [
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BoGBoI": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AnGAvnAwM": {
+                  "mChoices": [
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnGAvnAwv": {
+                  "mChoices": [
+                    3065
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnGAwMAwn": {
+                  "mChoices": [
+                    2504,
+                    3068,
+                    6664
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnGAwnAwv": {
+                  "mChoices": [
+                    3065
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAvnAv8": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAvnAwM": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAv8Awn": {
+                  "mChoices": [
+                    3075,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwMAwn": {
+                  "mChoices": [
+                    3075,
+                    3068,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwnAwv": {
+                  "mChoices": [
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwnBoG": {
+                  "mChoices": [
+                    3075,
+                    3119,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwnBoI": {
+                  "mChoices": [
+                    3075,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwnBoJ": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv8AwD": {
+                  "mChoices": [
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv8AwM": {
+                  "mChoices": [
+                    3075,
+                    4401,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv8BoG": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv+AwM": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv+BoG": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwDAwM": {
+                  "mChoices": [
+                    3068,
+                    2504,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwDBoG": {
+                  "mChoices": [
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwFAwM": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwFBoG": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwLAwM": {
+                  "mChoices": [
+                    3075,
+                    3068,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwMAwm": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwMAwv": {
+                  "mChoices": [
+                    3068,
+                    3075,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwMBoG": {
+                  "mChoices": [
+                    3075,
+                    3068,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwMBoI": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwvBoG": {
+                  "mChoices": [
+                    3075,
+                    3068,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwDAwn": {
+                  "mChoices": [
+                    4401,
+                    3083,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwMAwn": {
+                  "mChoices": [
+                    3075,
+                    4401,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwnBoG": {
+                  "mChoices": [
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AwMAwn": {
+                  "mChoices": [
+                    3119,
+                    3068,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AwMAwv": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AwnBoG": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwDAwMAwn": {
+                  "mChoices": [
+                    3068,
+                    2504,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwMAwn": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwnBoG": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwLAwMAwn": {
+                  "mChoices": [
+                    3075,
+                    3068,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwmAwn": {
+                  "mChoices": [
+                    2504,
+                    4401,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwnAwv": {
+                  "mChoices": [
+                    3068,
+                    3083,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwnA6e": {
+                  "mChoices": [
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwnBEx": {
+                  "mChoices": [
+                    3075,
+                    3068,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwnBoG": {
+                  "mChoices": [
+                    3068,
+                    2504,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwnBoI": {
+                  "mChoices": [
+                    3075,
+                    2504,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwMAwnBoJ": {
+                  "mChoices": [
+                    3075,
+                    3083,
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnAwvBoG": {
+                  "mChoices": [
+                    2504,
+                    4401,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnA6eBEx": {
+                  "mChoices": [
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnA6eBoG": {
+                  "mChoices": [
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBoGBoI": {
+                  "mChoices": [
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AnIAv8AwMAwn": {
+                  "mChoices": [
+                    3075,
+                    6665
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwDAwMAwn": {
+                  "mChoices": [
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwMAwnBoG": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwMAwnBoI": {
+                  "mChoices": [
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AnIAwnAwvBoG": {
+                  "mChoices": [
+                    3075,
+                    6664
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv8AwDAwM": {
+                  "mChoices": [
+                    3083,
+                    4401,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv8AwLAwM": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv8AwMBEx": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwDAwMAwn": {
+                  "mChoices": [
+                    3083,
+                    4401,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwFAwMAwn": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwLAwMAwn": {
+                  "mChoices": [
+                    3075,
+                    2504,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwMAwnAwv": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwMAwnBEx": {
+                  "mChoices": [
+                    3075,
+                    3083,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwMAwnBoG": {
+                  "mChoices": [
+                    3075,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwDAwLAwMAwn": {
+                  "mChoices": [
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwDAwMAwnBEx": {
+                  "mChoices": [
+                    2504,
+                    3083
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwMAwnAwv": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwnAwvBoG": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwLAwMAwnBEx": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnAwvBExBoG": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AnIAv8AwDAwMAwn": {
+                  "mChoices": [
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwDAwFAwMAwn": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwDAwLAwMAwn": {
+                  "mChoices": [
+                    4401,
+                    6662,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwDAwMAwnBEx": {
+                  "mChoices": [
+                    6662,
+                    3083,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8AwFAwMAwnBEx": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "__type": "ItemRecommendationContext"
+      },
+      {
+        "mChampionId": 72,
+        "mMapID": 11,
+        "{37b75f5c}": "CLASSIC",
+        "mPosition": "{4ea76b2a}",
+        "mStartingItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    1054,
+                    2003,
+                    1055,
+                    2003
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "mStartingItemBundles": [
+          {
+            "mItemList": [
+              1054,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              1055,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        ],
+        "{e1100a05}": {
+          "3867": {
+            "mItemList": [
+              3876,
+              3869
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        },
+        "mPopularItems": [
+          "Items/3078",
+          "Items/3158",
+          "Items/3070",
+          "Items/3077",
+          "Items/3047",
+          "Items/3742",
+          "Items/6662",
+          "Items/3009",
+          "Items/3004",
+          "Items/3748",
+          "Items/3071",
+          "Items/3110",
+          "Items/3119",
+          "Items/6610",
+          "Items/3111"
+        ],
+        "mCompletedItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    3070,
+                    3078,
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "__type": "ItemRecommendationContext"
+      },
+      {
+        "mChampionId": 72,
+        "mMapID": 11,
+        "{37b75f5c}": "CLASSIC",
+        "mPosition": "{f0ef0c24}",
+        "mStartingItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    1102,
+                    2003,
+                    1103,
+                    2003,
+                    1101,
+                    2003
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "mStartingItemBundles": [
+          {
+            "mItemList": [
+              1102,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              1103,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              1101,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        ],
+        "{e1100a05}": {
+          "3867": {
+            "mItemList": [
+              3876,
+              3869
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        },
+        "mPopularItems": [
+          "Items/3078",
+          "Items/3158",
+          "Items/3742",
+          "Items/3071",
+          "Items/6662",
+          "Items/3047",
+          "Items/3111",
+          "Items/4401",
+          "Items/3161",
+          "Items/3077",
+          "Items/3075",
+          "Items/3748",
+          "Items/3009",
+          "Items/3110",
+          "Items/2504"
+        ],
+        "mCompletedItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    3158,
+                    3078,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AgR": {
+                  "mChoices": [
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Au+": {
+                  "mChoices": [
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvB": {
+                  "mChoices": [
+                    3078,
+                    6662,
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Avn": {
+                  "mChoices": [
+                    3078,
+                    6662,
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8": {
+                  "mChoices": [
+                    3111,
+                    3047,
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+": {
+                  "mChoices": [
+                    3158,
+                    6662,
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/": {
+                  "mChoices": [
+                    3158,
+                    3047,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwB": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwF": {
+                  "mChoices": [
+                    3748,
+                    6631,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwG": {
+                  "mChoices": [
+                    3158,
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwM": {
+                  "mChoices": [
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Awc": {
+                  "mChoices": [
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Awn": {
+                  "mChoices": [
+                    3078,
+                    6662,
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxW": {
+                  "mChoices": [
+                    3078,
+                    6662,
+                    3161
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxZ": {
+                  "mChoices": [
+                    3158,
+                    3111,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "A6e": {
+                  "mChoices": [
+                    3047,
+                    3111,
+                    3009
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BIV": {
+                  "mChoices": [
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BoG": {
+                  "mChoices": [
+                    3111,
+                    3158,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BoI": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AgRAxW": {
+                  "mChoices": [
+                    3742,
+                    3190
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBAwG": {
+                  "mChoices": [
+                    3742,
+                    3071,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBA6e": {
+                  "mChoices": [
+                    4401,
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBBoG": {
+                  "mChoices": [
+                    3742,
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv/": {
+                  "mChoices": [
+                    8020
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwF": {
+                  "mChoices": [
+                    6631,
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwG": {
+                  "mChoices": [
+                    3742,
+                    3071,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAxZ": {
+                  "mChoices": [
+                    4633
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnA6e": {
+                  "mChoices": [
+                    3075,
+                    4401,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnBoG": {
+                  "mChoices": [
+                    3742,
+                    3110,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av8Awn": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AwG": {
+                  "mChoices": [
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AxW": {
+                  "mChoices": [
+                    6662,
+                    3078,
+                    6692
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+BoG": {
+                  "mChoices": [
+                    3158,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AwG": {
+                  "mChoices": [
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AxW": {
+                  "mChoices": [
+                    6662,
+                    8020,
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwn": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAxW": {
+                  "mChoices": [
+                    3748,
+                    6631
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFA6k": {
+                  "mChoices": [
+                    3047,
+                    3158,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFBnn": {
+                  "mChoices": [
+                    3158,
+                    3047,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAwn": {
+                  "mChoices": [
+                    3742,
+                    3071,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAxW": {
+                  "mChoices": [
+                    3071,
+                    3742,
+                    3161
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwLAxW": {
+                  "mChoices": [
+                    3110,
+                    3068
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwcAxW": {
+                  "mChoices": [
+                    2065
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwjAxW": {
+                  "mChoices": [
+                    3190
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnAxZ": {
+                  "mChoices": [
+                    4633
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnA6e": {
+                  "mChoices": [
+                    4401,
+                    3075,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBoG": {
+                  "mChoices": [
+                    3742,
+                    4401,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBoI": {
+                  "mChoices": [
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWAxZ": {
+                  "mChoices": [
+                    4633,
+                    3078,
+                    3071
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWA6e": {
+                  "mChoices": [
+                    6662,
+                    4401,
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWBoG": {
+                  "mChoices": [
+                    3742,
+                    3071,
+                    3161
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWBoI": {
+                  "mChoices": [
+                    2502
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AgRAwcAxW": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AgRAxWAx2": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBAwFAwG": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBAwGA6e": {
+                  "mChoices": [
+                    4401,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv+BoG": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv/AwG": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwDA6e": {
+                  "mChoices": [
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwFAwG": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwFA6e": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwFBnn": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwGA6e": {
+                  "mChoices": [
+                    3075,
+                    4401,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnA6eBoG": {
+                  "mChoices": [
+                    4401,
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AwGAxW": {
+                  "mChoices": [
+                    3004
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AxWBoG": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AxWBok": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AwGAwn": {
+                  "mChoices": [
+                    3742,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AwGAxW": {
+                  "mChoices": [
+                    3742,
+                    4401,
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AxWBoG": {
+                  "mChoices": [
+                    3742,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwGAwn": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAwGAxW": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAxWA6k": {
+                  "mChoices": [
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAxWBnn": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwFAxWBoG": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAwnAxZ": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAwnA6e": {
+                  "mChoices": [
+                    4401,
+                    3075,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAwnBEx": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAxWAxZ": {
+                  "mChoices": [
+                    3742,
+                    3071,
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAxWA6e": {
+                  "mChoices": [
+                    4401,
+                    3075,
+                    3071
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAxWBEx": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnA6eBoG": {
+                  "mChoices": [
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWAxZBIZ": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWAxZBoG": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWA6eBoG": {
+                  "mChoices": [
+                    4401,
+                    3075,
+                    2504
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWBExBoG": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AvnAv/AwGA6e": {
+                  "mChoices": [
+                    4401
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwFAwGA6e": {
+                  "mChoices": [
+                    3748
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwFAwGA6k": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AwGAxWAxZ": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AwGAxWA6e": {
+                  "mChoices": [
+                    4401,
+                    3075,
+                    6665
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av/AwGAxWBEx": {
+                  "mChoices": [
+                    3742
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAwnA6eBEx": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAxWAxZA6e": {
+                  "mChoices": [
+                    4401,
+                    3077
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAxWA6eBEx": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWA6eBExBoG": {
+                  "mChoices": [
+                    3075
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "__type": "ItemRecommendationContext"
+      },
+      {
+        "mChampionId": 72,
+        "mMapID": 11,
+        "{37b75f5c}": "CLASSIC",
+        "mPosition": "{c982a718}",
+        "mStartingItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    1054,
+                    2003,
+                    2003,
+                    2003,
+                    3070
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "mStartingItemBundles": [
+          {
+            "mItemList": [
+              1054,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              2003,
+              2003,
+              3070
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        ],
+        "{e1100a05}": {
+          "3867": {
+            "mItemList": [
+              3876,
+              3869
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        },
+        "mPopularItems": [
+          "Items/3158",
+          "Items/3070",
+          "Items/6662",
+          "Items/3078",
+          "Items/3111",
+          "Items/3119",
+          "Items/3110",
+          "Items/3004",
+          "Items/3047",
+          "Items/6664",
+          "Items/3742",
+          "Items/3077",
+          "Items/3009",
+          "Items/6610",
+          "Items/2504"
+        ],
+        "mCompletedItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    3158,
+                    3070,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "Av+": {
+                  "mChoices": [
+                    3158
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Awn": {
+                  "mChoices": [
+                    6664
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxW": {
+                  "mChoices": [
+                    6662,
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "Av+AxW": {
+                  "mChoices": [
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwnBoI": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AwnAwvBoI": {
+                  "mChoices": [
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "__type": "ItemRecommendationContext"
+      },
+      {
+        "mChampionId": 72,
+        "mMapID": 11,
+        "{37b75f5c}": "CLASSIC",
+        "mPosition": "{a710dc3c}",
+        "mIsDefaultPosition": true,
+        "mStartingItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    1054,
+                    2003,
+                    2003,
+                    2003,
+                    3070,
+                    1055,
+                    2003
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "mStartingItemBundles": [
+          {
+            "mItemList": [
+              1054,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              2003,
+              2003,
+              3070
+            ],
+            "__type": "ItemRecommendationItemList"
+          },
+          {
+            "mItemList": [
+              1055,
+              2003
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        ],
+        "{e1100a05}": {
+          "3867": {
+            "mItemList": [
+              3876,
+              3869
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        },
+        "mPopularItems": [
+          "Items/3158",
+          "Items/3070",
+          "Items/6662",
+          "Items/3078",
+          "Items/3119",
+          "Items/3047",
+          "Items/3004",
+          "Items/3110",
+          "Items/3111",
+          "Items/3077",
+          "Items/3742",
+          "Items/6664",
+          "Items/3071",
+          "Items/6610",
+          "Items/3161"
+        ],
+        "mCompletedItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    3070,
+                    3158,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "Avn": {
+                  "mChoices": [
+                    6662,
+                    3078,
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+": {
+                  "mChoices": [
+                    3158,
+                    3047,
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwG": {
+                  "mChoices": [
+                    3158,
+                    3047,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxW": {
+                  "mChoices": [
+                    6662,
+                    3078,
+                    3070
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BnS": {
+                  "mChoices": [
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "BoG": {
+                  "mChoices": [
+                    3158,
+                    3047,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "Au8AxW": {
+                  "mChoices": [
+                    3050
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBAv+": {
+                  "mChoices": [
+                    6692
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv+": {
+                  "mChoices": [
+                    6662,
+                    3078
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwG": {
+                  "mChoices": [
+                    3004
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwv": {
+                  "mChoices": [
+                    6662
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnBoG": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvqAxW": {
+                  "mChoices": [
+                    3004
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AxW": {
+                  "mChoices": [
+                    6662,
+                    3078,
+                    6692
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+BoG": {
+                  "mChoices": [
+                    3158,
+                    3111
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AwGAxW": {
+                  "mChoices": [
+                    3004
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWBoG": {
+                  "mChoices": [
+                    3119,
+                    3004,
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "Au8AvqAxW": {
+                  "mChoices": [
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Au8AxWBoG": {
+                  "mChoices": [
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvBAv+Bok": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv+AwG": {
+                  "mChoices": [
+                    3004
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAv+BoG": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AvnAwvBoG": {
+                  "mChoices": [
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AwGAxW": {
+                  "mChoices": [
+                    3004
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AxWBoG": {
+                  "mChoices": [
+                    3119,
+                    3004
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "Av+AxWBok": {
+                  "mChoices": [
+                    3119
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "Av+AwvAxWBoG": {
+                  "mChoices": [
+                    3110
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "__type": "ItemRecommendationContext"
+      },
+      {
+        "mChampionId": 72,
+        "mMapID": 11,
+        "{37b75f5c}": "CLASSIC",
+        "mPosition": "{bfc6b95f}",
+        "mStartingItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    2003,
+                    2003,
+                    3865
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "mStartingItemBundles": [
+          {
+            "mItemList": [
+              2003,
+              2003,
+              3865
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        ],
+        "{e1100a05}": {
+          "3867": {
+            "mItemList": [
+              3876,
+              3869
+            ],
+            "__type": "ItemRecommendationItemList"
+          }
+        },
+        "mPopularItems": [
+          "Items/3865",
+          "Items/3009",
+          "Items/3742",
+          "Items/3002",
+          "Items/3158",
+          "Items/3047",
+          "Items/3075",
+          "Items/4401",
+          "Items/2065",
+          "Items/3110",
+          "Items/6662",
+          "Items/3111",
+          "Items/3876",
+          "Items/3070",
+          "Items/3078"
+        ],
+        "mCompletedItemMatrix": {
+          "mrows": [
+            {
+              "mChoicesMap": {
+                "AAA": {
+                  "mChoices": [
+                    3865
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "A8Z": {
+                  "mChoices": [
+                    3009,
+                    3158,
+                    3047
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "mChoicesMap": {
+                "AvBA8Z": {
+                  "mChoices": [
+                    3742,
+                    3002
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                },
+                "AxWA8Z": {
+                  "mChoices": [
+                    2065
+                  ],
+                  "__type": "ItemRecommendationChoices"
+                }
+              },
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            },
+            {
+              "__type": "ItemRecommendationMatrixRow"
+            }
+          ],
+          "__type": "ItemRecommendationMatrix"
+        },
+        "__type": "ItemRecommendationContext"
+      }
+    ],
+    "__type": "ItemRecommendationContextList"
+  },
+  "{938e336e}": {
+    "{e766e3b1}": [
+      {
+        "Camp": 4,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 5,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 3,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 2,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 1,
+        "__type": "{e08272cf}"
+      },
+      {
+        "__type": "{e08272cf}"
+      },
+      {
+        "__type": "{f5676233}"
+      }
+    ],
+    "{b1df2719}": [
+      {
+        "Camp": 7,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 6,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 8,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 9,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 10,
+        "__type": "{e08272cf}"
+      },
+      {
+        "Camp": 11,
+        "__type": "{e08272cf}"
+      },
+      {
+        "__type": "{f5676233}"
+      }
+    ],
+    "__type": "{0d7f2774}"
+  },
+  "{3d016b4b}": {
+    "name": "stat_stone_set_name_1",
+    "catalogEntry": {
+      "contentId": "2fcda791-0efb-43ba-bba8-2c3bb85ae22f",
+      "itemID": 66600105,
+      "offerId": "8fc8a139-08fe-4a3f-8d55-c19aaea6229c",
+      "__type": "CatalogEntry"
+    },
+    "statStones": [
+      "{17ab2e0f}",
+      "{9402dd67}",
+      "{24b580f2}"
+    ],
+    "__type": "StatStoneSet"
+  },
+  "{17ab2e0f}": {
+    "mNameTraKey": "stat_stone_name_SkarnerRDrags",
+    "catalogEntry": {
+      "contentId": "6a018a9f-c899-4c4b-a4a8-c1f5c4589354",
+      "itemID": 6172,
+      "offerId": "32891519-c6e2-4dc3-be62-660302f9e19a",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_SkarnerRDrags",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 222,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{47089000}",
+    "Milestones": [
+      9,
+      25,
+      45,
+      55,
+      70,
+      25
+    ],
+    "EpicStatStone": true,
+    "TriggeredFromScript": true,
+    "stoneName": "SkarnerRDrags",
+    "__type": "StatStoneData"
+  },
+  "{24b580f2}": {
+    "mNameTraKey": "stat_stone_name_SkarnerEStuns",
+    "catalogEntry": {
+      "contentId": "9445602b-f5be-4c11-951c-40fd0b86e3e8",
+      "itemID": 224,
+      "offerId": "6a0556a5-851c-4bff-a658-0b2b20bd41d4",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_SkarnerEStuns",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 222,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{2eeaa87d}",
+    "Milestones": [
+      35,
+      80,
+      175,
+      200,
+      250,
+      100
+    ],
+    "EpicStatStone": true,
+    "TriggeredFromScript": true,
+    "stoneName": "SkarnerEStuns",
+    "__type": "StatStoneData"
+  },
+  "{9402dd67}": {
+    "mNameTraKey": "stat_stone_name_SkarnerPKills",
+    "catalogEntry": {
+      "contentId": "6dc9e2a1-9d15-4252-a43c-0219b65d192e",
+      "itemID": 223,
+      "offerId": "4775d42a-35a9-4b51-97ab-3ba0a73a453f",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_SkarnerPKills",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 222,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{06fc9407}",
+    "Milestones": [
+      3,
+      7,
+      15,
+      20,
+      20,
+      9
+    ],
+    "EpicStatStone": true,
+    "TriggeredFromScript": true,
+    "stoneName": "SkarnerPKills",
+    "__type": "StatStoneData"
+  },
+  "{3e016cde}": {
+    "name": "stat_stone_set_name_2",
+    "catalogEntry": {
+      "contentId": "36aed7ce-0424-4a16-ad2c-333294696086",
+      "itemID": 66600482,
+      "offerId": "2f2c9725-e468-4282-a1fc-51e1fb884faa",
+      "__type": "CatalogEntry"
+    },
+    "statStones": [
+      "{f5db034e}",
+      "{96007847}",
+      "{6da78a6a}"
+    ],
+    "__type": "StatStoneSet"
+  },
+  "{d3ff6433}": {
+    "name": "stat_stone_set_name_starter",
+    "catalogEntry": {
+      "contentId": "1c3eb474-3577-4937-b0ba-86fa1bef817b",
+      "itemID": 66600247,
+      "offerId": "42859fd1-bda5-4332-b136-09074f686ead",
+      "__type": "CatalogEntry"
+    },
+    "statStones": [
+      "{7507e22d}",
+      "{8602ed6a}",
+      "{56e39197}"
+    ],
+    "__type": "StatStoneSet"
+  },
+  "{56e39197}": {
+    "mNameTraKey": "stat_stone_name_structures_destroyed",
+    "catalogEntry": {
+      "contentId": "3d3305e7-cbdf-4cde-aaa6-977a4945640e",
+      "itemID": 125680,
+      "offerId": "3f83a81c-2837-4ddc-9362-550c3f1cbdab",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_StructuresDestroyed",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 52,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{6ce57a50}",
+    "Milestones": [
+      5,
+      15,
+      25,
+      30,
+      40,
+      15
+    ],
+    "stoneName": "SkarnerStructuresDestroyed",
+    "__type": "StatStoneData"
+  },
+  "{7507e22d}": {
+    "mNameTraKey": "stat_stone_name_EpicMonstersKilled",
+    "catalogEntry": {
+      "contentId": "6c78ce43-7d02-47e6-aa43-a426dacf908b",
+      "itemID": 125678,
+      "offerId": "9819c950-5fe0-419d-b4bd-86f5d248ce62",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_EpicMonstersKilled",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 54,
+        "StatFilters": [
+          {
+            "UnitTags": {
+              "{a47810c1}": [
+                "{592aa99b}"
+              ],
+              "__type": "ObjectTags"
+            },
+            "__type": "TargetHasUnitTagFilter"
+          }
+        ],
+        "__type": "StatStoneEventToTrack"
+      },
+      {
+        "EventToTrack": 86,
+        "StatFilters": [
+          {
+            "{47bac313}": false,
+            "__type": "TargetTypeFilter"
+          },
+          {
+            "UnitTags": {
+              "{a47810c1}": [
+                "{592aa99b}"
+              ],
+              "__type": "ObjectTags"
+            },
+            "__type": "TargetHasUnitTagFilter"
+          }
+        ],
+        "__type": "StatStoneEventToTrack"
+      },
+      {
+        "EventToTrack": 53,
+        "StatFilters": [
+          {
+            "UnitTags": {
+              "{a47810c1}": [
+                "{592aa99b}"
+              ],
+              "__type": "ObjectTags"
+            },
+            "__type": "TargetHasUnitTagFilter"
+          }
+        ],
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{6ce57a50}",
+    "Milestones": [
+      3,
+      10,
+      20,
+      22,
+      25,
+      10
+    ],
+    "stoneName": "SkarnerEpicMonstersKilled",
+    "__type": "StatStoneData"
+  },
+  "{8602ed6a}": {
+    "mNameTraKey": "stat_stone_name_takedowns",
+    "catalogEntry": {
+      "contentId": "ec465b46-211a-46c7-8e64-de57703b71eb",
+      "itemID": 125679,
+      "offerId": "c1f37e45-cd97-4e6c-8a4b-599920356dcd",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_Takedowns",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 7,
+        "__type": "StatStoneEventToTrack"
+      },
+      {
+        "EventToTrack": 86,
+        "StatFilters": [
+          {
+            "{1e3fcd64}": false,
+            "__type": "TargetTypeFilter"
+          }
+        ],
+        "__type": "StatStoneEventToTrack"
+      },
+      {
+        "EventToTrack": 204,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{5c6e96a2}",
+    "Milestones": [
+      25,
+      65,
+      125,
+      150,
+      185,
+      75
+    ],
+    "stoneName": "SkarnerTakedowns",
+    "__type": "StatStoneData"
+  },
+  "{6da78a6a}": {
+    "mNameTraKey": "stat_stone_name_SkarnerEMultithits",
+    "catalogEntry": {
+      "contentId": "88278d20-b4f6-49cd-aaa2-899450e64bab",
+      "itemID": 126232,
+      "offerId": "317b0d38-5977-4e2a-ab89-fb826f87f2e2",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_SkarnerEMultithits",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 222,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{2eeaa87d}",
+    "Milestones": [
+      6,
+      15,
+      30,
+      35,
+      45,
+      15
+    ],
+    "EpicStatStone": true,
+    "TriggeredFromScript": true,
+    "stoneName": "SkarnerERCombo",
+    "__type": "StatStoneData"
+  },
+  "{96007847}": {
+    "mNameTraKey": "stat_stone_name_SkarnerQDamage",
+    "catalogEntry": {
+      "contentId": "f95d189c-6bbe-4b6b-a961-452fd5dc8eb8",
+      "itemID": 126230,
+      "offerId": "3cb86d81-bee7-4ac5-9de7-90b1e67bc108",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_SkarnerQDamage",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 222,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{06fc9407}",
+    "Milestones": [
+      3500,
+      8000,
+      16000,
+      20000,
+      25000,
+      10000
+    ],
+    "EpicStatStone": true,
+    "TriggeredFromScript": true,
+    "stoneName": "SkarnerQDamage",
+    "__type": "StatStoneData"
+  },
+  "{f5db034e}": {
+    "mNameTraKey": "stat_stone_name_SkarnerWBlocks",
+    "catalogEntry": {
+      "contentId": "3cb620da-7aa6-4edf-a930-bc90adb2dc3a",
+      "itemID": 126231,
+      "offerId": "664e4e77-7f54-465d-8a3c-85f93f9b3aaf",
+      "__type": "CatalogEntry"
+    },
+    "mDescriptionTraKey": "stat_stone_description_SkarnerWBlocks",
+    "EventsToTrack": [
+      {
+        "EventToTrack": 222,
+        "__type": "StatStoneEventToTrack"
+      }
+    ],
+    "category": "{0899c06d}",
+    "Milestones": [
+      14000,
+      36000,
+      71000,
+      86000,
+      100000,
+      43000
+    ],
+    "EpicStatStone": true,
+    "TriggeredFromScript": true,
+    "stoneName": "SkarnerWBlocks",
+    "__type": "StatStoneData"
+  },
+  "Characters/Skarner/Skins/Meta": {
+    "__type": "SkinCharacterMetaDataProperties"
+  },
+  "Characters/Skarner/CharacterRecords/Root": {
+    "mCharacterName": "Skarner",
+    "baseHP": 650,
+    "hpPerLevel": 99,
+    "baseStaticHPRegen": 1.7999999523162842,
+    "hpRegenPerLevel": 0.17000000178813934,
+    "healthBarHeight": 85,
+    "primaryAbilityResource": {
+      "arType": 0,
+      "arBase": 320,
+      "arPerLevel": 60,
+      "arBaseStaticRegen": 1.440000057220459,
+      "arRegenPerLevel": 0.09000000357627869,
+      "__type": "AbilityResourceSlotInfo"
+    },
+    "baseDamage": 65,
+    "damagePerLevel": 4.5,
+    "baseArmor": 38,
+    "armorPerLevel": 5,
+    "baseSpellBlock": 32,
+    "spellBlockPerLevel": 2.049999952316284,
+    "baseMoveSpeed": 335,
+    "attackRange": 125,
+    "attackSpeed": 0.625,
+    "attackSpeedRatio": 0.625,
+    "attackSpeedPerLevel": 2.0999999046325684,
+    "acquisitionRange": 600,
+    "basicAttack": {
+      "mAttackDelayCastOffsetPercent": -0.11999999731779099,
+      "mAttackDelayCastOffsetPercentAttackSpeedRatio": 0.5,
+      "mAttackProbability": 0.4000000059604645,
+      "__type": "AttackSlotData"
+    },
+    "extraAttacks": [
+      {
+        "mAttackProbability": 0.30000001192092896,
+        "mAttackName": "SkarnerBasicAttack2",
+        "__type": "AttackSlotData"
+      },
+      {
+        "mAttackProbability": 0.30000001192092896,
+        "__type": "AttackSlotData"
+      }
+    ],
+    "critAttacks": [
+      {
+        "mAttackDelayCastOffsetPercent": -0.11999999731779099,
+        "mAttackDelayCastOffsetPercentAttackSpeedRatio": 0.5,
+        "mAttackName": "SkarnerCritAttack",
+        "__type": "AttackSlotData"
+      }
+    ],
+    "spellNames": [
+      "SkarnerVirulentSlashAbility/SkarnerVirulentSlash",
+      "SkarnerExoskeletonAbility/SkarnerExoskeleton",
+      "SkarnerFractureAbility/SkarnerFracture",
+      "SkarnerImpaleAbility/SkarnerImpale"
+    ],
+    "extraSpells": [
+      "SkarnerFractureMissile",
+      "SkarnerPassiveAttack",
+      "SkarnerTurretAttack",
+      "SkarnerTurretAttack2",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell",
+      "BaseSpell"
+    ],
+    "mAbilities": [
+      "Characters/Skarner/Spells/SkarnerVirulentSlashAbility",
+      "Characters/Skarner/Spells/SkarnerExoskeletonAbility",
+      "Characters/Skarner/Spells/SkarnerFractureAbility",
+      "Characters/Skarner/Spells/SkarnerImpaleAbility",
+      "Characters/Skarner/Spells/SkarnerPassiveAbility"
+    ],
+    "passiveName": "game_character_passiveName_Skarner",
+    "passiveLuaName": "SkarnerPassive",
+    "passiveToolTip": "game_character_passiveDescription_Skarner",
+    "passive1IconName": "ASSETS/Characters/Skarner/HUD/Icons2D/Skarner_Passive.dds",
+    "name": "game_character_displayname_Skarner",
+    "weaponMaterials": [
+      "SkarnerBasicAttack"
+    ],
+    "selectionHeight": 150,
+    "selectionRadius": 130,
+    "pathfindingCollisionRadius": 50,
+    "overrideGameplayCollisionRadius": 80,
+    "unitTagsString": "Champion",
+    "mEducationToolData": {
+      "firstItem": 1054,
+      "__type": "ToolEducationData"
+    },
+    "characterToolData": {
+      "spellData": [
+        {
+          "desc": "Cho'Gath consumes a unit in one gulp.  He gains a size level each time he kills a unit in this way, gaining health, ability power, and he can Feast on higher health units.",
+          "displayName": "Feast",
+          "__type": "ToolSpellDesc"
+        },
+        {
+          "desc": "Cho'Gath consumes a unit in one gulp.  He gains a size level each time he kills a unit in this way, gaining health, ability power, and he can Feast on higher health units.",
+          "displayName": "Feast",
+          "__type": "ToolSpellDesc"
+        },
+        {
+          "desc": "Cho'Gath consumes a unit in one gulp.  He gains a size level each time he kills a unit in this way, gaining health, ability power, and he can Feast on higher health units.",
+          "displayName": "Feast",
+          "__type": "ToolSpellDesc"
+        },
+        {
+          "desc": "Cho'Gath consumes a unit in one gulp.  He gains a size level each time he kills a unit in this way, gaining health, ability power, and he can Feast on higher health units.",
+          "displayName": "Feast",
+          "__type": "ToolSpellDesc"
+        }
+      ],
+      "mapAIPresence": {
+        "0": {
+          "__type": "ToolAiPresence"
+        },
+        "1": {
+          "__type": "ToolAiPresence"
+        },
+        "2": {
+          "__type": "ToolAiPresence"
+        }
+      },
+      "passiveData": [
+        {
+          "name": "game_character_passiveName_Skarner",
+          "__type": "ToolPassiveData"
+        }
+      ],
+      "searchTags": "fighter",
+      "searchTagsSecondary": "tank",
+      "championId": 72,
+      "magicRank": 5,
+      "LevelSpellEffectiveness": 1.5,
+      "difficultyRank": 5,
+      "description": "game_character_description_Skarner",
+      "defenseRank": 6,
+      "ChasingAttackRangePercent": 0.5,
+      "attackRank": 7,
+      "__type": "CharacterToolData"
+    },
+    "platformEnabled": true,
+    "flags": 8398088,
+    "purchaseIdentities": [
+      "Melee"
+    ],
+    "mPreferredPerkStyle": "Perks/Styles/Resolve",
+    "mCharacterPassiveSpell": "Characters/Skarner/Spells/SkarnerPassiveAbility/SkarnerPassive",
+    "mCharacterPassiveBuffs": [
+      {
+        "{bd3c31e4}": "Characters/Skarner/Spells/SkarnerPassiveAbility/SkarnerPassive",
+        "__type": "CharacterPassiveData"
+      },
+      {
+        "{bd3c31e4}": "{b31b3374}",
+        "SkinFilter": {
+          "skinIds": [
+            3
+          ],
+          "__type": "SkinFilterData"
+        },
+        "__type": "CharacterPassiveData"
+      },
+      {
+        "{bd3c31e4}": "Characters/Skarner/Spells/SkarnerBrushCheck",
+        "__type": "CharacterPassiveData"
+      }
+    ],
+    "__type": "CharacterRecord"
+  }
+}
