@@ -17,7 +17,7 @@ const client = await getClient(); // TODO: Change this into a function call so t
 async function createMaps(matchList, summonerName) {
     console.log("Inside createMaps");
     // TODO: Consider creating a map for ranked vs normal games vs ARAM games
-    let losingMatchups = new Map(); // overall
+    let losingMatchups = new Map();
     let losingMatchupsTOP = new Map();
     let losingMatchupsJNG = new Map();
     let losingMatchupsMID = new Map();
@@ -95,7 +95,7 @@ const updateMatchupStatistics = (map, champName, userTeamWon) => {
 async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, JNG, MID, BOT, SUP) {
     console.log("Inside getLosingMatchups");
     try {
-        // TODO: Skip if Areanas match OR alternatively, skip if not a ranked, norms, aram game
+        // TODO: Skip if Arenas match OR alternatively, skip if not a ranked, norms, aram game
         const matchDetails = await Promise.all(matchList.map(matchId =>
             client.matches.fetch(matchId).catch(error => {
                 console.error(`Failed to fetch match ${matchId}:`, error);
@@ -170,6 +170,7 @@ function mergeMatchlistAndDB(matchList, databaseList) {
     return databaseList;
 }
 
+// TODO: Add more complexity to this function
 function calculateNemesis(losingMatchups) {
     let nemesis = null;
     let highestLossRatio = 0;

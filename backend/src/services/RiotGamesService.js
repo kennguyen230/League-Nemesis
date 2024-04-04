@@ -3,7 +3,6 @@
  */
 
 import { getClient } from './ClientManager.js'
-import { createMaps } from '../utils/DataProcessing.js'
 
 /* CONSTANTS */
 const COUNT = 20; // How many game we fetch per call
@@ -32,22 +31,12 @@ async function getPUUID(summonerName) {
  */
 async function getRecentGames(summonerName, lastGameTimestamp) {
     console.log("Inside getRecentGames");
-    let matchList;
 
     if (lastGameTimestamp === -1) {
-        matchList = await getNewUserMatchlist(summonerName);
-        // return await getNewUserMatchlist(summonerName);
+        return await getNewUserMatchlist(summonerName);
     } else {
-        matchList = await getExistingUserMatchlist(summonerName, lastGameTimestamp);
-        // return await getExistingUserMatchlist(summonerName, lastGameTimestamp);
+        return await getExistingUserMatchlist(summonerName, lastGameTimestamp);
     }
-
-    return matchList;
-}
-
-async function createMapsWithML(summonerName, matchList) {
-    const allMatchups = await createMaps(matchList, summonerName);
-    return allMatchups;
 }
 
 /**
@@ -62,7 +51,6 @@ async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
         console.log("Inside getExistingUserML");
         const summoner = await client.summoners.fetchBySummonerName(summonerName);
         let matchList = await summoner.fetchMatchList({ count: COUNT, startTime: lastGameTimestamp });
-        console.log(matchList);
 
         // Existing user but they have not played any new games since the last time we fetched data
         if (matchList.length < 2) {
@@ -71,21 +59,18 @@ async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
         }
 
         let lastMatchInList = await client.matches.fetch(matchList[matchList.length - 1]);
-        console.log("1")
         let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
-        console.log("2")
 
-        // Loop until matchList has appended all games starting from the most recent game the user has played
-        // until lastGameTimestamp is hit
+        // Loop until matchList has appended all games starting from the most recent game the user has played until lastGameTimestamp is hit
         // If the user has played less games than 'count' in fetch options, then this loop will not be entered
         while (currLastGameTimestamp > lastGameTimestamp) {
-            console.log("INside loop");
             try {
                 const appendingMatchList = await summoner.fetchMatchList({ startTime: lastGameTimestamp, endTime: currLastGameTimestamp });
                 matchList.push(...appendingMatchList);
                 lastMatchInList = await client.matches.fetch(matchList[matchList.length - 1]);
                 currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
             } catch (innerError) {
+                // This error should only occur if it's a new user and we fetch a game that's not ARAM, Normals, or Ranked
                 if (innerError.response && innerError.response.status === 404) {
                     console.error("Fetched an invalid match. Exiting with remaining match list.", innerError)
                     break;
@@ -95,6 +80,7 @@ async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
             }
         }
 
+        console.log(matchList);
         return matchList.slice(0, -1) // Returns every element except the last one because it will be the same game as lastGameTimestamp
     } catch (error) {
         console.error("Error in getExistingUserMatchlist:", error)
@@ -145,9 +131,7 @@ async function getNewUserMatchlist(summonerName) {
                 }
             }
         }
-
-        console.log("Returning with matchlist successfully!");
-        console.log("Matchlist size:", matchList.length)
+        console.log(matchList);
         return matchList;
     } catch (error) {
         console.error("Error in getNewUserMatchlist:", error)
@@ -168,6 +152,6 @@ async function getLastGameTimestamp(matchList) {
     return Math.trunc(match.endTimestamp / 1000);
 }
 
-export { getPUUID, getRecentGames, getLastGameTimestamp, createMapsWithML }
+export { getPUUID, getRecentGames, getLastGameTimestamp }
 
 

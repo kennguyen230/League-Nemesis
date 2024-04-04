@@ -3,7 +3,6 @@
  * the entry way into the server. 
  */
 import express from 'express';
-// import { getPUUID, getRecentGames, createMapsWithML } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID } from '../services/DatabaseService.js';
 import { queryForMaps } from '../controllers/SummonerController.js';
 
@@ -59,8 +58,14 @@ router.get('/queryMaps', async (req, res) => {
         const allMatchups = await queryForMaps(summonerName);
 
         if (allMatchups) {
+            // Convert map to object for sending to client
+            let overallStats = {};
+            allMatchups.overall.forEach((value, key) => {
+                overallStats[key] = value;
+            });
+
             console.log("Querying for maps successful")
-            res.status(200).send("Success querying maps");
+            res.status(200).send(overallStats);
         } else {
             console.log("Querying for maps unsuccessful")
             res.status(404).send("Unsuccessful querying maps");
@@ -77,7 +82,6 @@ router.get('/queryMaps', async (req, res) => {
 
 // Route for saving a new summoner to the db
 router.post('/', async (req, res) => {
-    // TODO: Need to add way to prevent same user added twice. Probably check for PUUID in db first
     if (!req.body.summonerName ||
         !req.body.PUUID ||
         !req.body.top ||

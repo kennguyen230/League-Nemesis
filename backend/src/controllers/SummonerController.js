@@ -3,78 +3,9 @@
  * that grab and process our data. This includes RiotGamesServices, DatabaseServices, and DataProcessing.
  * All these services combined will generate the appropriate map to return to the client.
  */
-import { getPUUID, getRecentGames, getLastGameTimestamp, createMapsWithML } from '../services/RiotGamesService.js'
+import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeMatchlistAndDB } from '../utils/DataProcessing.js';
-
-/**
- * 1. Uses Riot API to get puuid
- * 2. Attempts to grab the user from DB with the puuid
- * 3. If a player was retrieved successfully from DB then it's an existing user, 
- * thus set lastGameTimeStamp appropriately
- * 4. Grab the user's matchlist using lastGameTimestamp as a parameter. (Can be -1 if new user)
- * 5. If there is data from DB then merge with matchlist
- * 6. Returns to routes page
- * 
- * @param {String} summonerName A user's summoner name
- * @returns An object that contains the merged maps
- */
-// async function queryForMaps(summonerName) {
-//     try {
-//         const puuid = await getPUUID(summonerName);
-//         let db = await getSummonerByPUUID(puuid);
-//         let lastGameTimestamp = -1; // Default for new users
-//         let returnObject;
-//         let mlMaps;
-
-//         if (db) {
-//             console.log("Player present in database, updating LGTS");
-//             lastGameTimestamp = db.lastGameTimestamp;
-//             console.log("Updated LGTS from db: ", lastGameTimestamp);
-//         }
-
-//         const matchlist = await getRecentGames(summonerName, lastGameTimestamp);
-//         console.log(matchlist);
-//         if (matchlist) {
-//             lastGameTimestamp = await getLastGameTimestamp(matchlist); // Grab the newest LGTS so we can update db
-//             console.log("Updated LGTS from ML: ", lastGameTimestamp);
-//             mlMaps = await createMapsWithML(summonerName, matchlist);
-//         } else {
-//             const dbMaps = {
-//                 overall: db.overallStats,
-//                 top: db.topStats,
-//                 jng: db.jungleStats,
-//                 mid: db.midStats,
-//                 bot: db.botStats,
-//                 sup: db.supportStats
-//             }
-//             return dbMaps;
-//         }
-
-//         if (db) {
-//             const dbMaps = {
-//                 overall: db.overallStats,
-//                 top: db.topStats,
-//                 jng: db.jungleStats,
-//                 mid: db.midStats,
-//                 bot: db.botStats,
-//                 sup: db.supportStats
-//             }
-
-//             returnObject = mergeEachMap(mlMaps, dbMaps); // Merge the two maps
-
-//             await updateSummonerByPUUID(summonerName, puuid, lastGameTimestamp, returnObject);
-//         } else {
-//             returnObject = mlMaps;
-//             await saveNewSummoner(summonerName, puuid, lastGameTimestamp, returnObject);
-//         }
-
-//         return returnObject;
-//     } catch (error) {
-//         console.error('Error in queryForMaps:', error);
-//         return null;
-//     }
-// }
+import { mergeMatchlistAndDB, createMaps } from '../utils/DataProcessing.js';
 
 async function queryForMaps(summonerName) {
     try {
@@ -83,16 +14,17 @@ async function queryForMaps(summonerName) {
         let lastGameTimestamp = db ? db.lastGameTimestamp : -1;
         let returnObject;
 
-        console.log(db ? "Player present in database, updating LGTS" : "New player, default LGTS");
-        if (db) console.log("Updated LGTS from db: ", lastGameTimestamp);
+        if (db) {
+            console.log("Player present in database");
+            console.log("Updated LGTS from DB: ", lastGameTimestamp);
+        }
 
         const matchlist = await getRecentGames(summonerName, lastGameTimestamp);
-
-        if (matchlist && matchlist.length) {
+        if (matchlist) {
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);
 
-            const mlMaps = await createMapsWithML(summonerName, matchlist);
+            const mlMaps = await createMaps(matchlist, summonerName);
             returnObject = db ? mergeEachMap(mlMaps, extractStatsFromDB(db)) : mlMaps;
 
             await (db ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject);
@@ -101,7 +33,6 @@ async function queryForMaps(summonerName) {
             returnObject = extractStatsFromDB(db);
         }
 
-        console.log(matchlist);
         return returnObject;
     } catch (error) {
         console.error('Error in queryForMaps:', error);

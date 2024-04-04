@@ -54,6 +54,7 @@ function App() {
       })
       .then(function (response) {
         console.log(response.data);
+        setLossRateMap(response.data);
       })
       .catch(function (error) {
         console.error(error);

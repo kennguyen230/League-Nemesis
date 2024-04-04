@@ -32,6 +32,10 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchu
 
 async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, updatedMaps) {
     try {
+        if (!summonerName || !PUUID || !lastGameTimestamp || !updatedMaps) {
+            throw new Error('All required fields must be provided')
+        }
+
         const update = {
             $set: {
                 summonerName: summonerName,
@@ -63,6 +67,8 @@ async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, upd
 
 async function getSummonerByPUUID(PUUID) {
     try {
+        if (!PUUID) throw new Error('PUUID not defined');
+
         const player = await SummonerProfile.findOne({ PUUID });
         if (!player) {
             console.log('No player found in database')
@@ -78,7 +84,8 @@ async function getSummonerByPUUID(PUUID) {
 
 async function deleteSummonerByPUUID(PUUID) {
     try {
-        console.log("Inside delete:", PUUID);
+        if (!PUUID) throw new Error('PUUID not defined');
+
         const result = await SummonerProfile.findOneAndDelete({ PUUID });
 
         // TODO: Return something instead of console logging
