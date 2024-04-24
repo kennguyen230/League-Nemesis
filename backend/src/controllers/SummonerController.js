@@ -29,6 +29,7 @@ async function queryForMaps(summonerName) {
 
             await (db ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject);
         } else {
+            // TODO: Edge case if they are a new account with 1 game then we dont return anything
             if (!db) throw new Error("No matchlist found and summoner not in database");
             returnObject = extractStatsFromDB(db);
         }

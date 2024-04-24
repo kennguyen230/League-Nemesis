@@ -3,22 +3,8 @@ import axios from "axios";
 
 function App() {
   const [summonerName, setSummonerName] = useState("");
-  const [matchList, setMatchList] = useState([]);
   const [puuid, setPuuid] = useState("");
   const [lossRateMap, setLossRateMap] = useState({});
-
-  function getMatchlist() {
-    axios
-      .get(`http://localhost:5000/summoner/getMatchlist`, {
-        params: { summoner: summonerName },
-      })
-      .then(function (response) {
-        setMatchList(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }
 
   function getPUUID() {
     axios
@@ -27,20 +13,6 @@ function App() {
       })
       .then(function (response) {
         setPuuid(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }
-
-  function getLN() {
-    axios
-      .get(`http://localhost:5000/summoner/getMaps`, {
-        params: { summoner: summonerName },
-      })
-      .then(function (response) {
-        console.log(response.data); // This should now be an object, not a Map
-        setLossRateMap(response.data); // Directly use the object
       })
       .catch(function (error) {
         console.error(error);
@@ -80,16 +52,11 @@ function App() {
     <div>
       <h1>League Nemesis</h1>
       <input type="text" onChange={(e) => setSummonerName(e.target.value)} />
-      <button onClick={() => getMatchlist()}>Get match list</button>
       <button onClick={() => getPUUID()}>Get PUUID</button>
-      <button onClick={() => getLN()}>League Nemesis</button>
       <button onClick={() => queryMaps()}>Query maps</button>
-      <ul>
-        {matchList.map((match, index) => (
-          <li key={index}>{match}</li>
-        ))}
-      </ul>
+
       <p>{puuid}</p>
+
       {Object.keys(lossRateMap).length > 0 && (
         <div className="table-container">
           <table>
