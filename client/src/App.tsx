@@ -4,6 +4,7 @@ import Footer from "./layouts/Footer";
 
 import HomePageBG from "./assets/image/HomePageBG.jpg";
 import HPL from "./assets/image/LNLogoBig.png";
+import HPBG from "./assets/svg/HomePageBg.svg";
 
 export default function App() {
   return (
