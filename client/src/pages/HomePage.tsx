@@ -1,29 +1,26 @@
-import Header from "../layouts/Header";
-import HomeSearchBox from "../layouts/HomePage/HomeSearchBox";
-import Footer from "../layouts/Footer";
+import Header from "../layouts/Header.tsx";
+import { Button } from "../components/ui/button.tsx";
+import SmallSearchBar from "../layouts/SmallSearchBar.tsx";
 
-import HomePageBG from "./assets/image/HomePageBG.jpg";
-import HPL from "./assets/image/LNLogoBig.png";
+import HomePageLogo from "./assets/image/HomePageLogo.png";
 
-export default function App() {
+const App = () => {
   return (
-    <div className="min-h-screen bg-[#11161D]">
-      <Header />
-
-      {/* Background & home page search box */}
-      <div
-        className="flex flex-col items-center justify-center h-[91vh] gap-5"
-        style={{
-          backgroundImage: `url(${HomePageBG})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <img src={HPL} alt="" />
-        <HomeSearchBox></HomeSearchBox>
+    <div>
+      <Header></Header>
+      <div className="bg-home-page-bg h-screen flex flex-col items-center justify-start bg-center bg-cover lg:bg-top">
+        <img
+          src={HomePageLogo}
+          alt="HomePageLogo"
+          className="mt-48 mb-4 lg:mt-64"
+        />
+        <SmallSearchBar></SmallSearchBar>
+        <Button className="hidden md:block lg:w-28 mt-2 bg-[#182B40]">
+          Search
+        </Button>
       </div>
-      <Footer></Footer>
     </div>
   );
-}
+};
+
+export default App;

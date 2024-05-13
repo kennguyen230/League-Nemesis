@@ -8,9 +8,11 @@ export default {
     extend: {
       fontFamily: {
         'vollkorn': ['Vollkorn SC', 'sans-serif']
+      },
+      backgroundImage: {
+        'home-page-bg': "url('src/assets/image/HomeBG.png')"
       }
     },
   },
   plugins: [],
 }
-
