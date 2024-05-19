@@ -10,7 +10,8 @@ export default {
         'vollkorn': ['Vollkorn SC', 'sans-serif']
       },
       backgroundImage: {
-        'home-page-bg': "url('src/assets/image/HomeBG.png')"
+        'home-page-bg': "url('src/assets/image/HomeBG.png')",
+        'lucian-bg': "url('src/assets/image/Temp/Lucian_bg.jpg')",
       }
     },
   },
