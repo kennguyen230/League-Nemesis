@@ -5,7 +5,11 @@ const SummonerInfo = () => {
   return (
     <div className="flex gap-3 justify-start items-center bg-lucian-bg bg-cover bg-center p-6 font-vollkorn">
       {/* Summoner Icon */}
-      <img src={TEMP_TeemoIcon} alt="Teemo" className="w-20 rounded-lg" />
+      <img
+        src={TEMP_TeemoIcon}
+        alt="Teemo"
+        className="w-20 rounded-lg border"
+      />
 
       {/* Summoner info */}
       <div className="flex flex-col">
