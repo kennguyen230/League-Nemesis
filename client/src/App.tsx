@@ -3,7 +3,7 @@ import SmallSearchBar from "./layouts/SmallSearchBar";
 import SummonerInfo from "./layouts/SummonerPage/SummonerInfo";
 import GameTypeBar from "./layouts/SummonerPage/GameTypeBar";
 import LeagueNemesisDisplay from "./layouts/SummonerPage/LeagueNemesisDisplay";
-import LeagueNemesisStatistics from "./layouts/SummonerPage/LeagueNemesisStatistics";
+import LeagueNemesisStatisticsBar from "./layouts/SummonerPage/LeagueNemesisStatisticsBar";
 
 import TEMP_SylasPic from "./assets/image/Temp/Sylas_bg.jpg";
 
@@ -23,13 +23,7 @@ const App = () => {
         bottomRightText="Total Games Polled:"
         gameCount="342"
       />
-      <LeagueNemesisStatistics
-        name="Sylas"
-        title="The Unshackled"
-        losses="8"
-        encounters="9"
-        lossRatio="88%"
-      />
+      <LeagueNemesisStatisticsBar />
     </div>
   );
 };
