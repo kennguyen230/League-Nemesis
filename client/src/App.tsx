@@ -13,9 +13,6 @@ const App = () => {
       <Header SearchBar={SmallSearchBar}></Header>
       <SummonerInfo></SummonerInfo>
       <GameTypeBar></GameTypeBar>
-      {/* <div className="w-full flex flex-col items-center justify-center mt-4"> */}
-      {/* </div> */}
-      {/* <img src={TEMP_SylasPic} alt="ChampPic" className="rounded-[2rem] p-4" /> */}
       <LeagueNemesisDisplay
         src={TEMP_SylasPic}
         alt="League Nemesis Picture"
