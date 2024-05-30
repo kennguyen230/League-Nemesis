@@ -3,7 +3,7 @@ const LeagueNemesisStatisticsBar = () => {
     <div className="flex m-4 text-xs bg-[#757575] rounded-md font-vollkorn">
       <div className="bg-[#757575] rounded-l-md p-2 drop-shadow w-1/4">
         <h1>Sylas</h1>
-        <h3 className="opacity-70 text-[.6rem]">The Unshackled</h3>
+        <h3 className="opacity-70 text-[.65rem]">The Unshackled</h3>
       </div>
       <div className="bg-[#757575] rounded-l-md p-2 drop-shadow w-1/4">
         <h1>Losses</h1>
