@@ -15,7 +15,6 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @param {String} summonerName A user's summoner name
  */
 async function createMaps(matchList, summonerName) {
-    console.log("Inside createMaps");
     // TODO: Consider creating a map for ranked vs normal games vs ARAM games
     let losingMatchups = new Map();
     let losingMatchupsTOP = new Map();
@@ -28,13 +27,11 @@ async function createMaps(matchList, summonerName) {
         losingMatchupsJNG, losingMatchupsMID, losingMatchupsBOT, losingMatchupsSUP);
 
     console.log(losingMatchups);
-    console.log(Object.fromEntries(losingMatchupsTOP));
-    console.log(Object.fromEntries(losingMatchupsJNG));
-    console.log(Object.fromEntries(losingMatchupsMID));
-    console.log(Object.fromEntries(losingMatchupsBOT));
-    console.log(Object.fromEntries(losingMatchupsSUP));
-
-    calculateNemesis(losingMatchups);
+    // console.log(Object.fromEntries(losingMatchupsTOP));
+    // console.log(Object.fromEntries(losingMatchupsJNG));
+    // console.log(Object.fromEntries(losingMatchupsMID));
+    // console.log(Object.fromEntries(losingMatchupsBOT));
+    // console.log(Object.fromEntries(losingMatchupsSUP));
 
     let allMatchups = {
         overall: losingMatchups,
@@ -93,7 +90,6 @@ const updateMatchupStatistics = (map, champName, userTeamWon) => {
  * @param {Map} SUP Maps champion name to [losses, encounters, lossRatio], specifically only for sup lane encounters
  */
 async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, JNG, MID, BOT, SUP) {
-    console.log("Inside getLosingMatchups");
     try {
         // TODO: Skip if Arenas match OR alternatively, skip if not a ranked, norms, aram game
         const matchDetails = await Promise.all(matchList.map(matchId =>
@@ -118,7 +114,7 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
 
             // Grab data from all enemy players
             match.teams.get(opposingTeam).participants.forEach(participant => {
-                const champName = participant.champion.champ.name;
+                let champName = participant.champion.champ.name;
 
                 // Update the overall losingMatchups map
                 updateMatchupStatistics(losingMatchups, champName, userTeamWon);
@@ -149,6 +145,64 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
     }
 }
 
+function sanitizeMaps(allMatchups) {
+    const sanitizedMatchups = {};
+
+    // Iterate over each property in the object
+    for (let role in allMatchups) {
+        const currentMap = allMatchups[role];
+        const sanitizedMap = new Map();
+
+        // Iterate over each key-value pair in the Map
+        for (let [key, value] of currentMap.entries()) {
+            sanitizedMap.set(sanitizeKey(key), value);
+        }
+
+        // Store the sanitized map back in the object
+        sanitizedMatchups[role] = sanitizedMap;
+    }
+
+    return sanitizedMatchups;
+}
+
+function originalMaps(allMatchups) {
+    const originalMatchups = {};
+
+    // Iterate over each property in the object
+    for (let role in allMatchups) {
+        const currentMap = allMatchups[role];
+        const originalMap = new Map();
+
+        // Iterate over each key-value pair in the Map
+        for (let [key, value] of currentMap.entries()) {
+            originalMap.set(originalKey(key), value);
+        }
+
+        // Store the sanitized map back in the object
+        originalMatchups[role] = originalMap;
+    }
+
+    return originalMatchups;
+}
+
+/**
+ * 
+ * @param {string} key A champion name
+ * @returns Champion name replace '.' with '_'
+ */
+function sanitizeKey(key) {
+    return key.replace(/\./g, '_');
+}
+
+/**
+ * 
+ * @param {string} key A champion name
+ * @returns Champion name replacing '_' with '.'
+ */
+function originalKey(key) {
+    return key.replace(/_/g, '.');
+}
+
 /**
  * Merge recent games matchlist into existing database matchlist and updating lossRatio accordingly
  * 
@@ -157,8 +211,11 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
  */
 function mergeMatchlistAndDB(matchList, databaseList) {
     matchList.forEach((MLmatchup, champName) => {
-        let DBmatchup = databaseList.get(champName);
+        if (champName === 'Dr. Mundo') {
+            champName = champName.replace('.', '_');
+        }
 
+        let DBmatchup = databaseList.get(champName);
         if (DBmatchup) {
             DBmatchup.losses += MLmatchup.losses;
             DBmatchup.encounters += MLmatchup.encounters;
@@ -175,8 +232,11 @@ function calculateNemesis(losingMatchups) {
     let nemesis = null;
     let highestLossRatio = 0;
     let highestLosses = 0;
+    let encounter = 0;
 
+    let numberOfGames = 0;
     losingMatchups.forEach((value, key) => {
+        numberOfGames += 1;
         const { losses, encounters, lossRatio } = value;
 
         // Check if the current champion's loss ratio is higher than the highest recorded,
@@ -184,11 +244,12 @@ function calculateNemesis(losingMatchups) {
         if (lossRatio > highestLossRatio || (lossRatio === highestLossRatio && losses > highestLosses)) {
             highestLossRatio = lossRatio;
             highestLosses = losses;
+            encounter = encounters;
             nemesis = key;
         }
     });
 
-    console.log(`Nemesis: ${nemesis}, Loss Ratio: ${highestLossRatio}, Total Losses: ${highestLosses}`);
+    console.log(`Nemesis: ${nemesis}, Loss Ratio: ${highestLossRatio}, Encounters: ${encounter}, Total Losses: ${highestLosses}, Number of games queried: ${numberOfGames}`);
 }
 
-export { createMaps, mergeMatchlistAndDB, calculateNemesis }
+export { createMaps, mergeMatchlistAndDB, calculateNemesis, sanitizeMaps, originalMaps }

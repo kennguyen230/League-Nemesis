@@ -9,6 +9,7 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchu
         if (!summonerName || !PUUID || !lastGameTimestamp || !allMatchups) {
             throw new Error('All required fields must be provided')
         }
+
         // TODO: Add type validation for each parameter
         const newSummoner = {
             summonerName,
@@ -70,11 +71,15 @@ async function getSummonerByPUUID(PUUID) {
         if (!PUUID) throw new Error('PUUID not defined');
 
         const player = await SummonerProfile.findOne({ PUUID });
+
         if (!player) {
             console.log('No player found in database')
             return null
         }
-        console.log('Player found in database')
+        else {
+            console.log('Player found in database')
+        }
+
         return player;
     } catch (error) {
         console.error('Error fetching player from database: ', error.message);

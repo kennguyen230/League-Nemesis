@@ -5,28 +5,37 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeMatchlistAndDB, createMaps } from '../utils/DataProcessing.js';
+import { mergeMatchlistAndDB, createMaps, calculateNemesis } from '../utils/DataProcessing.js';
 
-async function queryForMaps(summonerName) {
+async function queryForMaps(summonerName, tag) {
     try {
-        const puuid = await getPUUID(summonerName);
+        // Grab base info from user
+        const puuid = await getPUUID(summonerName, tag);
         let db = await getSummonerByPUUID(puuid);
         let lastGameTimestamp = db ? db.lastGameTimestamp : -1;
         let returnObject;
 
+        // Check to see if the user was in the database
         if (db) {
             console.log("Player present in database");
             console.log("Updated LGTS from DB: ", lastGameTimestamp);
         }
 
-        const matchlist = await getRecentGames(summonerName, lastGameTimestamp);
+        // Fetch new data from Riot and determine which object to send to client
+        const matchlist = await getRecentGames(puuid, lastGameTimestamp);
         if (matchlist) {
+            // Update LGTS for the database for future use
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);
 
+            // Take newly fetched matchlist and turn into maps
             const mlMaps = await createMaps(matchlist, summonerName);
+
+            // Create the return object that is either the newly fetched matchlist for
+            // new users, or the database matchlist concatenated with the newly fetched one
             returnObject = db ? mergeEachMap(mlMaps, extractStatsFromDB(db)) : mlMaps;
 
+            // Save to database or update existing user data
             await (db ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject);
         } else {
             // TODO: Edge case if they are a new account with 1 game then we dont return anything
@@ -34,6 +43,7 @@ async function queryForMaps(summonerName) {
             returnObject = extractStatsFromDB(db);
         }
 
+        calculateNemesis(returnObject.overall);
         return returnObject;
     } catch (error) {
         console.error('Error in queryForMaps:', error);

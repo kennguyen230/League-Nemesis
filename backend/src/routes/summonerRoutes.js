@@ -5,57 +5,29 @@
 import express from 'express';
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID } from '../services/DatabaseService.js';
 import { queryForMaps } from '../controllers/SummonerController.js';
+import { getPUUID } from '../services/RiotGamesService.js';
 
 const router = express.Router();
 
-// router.get('/getMatchlist', async (req, res) => {
-//     console.log("IN MATCHLIST ROUTE!");
-//     const summonerName = req.query.summoner;
-//     try {
-//         const matchList = await getRecentGames(summonerName, -1);
-//         res.status(200).json(matchList);
-//     } catch (error) {
-//         console.error("Error with matchlist route:", error);
-//         res.status(500).send("Error with matchlist route");
-//     }
-// })
-
-// router.get('/getPUUID', async (req, res) => {
-//     console.log("IN PUUID ROUTE");
-//     const summonerName = req.query.summoner;
-//     try {
-//         const puuid = await getPUUID(summonerName);
-//         res.status(200).json(puuid);
-//     } catch (error) {
-//         console.error("Error with fetching PUUID", error);
-//         res.status(500).send("Error with fetching PUUID");
-//     }
-// })
-
-// router.get('/getMaps', async (req, res) => {
-//     console.log("IN GET MAPS ROUTE!");
-//     const summonerName = req.query.summoner;
-//     try {
-//         const matchList = await getRecentGames(summonerName, -1);
-//         const allMatchups = await createMapsWithML(summonerName, matchList);
-
-//         // Convert Map to an object
-//         let overallStats = {};
-//         allMatchups.overall.forEach((value, key) => {
-//             overallStats[key] = value;
-//         });
-
-//         res.status(200).json(overallStats); // Send object, not Map
-//     } catch (error) {
-//         console.error("Error with fetching maps: ", error);
-//         res.status(500).send("Error with fetching maps");
-//     }
-// });
+router.get('/getPUUID', async (req, res) => {
+    console.log("IN PUUID ROUTE");
+    const summonerName = req.query.summoner;
+    const tag = req.query.tag;
+    try {
+        const puuid = await getPUUID(summonerName, tag);
+        res.status(200).json(puuid);
+    } catch (error) {
+        console.error("Error with fetching PUUID", error);
+        res.status(500).send("Error with fetching PUUID");
+    }
+})
 
 router.get('/queryMaps', async (req, res) => {
     try {
         const summonerName = req.query.summoner;
-        const allMatchups = await queryForMaps(summonerName);
+        const tag = req.query.tag;
+        console.log(tag);
+        const allMatchups = await queryForMaps(summonerName, tag);
 
         if (allMatchups) {
             // Convert map to object for sending to client

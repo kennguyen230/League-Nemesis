@@ -12,6 +12,7 @@ export default {
       backgroundImage: {
         'home-page-bg': "url('src/assets/image/HomeBG.png')",
         'lucian-bg': "url('src/assets/image/Temp/Lucian_bg.jpg')",
+        'summoner-page-bg': "url('src/assets/image/SummonerPageBG.jpg')"
       }
     },
   },
