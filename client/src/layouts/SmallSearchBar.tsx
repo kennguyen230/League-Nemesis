@@ -14,7 +14,7 @@ const SmallSearchBar = () => {
       <form action="" className="w-full flex">
         <Input
           placeholder="Summoner Name"
-          className="focus-visible:ring-transparent font-vollkorn text-xs lg:text-s rounded-r-md p-4 w-full"
+          className="border-none h-10 w-full py-1"
         ></Input>
       </form>
     </div>

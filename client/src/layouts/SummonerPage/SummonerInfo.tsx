@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import TEMP_TeemoIcon from "../../assets/image/Temp/TeemoIcon.webp";
+import TEMP_TeemoIcon from "@/assets/image/Temp/TeemoIcon.webp";
 
 const SummonerInfo = () => {
   return (

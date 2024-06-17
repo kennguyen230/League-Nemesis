@@ -222,9 +222,9 @@ const championEntry: ChampionEntry[] = [
   },
 ];
 
-import TEMP_SylasPic from "./assets/image/Temp/Sylas_bg.jpg";
+import TEMP_SylasPic from "@/assets/image/Temp/Sylas_bg.jpg";
 
-const App = () => {
+const SummonerPage = () => {
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
       <Header SearchBar={SmallSearchBar}></Header>
@@ -245,4 +245,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default SummonerPage;
