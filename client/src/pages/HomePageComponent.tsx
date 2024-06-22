@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button.tsx";
 import HomePageBigLogo from "@/layouts/HomePage/HomePageBigLogo";
 import Header from "@/layouts/Header";
 import HomePageSearchBar from "@/layouts/HomePage/HomePageSearchBar";

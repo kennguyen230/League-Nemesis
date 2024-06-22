@@ -63,6 +63,7 @@ export function ChampionsTable<TData, TValue>({
   return (
     <div className="mt-4 mx-4 p-2 rounded-md bg-[#757575] font-vollkorn lg:mx-20 lg:mt-6 lg:p-6">
       <div className="flex items-center py-4 gap-2">
+        {/* Lane dropdown menu */}
         <Select>
           <SelectTrigger className="w-[180px] text-gray-400">
             <SelectValue placeholder="Overall" />
@@ -76,7 +77,7 @@ export function ChampionsTable<TData, TValue>({
             <SelectItem value="sup">Support</SelectItem>
           </SelectContent>
         </Select>
-
+        {/* Champion search bar */}
         <Input
           placeholder="Search champions"
           value={
@@ -89,6 +90,7 @@ export function ChampionsTable<TData, TValue>({
         />
       </div>
 
+      {/* The table itself */}
       <div className="border rounded-sm">
         <Table>
           <TableHeader className="bg-[#3A3A3A]">
@@ -136,6 +138,7 @@ export function ChampionsTable<TData, TValue>({
         </Table>
       </div>
 
+      {/* Next & previous buttons */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

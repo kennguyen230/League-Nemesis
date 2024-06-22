@@ -1,5 +1,13 @@
-import { Button } from "@/components/ui/button";
 import SmallSearchBar from "../SmallSearchBar.tsx";
+
+import { Button } from "@/components/ui/button.tsx";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const HomePageSearchBar = () => {
   return (

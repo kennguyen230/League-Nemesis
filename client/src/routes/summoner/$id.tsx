@@ -10,6 +10,5 @@ export const Route = createFileRoute("/summoner/$id")({
 
 function SummonerPage() {
   const summoner = Route.useLoaderData();
-  console.log("Summoner within id: ", summoner);
   return <SummonerPageComponent summoner={summoner} />;
 }
