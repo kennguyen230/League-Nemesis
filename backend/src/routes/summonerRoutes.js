@@ -9,6 +9,22 @@ import { getPUUID } from '../services/RiotGamesService.js';
 
 const router = express.Router();
 
+router.get('/getBasicInfo', async (req, res) => {
+    try {
+        console.log("Inside getBasicInfo");
+        const basicInfo = {
+            summonerName: req.query.summoner,
+            summonerTag: "NA1",
+            summonerLevel: 111,
+        }
+
+        res.status(200).json(basicInfo);
+    } catch (error) {
+        console.error("Error in getBasicInfo: ", error);
+        res.status(500).send("Error with getting basic info")
+    }
+})
+
 router.get('/getPUUID', async (req, res) => {
     console.log("IN PUUID ROUTE");
     const summonerName = req.query.summoner;

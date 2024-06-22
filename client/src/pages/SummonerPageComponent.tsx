@@ -224,12 +224,16 @@ const championEntry: ChampionEntry[] = [
 
 import TEMP_SylasPic from "@/assets/image/Temp/Sylas_bg.jpg";
 
-const SummonerPage = () => {
+const SummonerPageComponent = (summoner) => {
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
       <Header SearchBar={SmallSearchBar}></Header>
       <div className="h-full bg-[#182B40] bg-center lg:mx-64">
-        <SummonerInfo></SummonerInfo>
+        <SummonerInfo
+          summonerName={summoner.summoner.summonerName}
+          summonerTag={summoner.summoner.summonerTag}
+          summonerLevel={summoner.summoner.summonerLevel}
+        ></SummonerInfo>
         <GameTypeBar></GameTypeBar>
         <LeagueNemesisDisplay
           src={TEMP_SylasPic}
@@ -245,4 +249,4 @@ const SummonerPage = () => {
   );
 };
 
-export default SummonerPage;
+export default SummonerPageComponent;

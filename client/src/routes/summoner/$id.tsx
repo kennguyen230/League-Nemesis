@@ -1,10 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { fetchSummonerData } from "@/api/api";
+
+import SummonerPageComponent from "@/pages/SummonerPageComponent";
 
 export const Route = createFileRoute("/summoner/$id")({
-  component: Summoner,
+  loader: async ({ params: { id } }) => fetchSummonerData(id),
+  component: SummonerPage,
 });
 
-function Summoner() {
-  const { id } = Route.useParams();
-  return <div>Hello {id}</div>;
+function SummonerPage() {
+  const summoner = Route.useLoaderData();
+  console.log("Summoner within id: ", summoner);
+  return <SummonerPageComponent summoner={summoner} />;
 }
