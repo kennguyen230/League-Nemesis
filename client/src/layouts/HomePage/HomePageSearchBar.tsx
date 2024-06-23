@@ -7,7 +7,7 @@ import { useNavigate } from "@tanstack/react-router";
 const HomePageSearchBar = () => {
   const [summonerName, setSummonerName] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("NA");
-  const navigate = useNavigate({ from: "/summoner/$id" });
+  const navigate = useNavigate({ from: "/summoner/$region/$id" });
 
   // The routing call that moves the user to a specific summoner
   // page. The call is triggered by an keyboard ENTER or when the
@@ -22,7 +22,7 @@ const HomePageSearchBar = () => {
 
     console.log("Searching for summoner: ", trimmedSummonerName);
     console.log("In the region: ", selectedRegion);
-    navigate({ to: `/summoner/${trimmedSummonerName}` });
+    navigate({ to: `/summoner/${selectedRegion}/${trimmedSummonerName}` });
   };
 
   return (

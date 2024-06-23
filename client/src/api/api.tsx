@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export const fetchSummonerData = async (summonerId: string) => {
+export const fetchSummonerData = async (region: string, summonerId: string) => {
   try {
     const response = await axios.get(
       `http://localhost:5000/summoner/getBasicInfo`,
       {
-        params: { summoner: summonerId },
+        params: { region, summoner: summonerId },
       }
     );
     return response.data;

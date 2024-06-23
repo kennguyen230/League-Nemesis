@@ -11,11 +11,11 @@ const router = express.Router();
 
 router.get('/getBasicInfo', async (req, res) => {
     try {
-        console.log("Inside getBasicInfo");
+        console.log("Inside getBasicInfo with summoner:", req.query.summoner);
         const basicInfo = {
             summonerName: req.query.summoner,
-            summonerTag: "NA1",
-            summonerLevel: 111,
+            summonerTag: req.query.region + "1",
+            summonerLevel: 112,
         }
 
         res.status(200).json(basicInfo);
@@ -66,6 +66,7 @@ router.get('/queryMaps', async (req, res) => {
 
 /******************************************************
  * The following routes are for testing purposes only *
+ * and should be deleted before production            *
  ******************************************************/
 
 // Route for saving a new summoner to the db

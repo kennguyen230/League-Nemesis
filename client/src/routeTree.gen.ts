@@ -13,7 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as SummonerIndexImport } from './routes/summoner/index'
-import { Route as SummonerIdImport } from './routes/summoner/$id'
+import { Route as SummonerRegionIndexImport } from './routes/summoner/region.index'
+import { Route as SummonerRegionIdImport } from './routes/summoner/$region.$id'
 
 // Create/Update Routes
 
@@ -27,8 +28,13 @@ const SummonerIndexRoute = SummonerIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const SummonerIdRoute = SummonerIdImport.update({
-  path: '/summoner/$id',
+const SummonerRegionIndexRoute = SummonerRegionIndexImport.update({
+  path: '/summoner/region/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SummonerRegionIdRoute = SummonerRegionIdImport.update({
+  path: '/summoner/$region/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -43,18 +49,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/summoner/$id': {
-      id: '/summoner/$id'
-      path: '/summoner/$id'
-      fullPath: '/summoner/$id'
-      preLoaderRoute: typeof SummonerIdImport
-      parentRoute: typeof rootRoute
-    }
     '/summoner/': {
       id: '/summoner/'
       path: '/summoner'
       fullPath: '/summoner'
       preLoaderRoute: typeof SummonerIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/summoner/$region/$id': {
+      id: '/summoner/$region/$id'
+      path: '/summoner/$region/$id'
+      fullPath: '/summoner/$region/$id'
+      preLoaderRoute: typeof SummonerRegionIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/summoner/region/': {
+      id: '/summoner/region/'
+      path: '/summoner/region'
+      fullPath: '/summoner/region'
+      preLoaderRoute: typeof SummonerRegionIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -64,8 +77,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  SummonerIdRoute,
   SummonerIndexRoute,
+  SummonerRegionIdRoute,
+  SummonerRegionIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -77,18 +91,22 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/summoner/$id",
-        "/summoner/"
+        "/summoner/",
+        "/summoner/$region/$id",
+        "/summoner/region/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/summoner/$id": {
-      "filePath": "summoner/$id.tsx"
-    },
     "/summoner/": {
       "filePath": "summoner/index.tsx"
+    },
+    "/summoner/$region/$id": {
+      "filePath": "summoner/$region.$id.tsx"
+    },
+    "/summoner/region/": {
+      "filePath": "summoner/region.index.tsx"
     }
   }
 }
