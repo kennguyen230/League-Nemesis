@@ -6,7 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 const HomePageSearchBar = () => {
   const [summonerName, setSummonerName] = useState("");
-  const [region, setRegion] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("NA");
   const navigate = useNavigate({ from: "/summoner/$id" });
 
   // The routing call that moves the user to a specific summoner
@@ -15,13 +15,14 @@ const HomePageSearchBar = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const trimmedName = summonerName.trim();
-    console.log("Searching for summoner: ", trimmedName);
-    if (trimmedName === "") {
+    const trimmedSummonerName = summonerName.trim();
+    if (trimmedSummonerName === "") {
       return;
     }
 
-    navigate({ to: `/summoner/${trimmedName}` });
+    console.log("Searching for summoner: ", trimmedSummonerName);
+    console.log("In the region: ", selectedRegion);
+    navigate({ to: `/summoner/${trimmedSummonerName}` });
   };
 
   return (
@@ -29,6 +30,8 @@ const HomePageSearchBar = () => {
       <SmallSearchBar
         summonerName={summonerName}
         setSummonerName={setSummonerName}
+        selectedRegion={selectedRegion}
+        setSelectedRegion={setSelectedRegion}
         onEnter={handleSubmit}
       ></SmallSearchBar>
 
