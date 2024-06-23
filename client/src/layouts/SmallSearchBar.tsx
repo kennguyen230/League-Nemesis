@@ -1,18 +1,10 @@
 import RegionSelector from "./RegionSelector";
 
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "@tanstack/react-router";
 
-const SmallSearchBar = ({ summonerName, setSummonerName }) => {
-  const navigate = useNavigate({ from: "/summoner/$id" });
-
+const SmallSearchBar = ({ summonerName, setSummonerName, onEnter }) => {
   const handleInputChange = (event) => {
     setSummonerName(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    navigate({ to: "/summoner/$id", params: { id: summonerName } });
   };
 
   return (
@@ -21,7 +13,7 @@ const SmallSearchBar = ({ summonerName, setSummonerName }) => {
       <RegionSelector></RegionSelector>
 
       {/* Summoner name input */}
-      <form onSubmit={handleSubmit} className="w-full flex font-vollkorn">
+      <form onSubmit={onEnter} className="w-full flex font-vollkorn">
         <Input
           placeholder="Summoner Name"
           className="border-none w-full h-full rounded-none rounded-r-md focus-visible:ring-offset-0 focus-visible:ring-0"

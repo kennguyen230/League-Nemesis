@@ -45,7 +45,7 @@ const RegionDropdown = () => {
   return (
     <div className="relative inline-block text-center" ref={dropdownRef}>
       {/* The region selector button */}
-      <div className="flex justify-center items-center bg-[#182B40] rounded-l-md w-16 md:w-24 h-12 px-4 font-vollkorn hover:bg-[#182B40]/95">
+      <div className="flex justify-center items-center bg-[#182B40] rounded-l-md w-16 md:w-24 h-12 px-4 font-vollkorn hover:bg-slate-900/90">
         <button
           onClick={toggleDropdown}
           className="text-white text-xs md:text-sm font-vollkorn flex items-center justify-center w-full"
