@@ -10,5 +10,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/summoner/")({
-  component: () => <>Hello welcome to the default summoner page</>,
+  component: () => <>Hello welcome to the default summoner page you SUCK</>,
 });

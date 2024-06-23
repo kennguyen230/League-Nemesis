@@ -5,7 +5,7 @@ const HomePageBigLogo = () => {
     <img
       src={HomePageLogo}
       alt="HomePageLogo"
-      className="mt-48 mb-4 lg:mt-64"
+      className="mt-48 mb-4 md:mt-64"
     />
   );
 };

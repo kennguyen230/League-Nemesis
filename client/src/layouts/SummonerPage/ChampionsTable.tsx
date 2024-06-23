@@ -61,7 +61,7 @@ export function ChampionsTable<TData, TValue>({
   });
 
   return (
-    <div className="mt-4 mx-4 p-2 rounded-md bg-[#757575] font-vollkorn lg:mx-20 lg:mt-6 lg:p-6">
+    <div className="mt-4 mx-4 p-2 rounded-md bg-[#757575] font-vollkorn md:mx-20 md:mt-6 md:p-6">
       <div className="flex items-center py-4 gap-2">
         {/* Lane dropdown menu */}
         <Select>

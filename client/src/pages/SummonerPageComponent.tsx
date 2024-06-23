@@ -228,7 +228,7 @@ const SummonerPageComponent = (summoner) => {
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
       <Header SearchBar={SmallSearchBar}></Header>
-      <div className="h-full bg-[#182B40] bg-center lg:mx-64">
+      <div className="h-full bg-[#182B40] bg-center md:mx-64">
         <SummonerInfo
           summonerName={summoner.summoner.summonerName}
           summonerTag={summoner.summoner.summonerTag}
