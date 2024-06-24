@@ -4,17 +4,20 @@
  */
 import express from 'express';
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID } from '../services/DatabaseService.js';
-import { queryForMaps } from '../controllers/SummonerController.js';
-import { getPUUID } from '../services/RiotGamesService.js';
+import { queryForMaps, parseSummonerInput } from '../controllers/SummonerController.js';
+import { getPUUID, getPlayerIcon, getPlayerLevel } from '../services/RiotGamesService.js';
 
 const router = express.Router();
 
 router.get('/getBasicInfo', async (req, res) => {
     try {
         console.log("Inside getBasicInfo with summoner:", req.query.summoner);
+        const input = req.query.summoner;
+
+        const { summonerName, tag } = parseSummonerInput(input);
         const basicInfo = {
-            summonerName: req.query.summoner,
-            summonerTag: req.query.region + "1",
+            summonerName: summonerName,
+            summonerTag: tag,
             summonerLevel: 112,
         }
 
@@ -35,6 +38,38 @@ router.get('/getPUUID', async (req, res) => {
     } catch (error) {
         console.error("Error with fetching PUUID", error);
         res.status(500).send("Error with fetching PUUID");
+    }
+})
+
+router.get('/querySummoner', async (req, res) => {
+    try {
+        const summonerName = req.query.summoner;
+        const tag = req.query.tag;
+
+        const allMatchups = await queryForMaps(summonerName, tag);
+        if (allMatchups) {
+            // Convert map to object for sending to client
+            let overallStats = {};
+            allMatchups.overall.forEach((value, key) => {
+                overallStats[key] = value;
+            });
+
+            // Construct the returning summoner object
+            let returnSummoner = {
+                maps: overallStats,
+                level: getPlayerLevel(summonerName, tag),
+                icon: getPlayerIcon(summonerName, tag),
+            }
+
+            console.log("Querying for summoner successful")
+            res.status(200).send(returnSummoner);
+        } else {
+            console.log("Querying for summoner unsuccessful")
+            res.status(404).send("Unsuccessful querying summoner");
+        }
+    } catch (error) {
+        console.error("Error querying for summoner: ", error);
+        res.status(500).send("Error with fetching summoner");
     }
 })
 

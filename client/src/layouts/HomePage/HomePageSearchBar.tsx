@@ -20,9 +20,14 @@ const HomePageSearchBar = () => {
       return;
     }
 
-    console.log("Searching for summoner: ", trimmedSummonerName);
+    const encodedSummonerName = trimmedSummonerName.replace("#", "%23");
+    if (encodedSummonerName === trimmedSummonerName) {
+      return;
+    }
+
+    console.log("Searching for summoner: ", encodedSummonerName);
     console.log("In the region: ", selectedRegion);
-    navigate({ to: `/summoner/${selectedRegion}/${trimmedSummonerName}` });
+    navigate({ to: `/summoner/${selectedRegion}/${encodedSummonerName}` });
   };
 
   return (

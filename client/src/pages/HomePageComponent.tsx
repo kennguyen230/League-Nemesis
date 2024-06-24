@@ -4,10 +4,17 @@ import HomePageSearchBar from "@/layouts/HomePage/HomePageSearchBar";
 
 const HomePageComponent = () => {
   return (
-    <div className="bg-home-page-bg h-screen flex flex-col items-center justify-start bg-center bg-cover md:bg-top m-0">
+    <div className="flex flex-col relative items-center justify-start h-screen overflow-hidden">
       <Header></Header>
-      <HomePageBigLogo></HomePageBigLogo>
-      <HomePageSearchBar></HomePageSearchBar>
+
+      {/* Content of home page */}
+      <div className="absolute z-10 flex flex-col items-center justify-center mt-10 w-full">
+        <HomePageBigLogo></HomePageBigLogo>
+        <HomePageSearchBar></HomePageSearchBar>
+      </div>
+
+      {/* Background of home page */}
+      <div className="bg-home-page-bg opacity-90 h-full relative bg-right-bottom md:bg-left-top bg-cover w-full blur-xs"></div>
     </div>
   );
 };

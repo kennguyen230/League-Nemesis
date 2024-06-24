@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const fetchSummonerData = async (region: string, summonerId: string) => {
   try {
+    console.log("Inside fetchSummonerData: ", summonerId);
     const response = await axios.get(
       `http://localhost:5000/summoner/getBasicInfo`,
       {
