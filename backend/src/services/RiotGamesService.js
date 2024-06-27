@@ -20,6 +20,16 @@ async function getPUUID(summonerName, tag) {
     return summoner.playerId;
 }
 
+async function getPlayerIcon(summonerName, tag) {
+    const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+    return summoner.profileIcon;
+}
+
+async function getPlayerLevel(summonerName, tag) {
+    const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+    return summoner.level;
+}
+
 /**
  * This function differentiates users by 'New' and 'Existing'. 
  * If they are 'New' then there is no lastGameTimestamp and we try to fetch as many games as possible.
@@ -150,6 +160,6 @@ async function getLastGameTimestamp(matchList) {
     return Math.trunc(match.endTimestamp / 1000);
 }
 
-export { getPUUID, getRecentGames, getLastGameTimestamp }
+export { getPUUID, getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel }
 
 

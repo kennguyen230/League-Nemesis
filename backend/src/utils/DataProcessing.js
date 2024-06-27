@@ -114,7 +114,7 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
 
             // Grab data from all enemy players
             match.teams.get(opposingTeam).participants.forEach(participant => {
-                let champName = participant.champion.champ.name;
+                let champName = participant.champion.champ.id;
 
                 // Update the overall losingMatchups map
                 updateMatchupStatistics(losingMatchups, champName, userTeamWon);
@@ -145,64 +145,6 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
     }
 }
 
-function sanitizeMaps(allMatchups) {
-    const sanitizedMatchups = {};
-
-    // Iterate over each property in the object
-    for (let role in allMatchups) {
-        const currentMap = allMatchups[role];
-        const sanitizedMap = new Map();
-
-        // Iterate over each key-value pair in the Map
-        for (let [key, value] of currentMap.entries()) {
-            sanitizedMap.set(sanitizeKey(key), value);
-        }
-
-        // Store the sanitized map back in the object
-        sanitizedMatchups[role] = sanitizedMap;
-    }
-
-    return sanitizedMatchups;
-}
-
-function originalMaps(allMatchups) {
-    const originalMatchups = {};
-
-    // Iterate over each property in the object
-    for (let role in allMatchups) {
-        const currentMap = allMatchups[role];
-        const originalMap = new Map();
-
-        // Iterate over each key-value pair in the Map
-        for (let [key, value] of currentMap.entries()) {
-            originalMap.set(originalKey(key), value);
-        }
-
-        // Store the sanitized map back in the object
-        originalMatchups[role] = originalMap;
-    }
-
-    return originalMatchups;
-}
-
-/**
- * 
- * @param {string} key A champion name
- * @returns Champion name replace '.' with '_'
- */
-function sanitizeKey(key) {
-    return key.replace(/\./g, '_');
-}
-
-/**
- * 
- * @param {string} key A champion name
- * @returns Champion name replacing '_' with '.'
- */
-function originalKey(key) {
-    return key.replace(/_/g, '.');
-}
-
 /**
  * Merge recent games matchlist into existing database matchlist and updating lossRatio accordingly
  * 
@@ -211,9 +153,9 @@ function originalKey(key) {
  */
 function mergeMatchlistAndDB(matchList, databaseList) {
     matchList.forEach((MLmatchup, champName) => {
-        if (champName === 'Dr. Mundo') {
-            champName = champName.replace('.', '_');
-        }
+        // if (champName === 'Dr. Mundo') {
+        //     champName = champName.replace('.', '_');
+        // }
 
         let DBmatchup = databaseList.get(champName);
         if (DBmatchup) {
@@ -227,29 +169,62 @@ function mergeMatchlistAndDB(matchList, databaseList) {
     return databaseList;
 }
 
-// TODO: Add more complexity to this function
+/**
+ * Takes one of the losingMatchups and calculates a weighted League Nemesis
+ * prioritizing lossRatio then encounters. Weights are added to prevent
+ * low encounter champions from becoming the League Nemesis.
+ * 
+ * @param {Map} losingMatchups A map representing the losing matchups for a lane
+ */
 function calculateNemesis(losingMatchups) {
     let nemesis = null;
-    let highestLossRatio = 0;
+    let highestWeightedLossRatio = 0;
     let highestLosses = 0;
     let encounter = 0;
-
     let numberOfGames = 0;
+
     losingMatchups.forEach((value, key) => {
         numberOfGames += 1;
         const { losses, encounters, lossRatio } = value;
+        const weightedLossRatio = lossRatio * Math.log(encounters + 1);
 
-        // Check if the current champion's loss ratio is higher than the highest recorded,
-        // or if the loss ratio is the same but the total losses are higher
-        if (lossRatio > highestLossRatio || (lossRatio === highestLossRatio && losses > highestLosses)) {
-            highestLossRatio = lossRatio;
+        // Check if the current champion's weighted loss ratio is higher than the highest recorded,
+        // or if the weighted loss ratio is the same but the total losses are higher
+        if (weightedLossRatio > highestWeightedLossRatio ||
+            (weightedLossRatio === highestWeightedLossRatio && losses > highestLosses)) {
+            highestWeightedLossRatio = weightedLossRatio;
             highestLosses = losses;
             encounter = encounters;
             nemesis = key;
         }
     });
 
-    console.log(`Nemesis: ${nemesis}, Loss Ratio: ${highestLossRatio}, Encounters: ${encounter}, Total Losses: ${highestLosses}, Number of games queried: ${numberOfGames}`);
+    console.log(`Nemesis: ${nemesis}, Weighted Loss Ratio: ${highestWeightedLossRatio}, Encounters: ${encounter}, Total Losses: ${highestLosses}, Number of games queried: ${numberOfGames}`);
 }
 
-export { createMaps, mergeMatchlistAndDB, calculateNemesis, sanitizeMaps, originalMaps }
+/**
+ * Takes one of the losingMatchups and sorts based on lossRatio and breaks ties
+ * with encounters. There is also weighting involved to prevent matchups with
+ * low encounters to top the list. Eg. 1 loss, 1 encounter, 1 loss ratio
+ * 
+ * @param {Map} losingMatchups A map representing the losing matchups for a lane
+ * @returns losingMatchups sorted
+ */
+function sortMaps(map) {
+    const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({ key, ...value }));
+
+    const sortedMatchupsArray = matchupsArray.sort((a, b) => {
+        const weightA = a.lossRatio * Math.log(a.encounters + 1);
+        const weightB = b.lossRatio * Math.log(b.encounters + 1);
+
+        if (weightB !== weightA) {
+            return weightB - weightA;
+        }
+        return b.losses - a.losses;
+    });
+
+    console.log("SORTED!");
+    return new Map(sortedMatchupsArray.map(item => [item.key, { losses: item.losses, encounters: item.encounters, lossRatio: item.lossRatio }]));
+}
+
+export { createMaps, mergeMatchlistAndDB, calculateNemesis, sortMaps }

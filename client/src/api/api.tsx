@@ -4,13 +4,13 @@ export const fetchSummonerData = async (region: string, summonerId: string) => {
   try {
     console.log("Inside fetchSummonerData: ", summonerId);
     const response = await axios.get(
-      `http://localhost:5000/summoner/getBasicInfo`,
+      `http://localhost:5000/summoner/querySummoner`,
       {
         params: { region, summoner: summonerId },
       }
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetchin data form getBasicInfo: ", error);
+    console.error("Error fetchin data form query summoner: ", error);
   }
 };

@@ -4,7 +4,7 @@
 // TODO: Create better way to handle errors. Potentially want to throw the errors to SummonerRoutes page so we can send a res msg
 import { SummonerProfile } from '../models/SummonerProfileModel.js';
 
-async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchups) {
+async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchups, totalGames) {
     try {
         if (!summonerName || !PUUID || !lastGameTimestamp || !allMatchups) {
             throw new Error('All required fields must be provided')
@@ -20,7 +20,8 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchu
             midStats: allMatchups.mid,
             botStats: allMatchups.bot,
             supportStats: allMatchups.sup,
-            lastGameTimestamp
+            lastGameTimestamp,
+            totalGames
         }
 
         await SummonerProfile.create(newSummoner);
@@ -31,7 +32,7 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchu
     }
 }
 
-async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, updatedMaps) {
+async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, updatedMaps, totalGames) {
     try {
         if (!summonerName || !PUUID || !lastGameTimestamp || !updatedMaps) {
             throw new Error('All required fields must be provided')
@@ -47,6 +48,7 @@ async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, upd
                 midStats: updatedMaps.mid,
                 botStats: updatedMaps.bot,
                 supportStats: updatedMaps.sup,
+                totalGames: totalGames
             }
         };
 

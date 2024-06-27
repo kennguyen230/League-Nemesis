@@ -5,45 +5,62 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeMatchlistAndDB, createMaps, calculateNemesis } from '../utils/DataProcessing.js';
+import { mergeMatchlistAndDB, createMaps, calculateNemesis, sortMaps } from '../utils/DataProcessing.js';
 
 async function queryForMaps(summonerName, tag) {
     try {
         // Grab base info from user
         const puuid = await getPUUID(summonerName, tag);
         let db = await getSummonerByPUUID(puuid);
+
+        // Variables to be saved to DB
         let lastGameTimestamp = db ? db.lastGameTimestamp : -1;
+        let numberOfGames = 0;
         let returnObject;
 
         // Check to see if the user was in the database
         if (db) {
             console.log("Player present in database");
             console.log("Updated LGTS from DB: ", lastGameTimestamp);
+            numberOfGames = db.totalGames;
         }
 
         // Fetch new data from Riot and determine which object to send to client
         const matchlist = await getRecentGames(puuid, lastGameTimestamp);
         if (matchlist) {
+            // Update the total number of games held in the DB for a player
+            numberOfGames += matchlist.length;
+
             // Update LGTS for the database for future use
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);
 
-            // Take newly fetched matchlist and turn into maps
+            // Take fetched matchlist and turn into maps
             const mlMaps = await createMaps(matchlist, summonerName);
 
-            // Create the return object that is either the newly fetched matchlist for
-            // new users, or the database matchlist concatenated with the newly fetched one
+            // returnObject can either be just the fetch matchlist or the fetched matchlist
+            // concatenated with what is in the database
             returnObject = db ? mergeEachMap(mlMaps, extractStatsFromDB(db)) : mlMaps;
 
             // Save to database or update existing user data
-            await (db ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject);
+            await (db ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject, numberOfGames);
         } else {
-            // TODO: Edge case if they are a new account with 1 game then we dont return anything
-            if (!db) throw new Error("No matchlist found and summoner not in database");
+            // In the case where the user is a new Riot account
+            if (!db) {
+                throw new Error("No matchlist found and summoner not in database");
+            }
+            // Otherwise, the database maps exist so return that
             returnObject = extractStatsFromDB(db);
         }
 
-        calculateNemesis(returnObject.overall);
+        // Calculate and log the League Nemesis
+        // calculateNemesis(returnObject.overall);
+
+        // Sort the maps before returning
+        Object.keys(returnObject).forEach(lane => {
+            returnObject[lane] = sortMaps(returnObject[lane]);
+        });
+
         return returnObject;
     } catch (error) {
         console.error('Error in queryForMaps:', error);
@@ -83,4 +100,20 @@ function mergeEachMap(ml, db) {
     return mergedMap; // Return the object containing all merged maps
 }
 
-export { queryForMaps }
+/**
+ * The user enters a summoner name and tag in the format 'Summoner Name#Tag'.
+ * This function decouples those two things using '#' as the delimiter and
+ * returns them separated
+ * 
+ * @param {String} input Summoner Name#Tag
+ * @returns Decoupled summoner name & tag
+ */
+function parseSummonerInput(input) {
+    const [summonerName, tag] = input.split('#');
+    return {
+        summonerName,
+        tag
+    };
+}
+
+export { queryForMaps, parseSummonerInput }

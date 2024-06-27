@@ -28,7 +28,7 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
             {summonerName}
           </h1>
           <h3 className="text-base text-white p-0 m-0 align-middle opacity-90 md:opacity-70 md:text-xl">
-            #{summonerTag}
+            #{summonerTag.toUpperCase()}
           </h3>
         </div>
         <h3 className="text-sm text-white mb-1 md:text-base">

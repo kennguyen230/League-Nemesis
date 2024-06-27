@@ -43,8 +43,10 @@ router.get('/getPUUID', async (req, res) => {
 
 router.get('/querySummoner', async (req, res) => {
     try {
-        const summonerName = req.query.summoner;
-        const tag = req.query.tag;
+        console.log("Inside query summoner");
+        const { summonerName, tag } = parseSummonerInput(req.query.summoner);
+        console.log(summonerName);
+        console.log(tag);
 
         const allMatchups = await queryForMaps(summonerName, tag);
         if (allMatchups) {
@@ -57,10 +59,11 @@ router.get('/querySummoner', async (req, res) => {
             // Construct the returning summoner object
             let returnSummoner = {
                 maps: overallStats,
-                level: getPlayerLevel(summonerName, tag),
-                icon: getPlayerIcon(summonerName, tag),
+                level: await getPlayerLevel(summonerName, tag),
+                icon: await getPlayerIcon(summonerName, tag),
             }
 
+            console.log(returnSummoner)
             console.log("Querying for summoner successful")
             res.status(200).send(returnSummoner);
         } else {
