@@ -1,4 +1,5 @@
 import Header from "@/layouts/Header";
+import Footer from "@/layouts/Footer";
 import SmallSearchBar from "@/layouts/SmallSearchBar";
 import SummonerInfo from "@/layouts/SummonerPage/SummonerInfo";
 import GameTypeBar from "@/layouts/SummonerPage/GameTypeBar";
@@ -227,8 +228,8 @@ import TEMP_SylasPic from "@/assets/image/Temp/Sylas_bg.jpg";
 const SummonerPageComponent = (summoner) => {
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
-      <Header SearchBar={SmallSearchBar}></Header>
-      <div className="h-full bg-[#182B40] bg-center md:mx-64">
+      <Header isSearchBar={true}></Header>
+      <div className="h-full bg-[#182B40] bg-center md:mx-64 pb-16">
         <SummonerInfo
           summonerName={summoner.summoner.summonerName}
           summonerTag={summoner.summoner.summonerTag}
@@ -245,6 +246,7 @@ const SummonerPageComponent = (summoner) => {
         <LeagueNemesisStatisticsBar />
         <ChampionsTable columns={columns} data={championEntry}></ChampionsTable>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

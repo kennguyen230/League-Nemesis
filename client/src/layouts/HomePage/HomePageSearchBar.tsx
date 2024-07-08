@@ -38,6 +38,8 @@ const HomePageSearchBar = () => {
         selectedRegion={selectedRegion}
         setSelectedRegion={setSelectedRegion}
         onEnter={handleSubmit}
+        height="h-12"
+        fontSize="text-sm"
       ></SmallSearchBar>
 
       <Button
