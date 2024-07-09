@@ -9,14 +9,16 @@ const SmallSearchBar = ({
   setSelectedRegion,
   onEnter,
   height,
-  fontSize
+  fontSize,
 }) => {
   const handleInputChange = (event) => {
     setSummonerName(event.target.value);
   };
 
   return (
-    <div className={`flex min-w-[22rem] max-w-[45rem] w-full mt-4 md:mt-0 ${height}`}>
+    <div
+      className={`flex min-w-[22rem] max-w-[45rem] w-full mt-4 md:mt-0 ${height} md:px-0`}
+    >
       {/* Region select dropdown */}
       <RegionSelector
         selectedRegion={selectedRegion}

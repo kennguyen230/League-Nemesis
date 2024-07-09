@@ -229,13 +229,19 @@ const SummonerPageComponent = (summoner) => {
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
       <Header isSearchBar={true}></Header>
-      <div className="h-full bg-[#182B40] bg-center md:mx-64 pb-16">
+
+      <div className="h-full bg-[#182B40] bg-center md:mx-64 pb-10">
+        {/* Summoner info at the top of the page */}
         <SummonerInfo
           summonerName={summoner.summoner.summonerName}
           summonerTag={summoner.summoner.summonerTag}
           summonerLevel={summoner.summoner.summonerLevel}
-        ></SummonerInfo>
+        />
+
+        {/* ie. Normals, ARAM, Ranked, etc */}
         <GameTypeBar></GameTypeBar>
+
+        {/* Front and center picture of LN */}
         <LeagueNemesisDisplay
           src={TEMP_SylasPic}
           alt="League Nemesis Picture"
@@ -243,10 +249,14 @@ const SummonerPageComponent = (summoner) => {
           bottomRightText="Total Games Polled:"
           gameCount="342"
         />
+
+        {/* Statistics correlating to the LN */}
         <LeagueNemesisStatisticsBar />
-        <ChampionsTable columns={columns} data={championEntry}></ChampionsTable>
+
+        {/* Detailed table view of champions based off role */}
+        <ChampionsTable columns={columns} data={championEntry} />
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };
