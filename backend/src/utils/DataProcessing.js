@@ -211,7 +211,12 @@ function calculateNemesis(losingMatchups) {
  * @returns losingMatchups sorted
  */
 function sortMaps(map) {
-    const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({ key, ...value }));
+    const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
+        key,
+        losses: value.losses,
+        encounters: value.encounters,
+        lossRatio: value.lossRatio,
+    }));
 
     const sortedMatchupsArray = matchupsArray.sort((a, b) => {
         const weightA = a.lossRatio * Math.log(a.encounters + 1);
@@ -224,7 +229,14 @@ function sortMaps(map) {
     });
 
     console.log("SORTED!");
-    return new Map(sortedMatchupsArray.map(item => [item.key, { losses: item.losses, encounters: item.encounters, lossRatio: item.lossRatio }]));
+    return new Map(sortedMatchupsArray.map(item => [
+        item.key,
+        {
+            losses: item.losses,
+            encounters: item.encounters,
+            lossRatio: item.lossRatio,
+        },
+    ]));
 }
 
 export { createMaps, mergeMatchlistAndDB, calculateNemesis, sortMaps }

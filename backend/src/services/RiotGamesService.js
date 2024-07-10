@@ -20,13 +20,13 @@ async function getPUUID(summonerName, tag) {
     return summoner.playerId;
 }
 
-async function getPlayerIcon(summonerName, tag) {
-    const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+async function getPlayerIcon(puuid) {
+    const summoner = await client.summoners.fetchByPlayerId(puuid)
     return summoner.profileIcon;
 }
 
-async function getPlayerLevel(summonerName, tag) {
-    const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+async function getPlayerLevel(puuid) {
+    const summoner = await client.summoners.fetchByPlayerId(puuid)
     return summoner.level;
 }
 
@@ -40,7 +40,6 @@ async function getPlayerLevel(summonerName, tag) {
  * @param {number} lastGameTimestamp The endTimestamp of the last game we fetched for existing users
  */
 async function getRecentGames(puuid, lastGameTimestamp) {
-
     if (lastGameTimestamp === -1) {
         return await getNewUserMatchlist(puuid);
     } else {

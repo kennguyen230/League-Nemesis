@@ -45,7 +45,7 @@ async function queryForMaps(summonerName, tag) {
             // Save to database or update existing user data
             await (db ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject, numberOfGames);
         } else {
-            // In the case where the user is a new Riot account
+            // In the case where the user is a new account with no games played yet
             if (!db) {
                 throw new Error("No matchlist found and summoner not in database");
             }
@@ -60,6 +60,10 @@ async function queryForMaps(summonerName, tag) {
         Object.keys(returnObject).forEach(lane => {
             returnObject[lane] = sortMaps(returnObject[lane]);
         });
+
+        // Log maps and total # of games
+        // console.log(returnObject);
+        // console.log("Total number of games: ", numberOfGames);
 
         return returnObject;
     } catch (error) {

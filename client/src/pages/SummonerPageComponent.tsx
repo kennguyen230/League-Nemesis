@@ -1,6 +1,5 @@
 import Header from "@/layouts/Header";
 import Footer from "@/layouts/Footer";
-import SmallSearchBar from "@/layouts/SmallSearchBar";
 import SummonerInfo from "@/layouts/SummonerPage/SummonerInfo";
 import GameTypeBar from "@/layouts/SummonerPage/GameTypeBar";
 import LeagueNemesisDisplay from "@/layouts/SummonerPage/LeagueNemesisDisplay";
@@ -233,9 +232,9 @@ const SummonerPageComponent = (summoner) => {
       <div className="h-full bg-[#182B40] bg-center md:mx-64 pb-10">
         {/* Summoner info at the top of the page */}
         <SummonerInfo
-          summonerName={summoner.summoner.summonerName}
-          summonerTag={summoner.summoner.summonerTag}
-          summonerLevel={summoner.summoner.summonerLevel}
+          summonerName={summoner.summoner.name}
+          summonerTag={summoner.summoner.tag}
+          summonerLevel={summoner.summoner.level}
         />
 
         {/* ie. Normals, ARAM, Ranked, etc */}

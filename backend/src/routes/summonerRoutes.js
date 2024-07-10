@@ -9,48 +9,20 @@ import { getPUUID, getPlayerIcon, getPlayerLevel } from '../services/RiotGamesSe
 
 const router = express.Router();
 
-router.get('/getBasicInfo', async (req, res) => {
-    try {
-        console.log("Inside getBasicInfo with summoner:", req.query.summoner);
-        const input = req.query.summoner;
-
-        const { summonerName, tag } = parseSummonerInput(input);
-        const basicInfo = {
-            summonerName: summonerName,
-            summonerTag: tag,
-            summonerLevel: 112,
-        }
-
-        res.status(200).json(basicInfo);
-    } catch (error) {
-        console.error("Error in getBasicInfo: ", error);
-        res.status(500).send("Error with getting basic info")
-    }
-})
-
-router.get('/getPUUID', async (req, res) => {
-    console.log("IN PUUID ROUTE");
-    const summonerName = req.query.summoner;
-    const tag = req.query.tag;
-    try {
-        const puuid = await getPUUID(summonerName, tag);
-        res.status(200).json(puuid);
-    } catch (error) {
-        console.error("Error with fetching PUUID", error);
-        res.status(500).send("Error with fetching PUUID");
-    }
-})
-
 router.get('/querySummoner', async (req, res) => {
     try {
         console.log("Inside query summoner");
-        const { summonerName, tag } = parseSummonerInput(req.query.summoner);
-        console.log(summonerName);
-        console.log(tag);
 
+        // Decouple client input into summoner name and tag
+        const { summonerName, tag } = parseSummonerInput(req.query.summoner);
+        // Then get puuid
+        const puuid = await getPUUID(summonerName, tag);
+
+        // Call backend data processing to retrieve maps to send to client
         const allMatchups = await queryForMaps(summonerName, tag);
         if (allMatchups) {
             // Convert map to object for sending to client
+            // TODO: Convert all maps not just overall one to the object
             let overallStats = {};
             allMatchups.overall.forEach((value, key) => {
                 overallStats[key] = value;
@@ -58,16 +30,18 @@ router.get('/querySummoner', async (req, res) => {
 
             // Construct the returning summoner object
             let returnSummoner = {
+                name: summonerName,
+                tag: tag,
                 maps: overallStats,
-                level: await getPlayerLevel(summonerName, tag),
-                icon: await getPlayerIcon(summonerName, tag),
+                level: await getPlayerLevel(puuid),
+                icon: await getPlayerIcon(puuid),
             }
 
-            console.log(returnSummoner)
-            console.log("Querying for summoner successful")
+            console.log(returnSummoner);
+            console.log("Querying for summoner in /querySummoner successful")
             res.status(200).send(returnSummoner);
         } else {
-            console.log("Querying for summoner unsuccessful")
+            console.log("Querying for summoner in /querySummoner unsuccessful")
             res.status(404).send("Unsuccessful querying summoner");
         }
     } catch (error) {
@@ -189,6 +163,40 @@ router.delete('/delete/:PUUID', async (req, res) => {
         return res.status(200).json({ message: 'Summoner deleted successfully' });
     } else {
         return res.status(404).json({ message: 'User not found in database' });
+    }
+})
+
+// Route for getting a user's PUUID
+router.get('/getPUUID', async (req, res) => {
+    console.log("IN PUUID ROUTE");
+    const summonerName = req.query.summoner;
+    const tag = req.query.tag;
+    try {
+        const puuid = await getPUUID(summonerName, tag);
+        res.status(200).json(puuid);
+    } catch (error) {
+        console.error("Error with fetching PUUID", error);
+        res.status(500).send("Error with fetching PUUID");
+    }
+})
+
+// Route for testing frontend by returning basic info about summoner
+router.get('/getBasicInfo', async (req, res) => {
+    try {
+        console.log("Inside getBasicInfo with summoner:", req.query.summoner);
+        const input = req.query.summoner;
+
+        const { summonerName, tag } = parseSummonerInput(input);
+        const basicInfo = {
+            summonerName: summonerName,
+            summonerTag: tag,
+            summonerLevel: 112,
+        }
+
+        res.status(200).json(basicInfo);
+    } catch (error) {
+        console.error("Error in getBasicInfo: ", error);
+        res.status(500).send("Error with getting basic info")
     }
 })
 
