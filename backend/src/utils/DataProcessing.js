@@ -15,7 +15,6 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @param {String} summonerName A user's summoner name
  */
 async function createMaps(matchList, summonerName) {
-    console.log("Inside createMaps");
     // TODO: Consider creating a map for ranked vs normal games vs ARAM games
     let losingMatchups = new Map();
     let losingMatchupsTOP = new Map();
@@ -28,13 +27,11 @@ async function createMaps(matchList, summonerName) {
         losingMatchupsJNG, losingMatchupsMID, losingMatchupsBOT, losingMatchupsSUP);
 
     console.log(losingMatchups);
-    console.log(Object.fromEntries(losingMatchupsTOP));
-    console.log(Object.fromEntries(losingMatchupsJNG));
-    console.log(Object.fromEntries(losingMatchupsMID));
-    console.log(Object.fromEntries(losingMatchupsBOT));
-    console.log(Object.fromEntries(losingMatchupsSUP));
-
-    calculateNemesis(losingMatchups);
+    // console.log(Object.fromEntries(losingMatchupsTOP));
+    // console.log(Object.fromEntries(losingMatchupsJNG));
+    // console.log(Object.fromEntries(losingMatchupsMID));
+    // console.log(Object.fromEntries(losingMatchupsBOT));
+    // console.log(Object.fromEntries(losingMatchupsSUP));
 
     let allMatchups = {
         overall: losingMatchups,
@@ -93,7 +90,6 @@ const updateMatchupStatistics = (map, champName, userTeamWon) => {
  * @param {Map} SUP Maps champion name to [losses, encounters, lossRatio], specifically only for sup lane encounters
  */
 async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, JNG, MID, BOT, SUP) {
-    console.log("Inside getLosingMatchups");
     try {
         // TODO: Skip if Arenas match OR alternatively, skip if not a ranked, norms, aram game
         const matchDetails = await Promise.all(matchList.map(matchId =>
@@ -118,7 +114,7 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
 
             // Grab data from all enemy players
             match.teams.get(opposingTeam).participants.forEach(participant => {
-                const champName = participant.champion.champ.name;
+                let champName = participant.champion.champ.id;
 
                 // Update the overall losingMatchups map
                 updateMatchupStatistics(losingMatchups, champName, userTeamWon);
@@ -157,8 +153,11 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
  */
 function mergeMatchlistAndDB(matchList, databaseList) {
     matchList.forEach((MLmatchup, champName) => {
-        let DBmatchup = databaseList.get(champName);
+        // if (champName === 'Dr. Mundo') {
+        //     champName = champName.replace('.', '_');
+        // }
 
+        let DBmatchup = databaseList.get(champName);
         if (DBmatchup) {
             DBmatchup.losses += MLmatchup.losses;
             DBmatchup.encounters += MLmatchup.encounters;
@@ -170,25 +169,74 @@ function mergeMatchlistAndDB(matchList, databaseList) {
     return databaseList;
 }
 
-// TODO: Add more complexity to this function
+/**
+ * Takes one of the losingMatchups and calculates a weighted League Nemesis
+ * prioritizing lossRatio then encounters. Weights are added to prevent
+ * low encounter champions from becoming the League Nemesis.
+ * 
+ * @param {Map} losingMatchups A map representing the losing matchups for a lane
+ */
 function calculateNemesis(losingMatchups) {
     let nemesis = null;
-    let highestLossRatio = 0;
+    let highestWeightedLossRatio = 0;
     let highestLosses = 0;
+    let encounter = 0;
+    let numberOfGames = 0;
 
     losingMatchups.forEach((value, key) => {
+        numberOfGames += 1;
         const { losses, encounters, lossRatio } = value;
+        const weightedLossRatio = lossRatio * Math.log(encounters + 1);
 
-        // Check if the current champion's loss ratio is higher than the highest recorded,
-        // or if the loss ratio is the same but the total losses are higher
-        if (lossRatio > highestLossRatio || (lossRatio === highestLossRatio && losses > highestLosses)) {
-            highestLossRatio = lossRatio;
+        // Check if the current champion's weighted loss ratio is higher than the highest recorded,
+        // or if the weighted loss ratio is the same but the total losses are higher
+        if (weightedLossRatio > highestWeightedLossRatio ||
+            (weightedLossRatio === highestWeightedLossRatio && losses > highestLosses)) {
+            highestWeightedLossRatio = weightedLossRatio;
             highestLosses = losses;
+            encounter = encounters;
             nemesis = key;
         }
     });
 
-    console.log(`Nemesis: ${nemesis}, Loss Ratio: ${highestLossRatio}, Total Losses: ${highestLosses}`);
+    console.log(`Nemesis: ${nemesis}, Weighted Loss Ratio: ${highestWeightedLossRatio}, Encounters: ${encounter}, Total Losses: ${highestLosses}, Number of games queried: ${numberOfGames}`);
 }
 
-export { createMaps, mergeMatchlistAndDB, calculateNemesis }
+/**
+ * Takes one of the losingMatchups and sorts based on lossRatio and breaks ties
+ * with encounters. There is also weighting involved to prevent matchups with
+ * low encounters to top the list. Eg. 1 loss, 1 encounter, 1 loss ratio
+ * 
+ * @param {Map} losingMatchups A map representing the losing matchups for a lane
+ * @returns losingMatchups sorted
+ */
+function sortMaps(map) {
+    const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
+        key,
+        losses: value.losses,
+        encounters: value.encounters,
+        lossRatio: value.lossRatio,
+    }));
+
+    const sortedMatchupsArray = matchupsArray.sort((a, b) => {
+        const weightA = a.lossRatio * Math.log(a.encounters + 1);
+        const weightB = b.lossRatio * Math.log(b.encounters + 1);
+
+        if (weightB !== weightA) {
+            return weightB - weightA;
+        }
+        return b.losses - a.losses;
+    });
+
+    console.log("SORTED!");
+    return new Map(sortedMatchupsArray.map(item => [
+        item.key,
+        {
+            losses: item.losses,
+            encounters: item.encounters,
+            lossRatio: item.lossRatio,
+        },
+    ]));
+}
+
+export { createMaps, mergeMatchlistAndDB, calculateNemesis, sortMaps }

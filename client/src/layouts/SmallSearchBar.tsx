@@ -1,20 +1,37 @@
+import RegionSelector from "./RegionSelector";
+
 import { Input } from "@/components/ui/input";
 
-const SmallSearchBar = () => {
+const SmallSearchBar = ({
+  summonerName,
+  setSummonerName,
+  selectedRegion,
+  setSelectedRegion,
+  onEnter,
+  height,
+  fontSize,
+}) => {
+  const handleInputChange = (event) => {
+    setSummonerName(event.target.value);
+  };
+
   return (
-    <div className="flex min-w-[22rem] max-w-[50rem] w-full px-4">
-      {/* Region selector */}
-      <div className="flex justify-center items-center bg-[#182B40] rounded-l-md p-4 w-20 ">
-        <button className="text-white text-xs lg:text-sm font-vollkorn">
-          NA &#9662;
-        </button>
-      </div>
+    <div
+      className={`flex min-w-[22rem] max-w-[45rem] w-full mt-4 md:mt-0 ${height} md:px-0`}
+    >
+      {/* Region select dropdown */}
+      <RegionSelector
+        selectedRegion={selectedRegion}
+        setSelectedRegion={setSelectedRegion}
+      />
 
       {/* Summoner name input */}
-      <form action="" className="w-full flex">
+      <form onSubmit={onEnter} className="w-full flex font-vollkorn">
         <Input
           placeholder="Summoner Name"
-          className="focus-visible:ring-transparent font-vollkorn text-xs lg:text-s rounded-r-md p-4 w-full"
+          className={`${fontSize} border-none w-full h-full rounded-none rounded-r-md focus-visible:ring-offset-0 focus-visible:ring-0`}
+          onChange={handleInputChange}
+          value={summonerName}
         ></Input>
       </form>
     </div>

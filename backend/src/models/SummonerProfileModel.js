@@ -6,8 +6,8 @@
 
 import mongoose from "mongoose";
 
-// Schema for individual champion stats within a role or overall
-const championStatsSchema = new mongoose.Schema({
+// Schema for individual champion stats as well as the champion's icon and description
+const championSchema = new mongoose.Schema({
     losses: {
         type: Number,
         required: true
@@ -19,16 +19,16 @@ const championStatsSchema = new mongoose.Schema({
     lossRatio: {
         type: Number,
         required: true
-    }
+    },
 }, { _id: false });
 
-// Embedding championStatsSchema in a Map structure for each role and overall stats
+// Embedding championSchema in a Map structure for each role and overall stats
 const roleStatsSchema = {
     type: Map,
-    of: championStatsSchema
+    of: championSchema
 };
 
-// Updated summonerSchema to reflect role-based statistics and possibly game type differentiation
+// Updated summonerSchema to reflect role-based statistics and game type differentiation
 const summonerSchema = new mongoose.Schema({
     summonerName: {
         type: String,
@@ -47,11 +47,15 @@ const summonerSchema = new mongoose.Schema({
     lastGameTimestamp: {
         type: Number,
         required: true
+    },
+    totalGames: {
+        type: Number,
+        required: true
     }
 }, {
     timestamps: true
 });
 
-// summonerprofiles is the name of the collection, as collections are the lowercased plural form of what
-// we call it here
-export const SummonerProfile = mongoose.model('SummonerProfile', summonerSchema); 
+// summonerprofiles is the name of the collection in the database
+// as collections are the lowercased plural form of what we call it
+export const SummonerProfile = mongoose.model('UpdatedSummonerProfile', summonerSchema); 

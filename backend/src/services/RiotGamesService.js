@@ -15,9 +15,19 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @param {string} region The user's region. Defaults to NA
  * @returns A user's PUUID
  */
-async function getPUUID(summonerName) {
-    const summoner = await client.summoners.fetchBySummonerName(summonerName);
+async function getPUUID(summonerName, tag) {
+    const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
     return summoner.playerId;
+}
+
+async function getPlayerIcon(puuid) {
+    const summoner = await client.summoners.fetchByPlayerId(puuid)
+    return summoner.profileIcon;
+}
+
+async function getPlayerLevel(puuid) {
+    const summoner = await client.summoners.fetchByPlayerId(puuid)
+    return summoner.level;
 }
 
 /**
@@ -29,13 +39,11 @@ async function getPUUID(summonerName) {
  * @param {string} summonerName A user's summoner name
  * @param {number} lastGameTimestamp The endTimestamp of the last game we fetched for existing users
  */
-async function getRecentGames(summonerName, lastGameTimestamp) {
-    console.log("Inside getRecentGames");
-
+async function getRecentGames(puuid, lastGameTimestamp) {
     if (lastGameTimestamp === -1) {
-        return await getNewUserMatchlist(summonerName);
+        return await getNewUserMatchlist(puuid);
     } else {
-        return await getExistingUserMatchlist(summonerName, lastGameTimestamp);
+        return await getExistingUserMatchlist(puuid, lastGameTimestamp);
     }
 }
 
@@ -46,10 +54,9 @@ async function getRecentGames(summonerName, lastGameTimestamp) {
  * @param {number} lastGameTimestamp The timestamp of the most recent game present in the database for this user in seconds.
  * @returns The most recent matches from the lastGameTimestamp onwards
  */
-async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
+async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
     try {
-        console.log("Inside getExistingUserML");
-        const summoner = await client.summoners.fetchBySummonerName(summonerName);
+        const summoner = await client.summoners.fetchByPlayerId(puuid);
         let matchList = await summoner.fetchMatchList({ count: COUNT, startTime: lastGameTimestamp });
 
         // Existing user but they have not played any new games since the last time we fetched data
@@ -80,6 +87,7 @@ async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
             }
         }
 
+        console.log("Number of new games fetched: ", matchList.length)
         console.log(matchList);
         return matchList.slice(0, -1) // Returns every element except the last one because it will be the same game as lastGameTimestamp
     } catch (error) {
@@ -97,10 +105,9 @@ async function getExistingUserMatchlist(summonerName, lastGameTimestamp) {
  * @param {string} summonerName The user's summoner name
  * @returns matchList 
  */
-async function getNewUserMatchlist(summonerName) {
+async function getNewUserMatchlist(puuid) {
     try {
-        console.log("In getNewUserMatchlist");
-        const summoner = await client.summoners.fetchBySummonerName(summonerName);
+        const summoner = await client.summoners.fetchByPlayerId(puuid);
 
         // TODO: Make a matchHistoryOption object
         let matchList = await summoner.fetchMatchList({ count: COUNT, type: 'normal' });
@@ -152,6 +159,6 @@ async function getLastGameTimestamp(matchList) {
     return Math.trunc(match.endTimestamp / 1000);
 }
 
-export { getPUUID, getRecentGames, getLastGameTimestamp }
+export { getPUUID, getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel }
 
 

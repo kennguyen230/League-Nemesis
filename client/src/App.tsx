@@ -1,28 +1,16 @@
-import Header from "./layouts/Header";
-import SmallSearchBar from "./layouts/SmallSearchBar";
-import SummonerInfo from "./layouts/SummonerPage/SummonerInfo";
-import GameTypeBar from "./layouts/SummonerPage/GameTypeBar";
-import LeagueNemesisDisplay from "./layouts/SummonerPage/LeagueNemesisDisplay";
-import LeagueNemesisStatisticsBar from "./layouts/SummonerPage/LeagueNemesisStatisticsBar";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
-import TEMP_SylasPic from "./assets/image/Temp/Sylas_bg.jpg";
+const router = createRouter({ routeTree });
 
-const App = () => {
-  return (
-    <div className="bg-[#182B40] h-screen">
-      <Header SearchBar={SmallSearchBar}></Header>
-      <SummonerInfo></SummonerInfo>
-      <GameTypeBar></GameTypeBar>
-      <LeagueNemesisDisplay
-        src={TEMP_SylasPic}
-        alt="League Nemesis Picture"
-        topText="Overall"
-        bottomRightText="Total Games Polled:"
-        gameCount="342"
-      />
-      <LeagueNemesisStatisticsBar />
-    </div>
-  );
-};
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
+
+function App() {
+  return <RouterProvider router={router} />;
+}
 
 export default App;

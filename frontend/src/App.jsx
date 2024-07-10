@@ -3,13 +3,14 @@ import axios from "axios";
 
 function App() {
   const [summonerName, setSummonerName] = useState("");
+  const [summonerTag, setSummonerTag] = useState("");
   const [puuid, setPuuid] = useState("");
   const [lossRateMap, setLossRateMap] = useState({});
 
   function getPUUID() {
     axios
       .get(`http://localhost:5000/summoner/getPUUID`, {
-        params: { summoner: summonerName },
+        params: { summoner: summonerName, tag: summonerTag },
       })
       .then(function (response) {
         setPuuid(response.data);
@@ -22,7 +23,7 @@ function App() {
   function queryMaps() {
     axios
       .get(`http://localhost:5000/summoner/queryMaps`, {
-        params: { summoner: summonerName },
+        params: { summoner: summonerName, tag: summonerTag },
       })
       .then(function (response) {
         console.log(response.data);
@@ -52,6 +53,7 @@ function App() {
     <div>
       <h1>League Nemesis</h1>
       <input type="text" onChange={(e) => setSummonerName(e.target.value)} />
+      <input type="text" onChange={(e) => setSummonerTag(e.target.value)} />
       <button onClick={() => getPUUID()}>Get PUUID</button>
       <button onClick={() => queryMaps()}>Query maps</button>
 

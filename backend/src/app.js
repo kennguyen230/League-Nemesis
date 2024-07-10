@@ -4,8 +4,8 @@
 
 import express from 'express';
 import cors from 'cors';
-// import summonerRoutes from './routes/summonerRoutes.js';
-import summonerRoutes from './routes/SummonerRoutes.js';
+import summonerRoutes from './routes/summonerRoutes.js';
+// import summonerRoutes from './routes/SummonerRoutes.js';
 
 const app = express();
 
