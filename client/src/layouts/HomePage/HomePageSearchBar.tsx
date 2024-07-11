@@ -31,7 +31,7 @@ const HomePageSearchBar = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full md:mt-6 px-4 md:px-0">
+    <div className="flex flex-col justify-center items-center w-full px-4 md:px-0">
       <SmallSearchBar
         summonerName={summonerName}
         setSummonerName={setSummonerName}

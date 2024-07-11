@@ -235,6 +235,7 @@ const SummonerPageComponent = (summoner) => {
           summonerName={summoner.summoner.name}
           summonerTag={summoner.summoner.tag}
           summonerLevel={summoner.summoner.level}
+          summonerIcon={summoner.summoner.icon}
         />
 
         {/* ie. Normals, ARAM, Ranked, etc */}
@@ -245,7 +246,6 @@ const SummonerPageComponent = (summoner) => {
           src={TEMP_SylasPic}
           alt="League Nemesis Picture"
           topText="Overall"
-          bottomRightText="Total Games Polled:"
           gameCount="342"
         />
 
@@ -253,7 +253,7 @@ const SummonerPageComponent = (summoner) => {
         <LeagueNemesisStatisticsBar />
 
         {/* Detailed table view of champions based off role */}
-        <ChampionsTable columns={columns} data={championEntry} />
+        <ChampionsTable columns={columns} data={summoner.summoner.maps} />
       </div>
       <Footer />
     </div>

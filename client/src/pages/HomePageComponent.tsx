@@ -8,7 +8,7 @@ const HomePageComponent = () => {
       <Header isSearchBar={false}></Header>
 
       {/* Content of home page */}
-      <div className="absolute z-10 flex flex-col items-center justify-center mt-10 w-full">
+      <div className="absolute z-10 flex flex-col items-center justify-center mt-16 md:mt-24 w-full">
         <HomePageBigLogo></HomePageBigLogo>
         <HomePageSearchBar></HomePageSearchBar>
       </div>

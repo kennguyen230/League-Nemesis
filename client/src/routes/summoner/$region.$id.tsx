@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { fetchSummonerData } from "@/api/api";
+import { fetchSummonerData } from "@/data/api";
 
 import SummonerPageComponent from "@/pages/SummonerPageComponent";
 

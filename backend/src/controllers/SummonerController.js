@@ -62,16 +62,22 @@ async function queryForMaps(summonerName, tag) {
         });
 
         // Log maps and total # of games
-        // console.log(returnObject);
-        // console.log("Total number of games: ", numberOfGames);
+        console.log(returnObject);
+        console.log("Total number of games: ", numberOfGames);
 
-        return returnObject;
+        return [returnObject, numberOfGames];
     } catch (error) {
         console.error('Error in queryForMaps:', error);
         return null;
     }
 }
 
+/**
+ * Helper function that separates the 6 maps into its own
+ * 
+ * @param {Object} db Holds 6 maps with data from db
+ * @returns The stats decoupled
+ */
 function extractStatsFromDB(db) {
     return {
         overall: db.overallStats,

@@ -43,21 +43,24 @@ const Header = ({ isSearchBar }) => {
 
         {/* Top right hamburger menu for small screens */}
         <button className="md:hidden">
-          <i className="fa-solid fa-bars fa-xl" style={{ color: "#ffffff" }}></i>
+          <i
+            className="fa-solid fa-bars fa-xl"
+            style={{ color: "#ffffff" }}
+          ></i>
         </button>
       </div>
 
       {/* Optionally passed in search bar, centered on smaller screens */}
       {isSearchBar && (
-          <SmallSearchBar
-            summonerName={summonerName}
-            setSummonerName={setSummonerName}
-            selectedRegion={selectedRegion}
-            setSelectedRegion={setSelectedRegion}
-            onEnter={handleSubmit}
-            height="h-10" // Corrected class name
-            fontSize="text-xs"
-          />
+        <SmallSearchBar
+          summonerName={summonerName}
+          setSummonerName={setSummonerName}
+          selectedRegion={selectedRegion}
+          setSelectedRegion={setSelectedRegion}
+          onEnter={handleSubmit}
+          height="h-10" // Corrected class name
+          fontSize="text-xs"
+        />
       )}
 
       {/* Top right hamburger menu for large screens */}

@@ -8,7 +8,7 @@ export type ChampionEntry = {
   icon: string;
   losses: number;
   encounters: number;
-  lossratio: number;
+  lossRatio: number;
 };
 
 export const columns: ColumnDef<ChampionEntry>[] = [
@@ -25,6 +25,11 @@ export const columns: ColumnDef<ChampionEntry>[] = [
   {
     accessorKey: "champion",
     header: "Champion",
+    cell: ({ row }) => {
+      return (
+        <div className="text-center w-1/2">{row.getValue("champion")}</div>
+      );
+    },
   },
   {
     accessorKey: "losses",
@@ -40,7 +45,11 @@ export const columns: ColumnDef<ChampionEntry>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="text-left">{row.getValue("losses")}</div>;
+      return (
+        <div className="text-center w-1/2 text-lg">
+          {row.getValue("losses")}
+        </div>
+      );
     },
   },
   {
@@ -56,9 +65,16 @@ export const columns: ColumnDef<ChampionEntry>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return (
+        <div className="text-center w-1/2 text-lg">
+          {row.getValue("encounters")}
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "lossratio",
+    accessorKey: "lossRatio",
     header: ({ column }) => {
       return (
         <Button
@@ -68,6 +84,13 @@ export const columns: ColumnDef<ChampionEntry>[] = [
           Loss Ratio
           <ArrowUpDown className="ml-2 h-4 w-4"></ArrowUpDown>
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div className="text-center w-1/2 text-lg">
+          {row.getValue("lossRatio").toFixed(2) * 100}%
+        </div>
       );
     },
   },

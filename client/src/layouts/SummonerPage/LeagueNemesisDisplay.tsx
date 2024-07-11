@@ -12,7 +12,7 @@ const LeagueNemesisDisplay = ({
         {topText}
       </div>
       <div className="absolute bottom-2 right-2 bg-gray-900 bg-opacity-75 text-white text-xs p-2 rounded md:p-5 md:text-base">
-        <p>{bottomRightText}</p>
+        <p>Total Games Polled:</p>
         <p>{gameCount}</p>
       </div>
     </div>

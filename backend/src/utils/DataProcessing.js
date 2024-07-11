@@ -210,9 +210,37 @@ function calculateNemesis(losingMatchups) {
  * @param {Map} losingMatchups A map representing the losing matchups for a lane
  * @returns losingMatchups sorted
  */
+// function sortMaps(map) {
+//     const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
+//         key,
+//         losses: value.losses,
+//         encounters: value.encounters,
+//         lossRatio: value.lossRatio,
+//     }));
+
+//     const sortedMatchupsArray = matchupsArray.sort((a, b) => {
+//         const weightA = a.lossRatio * Math.log(a.encounters + 1);
+//         const weightB = b.lossRatio * Math.log(b.encounters + 1);
+
+//         if (weightB !== weightA) {
+//             return weightB - weightA;
+//         }
+//         return b.losses - a.losses;
+//     });
+
+//     console.log("SORTED!");
+//     return new Map(sortedMatchupsArray.map(item => [
+//         item.key,
+//         {
+//             losses: item.losses,
+//             encounters: item.encounters,
+//             lossRatio: item.lossRatio,
+//         },
+//     ]));
+// }
 function sortMaps(map) {
     const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
-        key,
+        champion: key,
         losses: value.losses,
         encounters: value.encounters,
         lossRatio: value.lossRatio,
@@ -229,14 +257,13 @@ function sortMaps(map) {
     });
 
     console.log("SORTED!");
-    return new Map(sortedMatchupsArray.map(item => [
-        item.key,
-        {
-            losses: item.losses,
-            encounters: item.encounters,
-            lossRatio: item.lossRatio,
-        },
-    ]));
+    return sortedMatchupsArray;
+}
+
+function cleanData(arr) {
+    arr.forEach((entry) => {
+        entry.lossRatio
+    })
 }
 
 export { createMaps, mergeMatchlistAndDB, calculateNemesis, sortMaps }

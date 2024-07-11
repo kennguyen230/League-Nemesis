@@ -19,11 +19,11 @@ router.get('/querySummoner', async (req, res) => {
         const puuid = await getPUUID(summonerName, tag);
 
         // Call backend data processing to retrieve maps to send to client
-        const allMatchups = await queryForMaps(summonerName, tag);
+        const [allMatchups, numberOfGames] = await queryForMaps(summonerName, tag);
         if (allMatchups) {
             // Convert map to object for sending to client
             // TODO: Convert all maps not just overall one to the object
-            let overallStats = {};
+            let overallStats = [];
             allMatchups.overall.forEach((value, key) => {
                 overallStats[key] = value;
             });
@@ -35,6 +35,7 @@ router.get('/querySummoner', async (req, res) => {
                 maps: overallStats,
                 level: await getPlayerLevel(puuid),
                 icon: await getPlayerIcon(puuid),
+                games: numberOfGames
             }
 
             console.log(returnSummoner);
