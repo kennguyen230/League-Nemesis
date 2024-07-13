@@ -8,6 +8,7 @@ dotenv.config({ path: "./config.env" });
 
 const config = {
     port: process.env.PORT || 3000,
+    host: process.env.HOST || 'localhost',
     mongoURI: process.env.MONGO_URI,
     apiKey: process.env.API_KEY,
 }

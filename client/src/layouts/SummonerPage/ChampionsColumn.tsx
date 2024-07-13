@@ -15,19 +15,28 @@ export const columns: ColumnDef<ChampionEntry>[] = [
   {
     header: "#",
     accessorKey: "rowNumber",
-    cell: ({ row }) => row.index + 1,
+    cell: ({ row }) => {
+      return <div className="text-md">{row.index + 1}</div>;
+    },
     enableSorting: false,
   },
-  //   {
-  //     accessorKey: "icon",
-  //     header: "",
-  //   },
   {
     accessorKey: "champion",
     header: "Champion",
     cell: ({ row }) => {
       return (
-        <div className="text-center w-1/2">{row.getValue("champion")}</div>
+        <div className="flex items-center justify-start gap-2 md:gap-3 w-2/3">
+          <img
+            src={
+              "https://ddragon.leagueoflegends.com/cdn/14.13.1/img/champion/" +
+              row.getValue("champion") +
+              ".png"
+            }
+            alt="Icon"
+            className="w-10 rounded-md"
+          />
+          <div className="text-md">{row.getValue("champion")}</div>
+        </div>
       );
     },
   },
@@ -46,7 +55,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-center w-1/2 text-lg">
+        <div className="text-center md:w-1/2 text-lg">
           {row.getValue("losses")}
         </div>
       );
@@ -67,7 +76,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-center w-1/2 text-lg">
+        <div className="text-center md:w-1/2 text-lg">
           {row.getValue("encounters")}
         </div>
       );
@@ -88,7 +97,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="text-center w-1/2 text-lg">
+        <div className="text-center md:w-1/2 text-lg">
           {row.getValue("lossRatio").toFixed(2) * 100}%
         </div>
       );

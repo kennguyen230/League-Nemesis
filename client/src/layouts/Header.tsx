@@ -34,7 +34,7 @@ const Header = ({ isSearchBar }) => {
    * Then, toggle between which hamburger menu is hidden.
    */
   return (
-    <header className="flex flex-col md:flex-row sticky top-0 bg-[#11161D] py-4 px-6 justify-between items-center w-full z-50 shadow-lg">
+    <header className="flex flex-col md:flex-row sticky top-0 bg-[#11161D] p-4 justify-between items-center w-full z-50 shadow-lg">
       <div className="flex justify-between items-center w-full md:w-auto">
         {/* Top left logo */}
         <Link to="/">

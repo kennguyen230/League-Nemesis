@@ -11,8 +11,8 @@ mongoose
     .connect(config.mongoURI)
     .then(() => {
         console.log("App connected to database");
-        app.listen(config.port, () => {
-            console.log(`App is listening to port: ${config.port}`);
+        app.listen(config.port, config.host, () => {
+            console.log(`Server is running on http://${config.host}:${config.port}`);
         })
     }).catch((error) => {
         console.log(error);

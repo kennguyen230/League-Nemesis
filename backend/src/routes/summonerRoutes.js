@@ -38,7 +38,7 @@ router.get('/querySummoner', async (req, res) => {
                 games: numberOfGames
             }
 
-            console.log(returnSummoner);
+            // console.log(returnSummoner);
             console.log("Querying for summoner in /querySummoner successful")
             res.status(200).send(returnSummoner);
         } else {
