@@ -5,12 +5,12 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 
-const Header = ({ isSearchBar }) => {
-  const [summonerName, setSummonerName] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("NA");
+const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
+  const [summonerName, setSummonerName] = useState<string>("");
+  const [selectedRegion, setSelectedRegion] = useState<string>("NA");
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedSummonerName = summonerName.trim();

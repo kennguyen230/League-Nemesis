@@ -26,13 +26,6 @@ async function createMaps(matchList, summonerName) {
     await getLosingMatchups(summonerName, matchList, losingMatchups, losingMatchupsTOP,
         losingMatchupsJNG, losingMatchupsMID, losingMatchupsBOT, losingMatchupsSUP);
 
-    console.log(losingMatchups);
-    // console.log(Object.fromEntries(losingMatchupsTOP));
-    // console.log(Object.fromEntries(losingMatchupsJNG));
-    // console.log(Object.fromEntries(losingMatchupsMID));
-    // console.log(Object.fromEntries(losingMatchupsBOT));
-    // console.log(Object.fromEntries(losingMatchupsSUP));
-
     let allMatchups = {
         overall: losingMatchups,
         top: losingMatchupsTOP,
@@ -210,34 +203,6 @@ function calculateNemesis(losingMatchups) {
  * @param {Map} losingMatchups A map representing the losing matchups for a lane
  * @returns losingMatchups sorted
  */
-// function sortMaps(map) {
-//     const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
-//         key,
-//         losses: value.losses,
-//         encounters: value.encounters,
-//         lossRatio: value.lossRatio,
-//     }));
-
-//     const sortedMatchupsArray = matchupsArray.sort((a, b) => {
-//         const weightA = a.lossRatio * Math.log(a.encounters + 1);
-//         const weightB = b.lossRatio * Math.log(b.encounters + 1);
-
-//         if (weightB !== weightA) {
-//             return weightB - weightA;
-//         }
-//         return b.losses - a.losses;
-//     });
-
-//     console.log("SORTED!");
-//     return new Map(sortedMatchupsArray.map(item => [
-//         item.key,
-//         {
-//             losses: item.losses,
-//             encounters: item.encounters,
-//             lossRatio: item.lossRatio,
-//         },
-//     ]));
-// }
 function sortMaps(map) {
     const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
         champion: key,

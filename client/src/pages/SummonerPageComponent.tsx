@@ -29,7 +29,7 @@ const SummonerPageComponent = (summoner) => {
         <LeagueNemesisDisplay
           champion={summoner.summoner.maps[0].champion}
           topText="Overall"
-          gameCount="342"
+          gameCount={summoner.summoner.games}
         />
 
         {/* Statistics correlating to the LN */}
