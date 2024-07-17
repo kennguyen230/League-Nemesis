@@ -1,22 +1,23 @@
 import { Button } from "@/components/ui/button";
-import TEMP_TeemoIcon from "@/assets/image/Temp/TeemoIcon.webp";
 
 interface SummonerInfoProps {
   summonerName: string;
   summonerTag: string;
   summonerLevel: number;
+  summonerIcon: string;
 }
 
 const SummonerInfo: React.FC<SummonerInfoProps> = ({
   summonerName,
   summonerTag,
   summonerLevel,
+  summonerIcon,
 }) => {
   return (
     <div className="flex gap-3 justify-start items-center bg-lucian-bg bg-cover bg-center p-4 font-vollkorn md:py-10 md:px-10 md:bg-center">
       {/* Summoner Icon */}
       <img
-        src={TEMP_TeemoIcon}
+        src={summonerIcon}
         alt="Teemo"
         className="w-20 rounded-md border md:w-24"
       />

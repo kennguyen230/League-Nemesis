@@ -8,23 +8,37 @@ export type ChampionEntry = {
   icon: string;
   losses: number;
   encounters: number;
-  lossratio: number;
+  lossRatio: number;
 };
 
 export const columns: ColumnDef<ChampionEntry>[] = [
   {
     header: "#",
     accessorKey: "rowNumber",
-    cell: ({ row }) => row.index + 1,
+    cell: ({ row }) => {
+      return <div className="text-md">{row.index + 1}</div>;
+    },
     enableSorting: false,
   },
-  //   {
-  //     accessorKey: "icon",
-  //     header: "",
-  //   },
   {
     accessorKey: "champion",
     header: "Champion",
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center justify-start gap-2 md:gap-3 w-2/3">
+          <img
+            src={
+              "https://ddragon.leagueoflegends.com/cdn/14.13.1/img/champion/" +
+              row.getValue("champion") +
+              ".png"
+            }
+            alt="Icon"
+            className="w-10 rounded-md"
+          />
+          <div className="text-md">{row.getValue("champion")}</div>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "losses",
@@ -40,7 +54,11 @@ export const columns: ColumnDef<ChampionEntry>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="text-left">{row.getValue("losses")}</div>;
+      return (
+        <div className="text-center md:w-1/2 text-lg">
+          {row.getValue("losses")}
+        </div>
+      );
     },
   },
   {
@@ -56,9 +74,16 @@ export const columns: ColumnDef<ChampionEntry>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return (
+        <div className="text-center md:w-1/2 text-lg">
+          {row.getValue("encounters")}
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "lossratio",
+    accessorKey: "lossRatio",
     header: ({ column }) => {
       return (
         <Button
@@ -68,6 +93,13 @@ export const columns: ColumnDef<ChampionEntry>[] = [
           Loss Ratio
           <ArrowUpDown className="ml-2 h-4 w-4"></ArrowUpDown>
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div className="text-center md:w-1/2 text-lg">
+          {row.getValue("lossRatio").toFixed(2) * 100}%
+        </div>
       );
     },
   },

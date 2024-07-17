@@ -5,224 +5,8 @@ import GameTypeBar from "@/layouts/SummonerPage/GameTypeBar";
 import LeagueNemesisDisplay from "@/layouts/SummonerPage/LeagueNemesisDisplay";
 import LeagueNemesisStatisticsBar from "@/layouts/SummonerPage/LeagueNemesisStatisticsBar";
 
-import { ChampionEntry, columns } from "@/layouts/SummonerPage/ChampionsColumn";
+import { columns } from "@/layouts/SummonerPage/ChampionsColumn";
 import { ChampionsTable } from "@/layouts/SummonerPage/ChampionsTable";
-
-// Temp fake data
-const championEntry: ChampionEntry[] = [
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-  {
-    champion: "Sylas",
-    icon: "icon",
-    losses: 1,
-    encounters: 10,
-    lossratio: 0.1,
-  },
-  {
-    champion: "Teemo",
-    icon: "icon",
-    losses: 2,
-    encounters: 9,
-    lossratio: 0.2,
-  },
-  {
-    champion: "Shivana",
-    icon: "icon",
-    losses: 3,
-    encounters: 8,
-    lossratio: 0.3,
-  },
-];
-
-import TEMP_SylasPic from "@/assets/image/Temp/Sylas_bg.jpg";
 
 const SummonerPageComponent = (summoner) => {
   return (
@@ -235,6 +19,7 @@ const SummonerPageComponent = (summoner) => {
           summonerName={summoner.summoner.name}
           summonerTag={summoner.summoner.tag}
           summonerLevel={summoner.summoner.level}
+          summonerIcon={summoner.summoner.icon}
         />
 
         {/* ie. Normals, ARAM, Ranked, etc */}
@@ -242,18 +27,16 @@ const SummonerPageComponent = (summoner) => {
 
         {/* Front and center picture of LN */}
         <LeagueNemesisDisplay
-          src={TEMP_SylasPic}
-          alt="League Nemesis Picture"
+          champion={summoner.summoner.maps[0].champion}
           topText="Overall"
-          bottomRightText="Total Games Polled:"
-          gameCount="342"
+          gameCount={summoner.summoner.games}
         />
 
         {/* Statistics correlating to the LN */}
-        <LeagueNemesisStatisticsBar />
+        <LeagueNemesisStatisticsBar champion={summoner.summoner.maps[0]} />
 
         {/* Detailed table view of champions based off role */}
-        <ChampionsTable columns={columns} data={championEntry} />
+        <ChampionsTable columns={columns} data={summoner.summoner.maps} />
       </div>
       <Footer />
     </div>

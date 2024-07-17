@@ -45,6 +45,7 @@ export function ChampionsTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
   const table = useReactTable({
     data,
     columns,
@@ -62,8 +63,9 @@ export function ChampionsTable<TData, TValue>({
 
   return (
     <div className="mt-4 mx-4 p-2 rounded-md bg-[#757575] font-vollkorn md:mx-20 md:mt-6 md:p-6">
+      {/* Lane dropdown menu */}
       <div className="flex items-center py-4 gap-2">
-        {/* Lane dropdown menu */}
+        {/* Dropdown */}
         <Select>
           <SelectTrigger className="w-[180px] text-gray-400">
             <SelectValue placeholder="Overall" />
@@ -77,7 +79,7 @@ export function ChampionsTable<TData, TValue>({
             <SelectItem value="sup">Support</SelectItem>
           </SelectContent>
         </Select>
-        {/* Champion search bar */}
+        {/* Search bar */}
         <Input
           placeholder="Search champions"
           value={
@@ -115,7 +117,7 @@ export function ChampionsTable<TData, TValue>({
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     // This is where you can edit the table entry CSS
-                    <TableCell className="bg-white" key={cell.id}>
+                    <TableCell className="bg-white py-1" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
