@@ -1,2 +1,4 @@
 /backend/config.env
+/backend/node_modules
+/backend/data
 Notes.txt

@@ -1,6 +1,7 @@
 import LNLogoSmall from "@/assets/image/LNLogoSmall.png";
 import SmallSearchBar from "./SmallSearchBar";
 
+import { HamburgerMenu } from "./HamburgerMenu";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
@@ -42,12 +43,9 @@ const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
         </Link>
 
         {/* Top right hamburger menu for small screens */}
-        <button className="md:hidden">
-          <i
-            className="fa-solid fa-bars fa-xl"
-            style={{ color: "#ffffff" }}
-          ></i>
-        </button>
+        <div className="md:hidden">
+          <HamburgerMenu></HamburgerMenu>
+        </div>
       </div>
 
       {/* Optionally passed in search bar, centered on smaller screens */}
@@ -64,9 +62,9 @@ const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
       )}
 
       {/* Top right hamburger menu for large screens */}
-      <button className="hidden md:block">
-        <i className="fa-solid fa-bars fa-xl" style={{ color: "#ffffff" }}></i>
-      </button>
+      <div className="hidden md:block">
+        <HamburgerMenu></HamburgerMenu>
+      </div>
     </header>
   );
 };
