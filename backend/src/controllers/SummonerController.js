@@ -5,7 +5,7 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeMatchlistAndDB, createMaps, calculateNemesis, sortMaps } from '../utils/DataProcessing.js';
+import { mergeMatchlistAndDB, createReturnObjects, calculateNemesis, sortMaps, createReturnObjects } from '../utils/DataProcessing.js';
 
 async function queryForMaps(summonerName, tag) {
     try {
@@ -29,14 +29,14 @@ async function queryForMaps(summonerName, tag) {
         const matchlist = await getRecentGames(puuid, lastGameTimestamp);
         if (matchlist) {
             // Update the total number of games held in the DB for a player
-            numberOfGames += matchlist.length;
+            // numberOfGames += matchlist.length;
 
             // Update LGTS for the database for future use
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);
 
             // Take fetched matchlist and turn into maps
-            const mlMaps = await createMaps(matchlist, summonerName);
+            const mlMaps = await createReturnObjects(matchlist, summonerName);
 
             // returnObject can either be just the fetch matchlist or the fetched matchlist
             // concatenated with what is in the database

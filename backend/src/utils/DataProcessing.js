@@ -8,34 +8,58 @@ import { getClient } from '../services/ClientManager.js'
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
 /**
- * Takes in a user's recent games and creates 6 maps. One overall map that maps champion names
- * to [losses, encounters, loss ratio] tuple. Then 5 maps that separate the info by lane.
- * 
- * @param {Array} matchList A user's matchlist
- * @param {String} summonerName A user's summoner name
+ * Takes in a user's match list and produce an 'enemy' and 'user' object
+ * which holds data on an enemy/user based on gametype + lane
+ * @param {Array} matchList 
+ * @param {String} summonerName 
+ * @returns returnObject holds enemy and user data
  */
-async function createMaps(matchList, summonerName) {
-    // TODO: Consider creating a map for ranked vs normal games vs ARAM games
-    let losingMatchups = new Map();
-    let losingMatchupsTOP = new Map();
-    let losingMatchupsJNG = new Map();
-    let losingMatchupsMID = new Map();
-    let losingMatchupsBOT = new Map();
-    let losingMatchupsSUP = new Map();
+async function createReturnObjects(matchList, summonerName) {
+    const enemy = {
+        normals_overall: [],
+        normals_top: [],
+        normals_jng: [],
+        normals_mid: [],
+        normals_bot: [],
+        normals_sup: [],
+        ranked_overall: [],
+        ranked_top: [],
+        ranked_jng: [],
+        ranked_mid: [],
+        ranked_bot: [],
+        ranked_sup: [],
+        aram_overall: [],
+        aram_top: [],
+        aram_jng: [],
+        aram_mid: [],
+        aram_bot: [],
+        aram_sup: []
+    };
 
-    await getLosingMatchups(summonerName, matchList, losingMatchups, losingMatchupsTOP,
-        losingMatchupsJNG, losingMatchupsMID, losingMatchupsBOT, losingMatchupsSUP);
+    const user = {
+        normals_overall: [],
+        normals_top: [],
+        normals_jng: [],
+        normals_mid: [],
+        normals_bot: [],
+        normals_sup: [],
+        ranked_overall: [],
+        ranked_top: [],
+        ranked_jng: [],
+        ranked_mid: [],
+        ranked_bot: [],
+        ranked_sup: [],
+        aram_overall: [],
+        aram_top: [],
+        aram_jng: [],
+        aram_mid: [],
+        aram_bot: [],
+        aram_sup: []
+    };
 
-    let allMatchups = {
-        overall: losingMatchups,
-        top: losingMatchupsTOP,
-        jng: losingMatchupsJNG,
-        mid: losingMatchupsMID,
-        bot: losingMatchupsBOT,
-        sup: losingMatchupsSUP
-    }
+    await getLosingMatchups(summonerName, matchList, enemy, user);
 
-    return allMatchups;
+    return { enemy, user }
 }
 
 /**
@@ -64,27 +88,9 @@ const updateMatchupStatistics = (map, champName, userTeamWon) => {
     map.set(champName, matchup);
 };
 
-/**
- * Fetches match details for every match in the match list. For each match:
- * 1. If undefined, return
- * 2. If remake, dont consider and return
- * 3. Find which side the user/opponents are on, then which side won
- * 4. For each champion on the opponent's side:
- *      a. Update the overall map
- *      b. Update the lane specific map
- * 
- * @param {String} summonerName A user's summoner name
- * @param {Array} matchList A user's match list
- * @param {Map} losingMatchups Maps champion name to [losses, encounters, lossRatio]
- * @param {Map} TOP Maps champion name to [losses, encounters, lossRatio], specifically only for top lane encounters
- * @param {Map} JNG Maps champion name to [losses, encounters, lossRatio], specifically only for jng lane encounters
- * @param {Map} MID Maps champion name to [losses, encounters, lossRatio], specifically only for mid lane encounters
- * @param {Map} BOT Maps champion name to [losses, encounters, lossRatio], specifically only for AD carry lane encounters
- * @param {Map} SUP Maps champion name to [losses, encounters, lossRatio], specifically only for sup lane encounters
- */
-async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, JNG, MID, BOT, SUP) {
+async function getLosingMatchups(summonerName, matchList, enemy, user) {
     try {
-        // TODO: Skip if Arenas match OR alternatively, skip if not a ranked, norms, aram game
+        // Async fetch all match data from the match list
         const matchDetails = await Promise.all(matchList.map(matchId =>
             client.matches.fetch(matchId).catch(error => {
                 console.error(`Failed to fetch match ${matchId}:`, error);
@@ -100,13 +106,16 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
 
             // Check which side the user is on
             let userTeam = match.teams.get('blue').participants.some(participant => participant.summoner.name === summonerName) ? 'blue' : 'red';
-            // The opposingTeam is naturally the other side
+
+            // The opposing team is naturally the other side
             let opposingTeam = userTeam === 'blue' ? 'red' : 'blue';
-            // Check which team won
+
+            // Check to see if user won this game
             let userTeamWon = match.teams.get(userTeam).win;
 
             // Grab data from all enemy players
             match.teams.get(opposingTeam).participants.forEach(participant => {
+                // Id is the raw value not the prettified version. Eg. Kha'Zix = Khazix, Dr. Mundo = DrMundo
                 let champName = participant.champion.champ.id;
 
                 // Update the overall losingMatchups map
@@ -146,10 +155,6 @@ async function getLosingMatchups(summonerName, matchList, losingMatchups, TOP, J
  */
 function mergeMatchlistAndDB(matchList, databaseList) {
     matchList.forEach((MLmatchup, champName) => {
-        // if (champName === 'Dr. Mundo') {
-        //     champName = champName.replace('.', '_');
-        // }
-
         let DBmatchup = databaseList.get(champName);
         if (DBmatchup) {
             DBmatchup.losses += MLmatchup.losses;
@@ -231,4 +236,4 @@ function cleanData(arr) {
     })
 }
 
-export { createMaps, mergeMatchlistAndDB, calculateNemesis, sortMaps }
+export { createReturnObjects, mergeMatchlistAndDB, calculateNemesis, sortMaps }
