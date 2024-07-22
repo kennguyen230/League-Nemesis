@@ -1,47 +1,55 @@
 /**
- * @brief This is a catch-all class that provides methods for data processing. Majority of data
- * proccessing comes in the form of creating or updating maps. There are also methods for calculating
- * the League Nemesis.
+ * @brief This is a catch-all file that exports methods for processing data. 
  */
 import { Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from './Interfaces.ts';
 import { getClient } from "../services/ClientManager.js";
+
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
-const emptyChampionEnemyData: ChampionEnemyData = {
-    champName: "",
-    encounters: 0,
-    losses: 0,
-    lossRate: 0
+function emptyChampionEnemyData(): ChampionEnemyData {
+    return {
+        champName: "",
+        encounters: 0,
+        losses: 0,
+        lossRate: 0
+    }
 }
 
-const emptyChampionUserData: ChampionUserData = {
-    champName: "",
-    picks: 0,
-    wins: 0,
-    winRate: 0
+function emptyChampionUserData(): ChampionUserData {
+    return {
+        champName: "",
+        picks: 0,
+        wins: 0,
+        winRate: 0
+    }
 }
 
-const emptyGameModeEnemyData: GameModeEnemyData = {
-    overall: [],
-    top: [],
-    jng: [],
-    mid: [],
-    bot: [],
-    sup: []
+function emptyGameModeEnemyData(): GameModeEnemyData {
+    return {
+        overall: [],
+        top: [],
+        jng: [],
+        mid: [],
+        bot: [],
+        sup: []
+    }
 };
 
-const emptyGameModeUserData: GameModeUserData = {
-    overall: [],
-    top: [],
-    jng: [],
-    mid: [],
-    bot: [],
-    sup: []
+function emptyGameModeUserData(): GameModeUserData {
+    return {
+        overall: [],
+        top: [],
+        jng: [],
+        mid: [],
+        bot: [],
+        sup: []
+    }
 };
 
 /**
  * Takes in a user's match list and produce an 'enemy' and 'user' object
  * which holds data on an enemy/user based on gametype + lane
+ * 
  * @param {Array} matchList
  * @param {String} summonerName
  * @returns returnObject holds enemy and user data
@@ -51,52 +59,71 @@ async function createReturnObjects(
     summonerName: string
 ) {
     const enemy: Enemy = {
-        normals: { ...emptyGameModeEnemyData },
-        ranked: { ...emptyGameModeEnemyData },
-        flex: { ...emptyGameModeEnemyData },
-        aram: emptyChampionEnemyData
+        normals: emptyGameModeEnemyData(),
+        ranked: emptyGameModeEnemyData(),
+        flex: emptyGameModeEnemyData(),
+        aram: []
     };
 
     const user: User = {
-        normals: { ...emptyGameModeUserData },
-        ranked: { ...emptyGameModeUserData },
-        flex: { ...emptyGameModeUserData },
-        aram: emptyChampionUserData
+        normals: emptyGameModeUserData(),
+        ranked: emptyGameModeUserData(),
+        flex: emptyGameModeUserData(),
+        aram: []
     };
 
     await processMatchList(summonerName, matchList, enemy, user);
+
+    console.log(enemy);
+    console.log(user);
 
     return { enemy, user };
 }
 
 /**
- * Increments the encounter variable for the champion passed in. If the user lost this game as well, then
- * increment the losses variable for this champion. Recalculate the lossRatio. Update the map entry for this champ
- *
- * @param {Map} map Either overall or lane specific map that maps champion names to [losses, encounters, lossRatio]
- * @param {String} champName The name for a champion on the opposing side
- * @param {Boolean} userTeamWon Bool indicating if the user won that game. Used to determine if function needs to increment 'losses' var
+ * Takes the champion passed in and populates enemy object based on which game mode it is.
+ * 
+ * @param enemy Object that holds all user data
+ * @param champName Name of champion
+ * @param userTeamWon Flag to indicate if user won the current match
+ * @param gameMode Normals vs ranked vs aram vs flex
+ * @param lane Which lane to process for
  */
-const updateMatchupStatistics = (map, champName, userTeamWon) => {
-    let matchup = map.get(champName) || {
-        losses: 0,
-        encounters: 0,
-        lossRatio: 0,
+const updateEnemyData = (
+    enemy: Enemy,
+    champName: string,
+    userTeamWon: boolean,
+    gameMode: keyof Enemy,
+    lane: keyof GameModeEnemyData
+) => {
+    // Nested function that update enemy data for each entry
+    const updateChampionData = (champArray: ChampionEnemyData[], champName: string, userTeamWon: boolean) => {
+        // Check to see if this entry already exists
+        let champData = champArray.find(champ => champ.champName === champName);
+
+        // If not, create a default entry with the champ name
+        if (!champData) {
+            champData = emptyChampionEnemyData();
+            champData.champName = champName;
+            champArray.push(champData);
+        }
+
+        // Then update each property
+        champData.encounters += 1;
+        if (!userTeamWon) {
+            champData.losses += 1;
+        }
+        champData.lossRate = (champData.losses / champData.encounters) * 100;
     };
 
-    // Increment encounters for every game played
-    matchup.encounters += 1;
+    if (gameMode === 'aram') {
+        updateChampionData(enemy.aram, champName, userTeamWon);
+    } else {
+        updateChampionData(enemy[gameMode][lane], champName, userTeamWon);
 
-    // Only increment losses if the user's team lost
-    if (!userTeamWon) {
-        matchup.losses += 1;
+        // Also update the overall data for normals, ranked, and flex
+        updateChampionData(enemy[gameMode].overall, champName, userTeamWon);
     }
-
-    // Update the loss ratio
-    matchup.lossRatio = matchup.losses / matchup.encounters;
-
-    // Update the map
-    map.set(champName, matchup);
 };
 
 /**
@@ -109,14 +136,39 @@ const updateMatchupStatistics = (map, champName, userTeamWon) => {
  * @param lane Which lane to process for
  */
 const updateUserData = (
-    user: Object,
+    user: User,
     champName: string,
     userTeamWon: boolean,
-    gameMode: string,
-    lane: string
+    gameMode: keyof User,
+    lane: keyof GameModeUserData
 ) => {
-    const x = [];
-    x.find
+    const updateChampionData = (champArray: ChampionUserData[], champName: string, userTeamWon: boolean) => {
+        // Check to see if this entry already exists
+        let champData = champArray.find(champ => champ.champName === champName);
+
+        // If not, create a default entry with the champ name
+        if (!champData) {
+            champData = emptyChampionUserData();
+            champData.champName = champName;
+            champArray.push(champData);
+        }
+
+        // Then update each property
+        champData.picks += 1;
+        if (userTeamWon) {
+            champData.wins += 1;
+        }
+        champData.winRate = (champData.wins / champData.picks) * 100;
+    };
+
+    if (gameMode === 'aram') {
+        updateChampionData(user.aram, champName, userTeamWon);
+    } else {
+        updateChampionData(user[gameMode][lane], champName, userTeamWon);
+
+        // Also update the overall data for normals, ranked, and flex
+        updateChampionData(user[gameMode].overall, champName, userTeamWon);
+    }
 };
 
 /**
@@ -132,8 +184,8 @@ const updateUserData = (
 async function processMatchList(
     summonerName: string,
     matchList: Array<any>,
-    enemy: Object,
-    user: Object
+    enemy: Enemy,
+    user: User
 ) {
     try {
         // Fetch match data all at the same time
@@ -145,6 +197,10 @@ async function processMatchList(
                 })
             )
         );
+
+        // Keeps track of how many games the user loss from this set of match lists
+        // Will be displayed on the client side after summing with the DB variable
+        let numberOfLosses: number;
 
         matchDetails.forEach((match) => {
             if (!match) return; // Skip if match details couldn't be fetched
@@ -162,77 +218,98 @@ async function processMatchList(
             // Check to see if user won this game
             const userTeamWon: boolean = match.teams.get(userTeam).win;
 
-            // Grab game ID (follow reference on Riot Dev Docs)
+            // If the user loss this game then increment
+            if (!userTeamWon) numberOfLosses += 1;
+
+            // Grab game queue type (follow reference on Riot Dev Docs)
+            // https://static.developer.riotgames.com/docs/lol/queues.json
             const gameQueue: number = match.queue.queueId;
 
-            let gameMode: string;
+            // Then determine game mode based off the queue ID
+            let gameMode: keyof Enemy | keyof User | undefined;
             switch (gameQueue) {
-                case 400 || 430 || 490:
-                    gameMode = "NORMALS";
+                case 400:
+                case 430:
+                case 490:
+                    gameMode = "normals";
                     break;
                 case 420:
-                    gameMode = "RANKED";
-                    break;
-                case 450:
-                    gameMode = "ARAM";
+                    gameMode = "ranked";
                     break;
                 case 440:
-                    gameMode = "FLEX";
+                    gameMode = "flex";
                     break;
+                case 450:
+                    gameMode = "aram";
+                    break;
+                default:
+                    gameMode = undefined;
             }
+
+            // If the game mode is not one of the ones listed, return early as
+            // League Nemesis only deals with normals, ranked, flex, and aram
+            if (gameMode === undefined) return;
 
             // Populate user object
             match.teams.get(userTeam).participants.forEach((participant) => {
+                // Loop through list of participants until the user is found
                 if (participant.summoner.name !== summonerName) return;
 
+                // If it is the user, grab their champion and update the user object
                 const champName: string = participant.champion.champ.id;
-                updateUserData(user, champName, userTeamWon, gameMode, "OVERALL");
+                updateUserData(user, champName, userTeamWon, gameMode, "overall");
 
                 // Return early if ARAM, don't need to populate lane data
-                if (gameMode == "ARAM") return;
+                if (gameMode == "aram") return;
 
+                // For non-aram game mode, need to also update each individual lane
                 switch (participant.position.team) {
                     case "TOP":
-                        updateUserData(user, champName, userTeamWon, gameMode, "TOP");
+                        updateUserData(user, champName, userTeamWon, gameMode, "top");
+                        break;
                     case "JUNGLE":
-                        updateUserData(user, champName, userTeamWon, gameMode, "JUNGLE");
+                        updateUserData(user, champName, userTeamWon, gameMode, "jng");
+                        break;
                     case "MIDDLE":
-                        updateUserData(user, champName, userTeamWon, gameMode, "MIDDLE");
+                        updateUserData(user, champName, userTeamWon, gameMode, "mid");
+                        break;
                     case "BOTTOM":
-                        updateUserData(user, champName, userTeamWon, gameMode, "BOTTOM");
+                        updateUserData(user, champName, userTeamWon, gameMode, "bot");
+                        break;
                     case "UTILITY":
-                        updateUserData(user, champName, userTeamWon, gameMode, "UTILITY");
+                        updateUserData(user, champName, userTeamWon, gameMode, "sup");
+                        break;
                 }
             })
 
-            // Grab data from all enemy players
-            // match.teams.get(opposingTeam).participants.forEach((participant) => {
-            //     // Id is the raw value not the prettified version. Eg. Kha'Zix = Khazix, Dr. Mundo = DrMundo
-            //     let champName = participant.champion.champ.id;
+            // Populate enemy data
+            match.teams.get(opposingTeam).participants.forEach((participant) => {
+                // Grab champ id of each opponent and update the enemy object
+                const champName: string = participant.champion.champ.id;
+                updateEnemyData(enemy, champName, userTeamWon, gameMode, "overall");
 
-            //     // Update the overall losingMatchups map
-            //     updateMatchupStatistics(losingMatchups, champName, userTeamWon);
+                // Return early if ARAM, don't need to populate lane data
+                if (gameMode == "aram") return;
 
-            //     // TODO: Consider skipping this part if the game is NOT summoner's rift
-            //     // Determine the participant's role and update the corresponding role-specific map
-            //     switch (participant.position.team) {
-            //         case "TOP":
-            //             updateMatchupStatistics(TOP, champName, userTeamWon);
-            //             break;
-            //         case "JUNGLE":
-            //             updateMatchupStatistics(JNG, champName, userTeamWon);
-            //             break;
-            //         case "MIDDLE":
-            //             updateMatchupStatistics(MID, champName, userTeamWon);
-            //             break;
-            //         case "BOTTOM":
-            //             updateMatchupStatistics(BOT, champName, userTeamWon);
-            //             break;
-            //         case "UTILITY":
-            //             updateMatchupStatistics(SUP, champName, userTeamWon);
-            //             break;
-            //     }
-            // });
+                // For non-aram game mode, need to also update each individual lane
+                switch (participant.position.team) {
+                    case "TOP":
+                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "top");
+                        break;
+                    case "JUNGLE":
+                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "jng");
+                        break;
+                    case "MIDDLE":
+                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "mid");
+                        break;
+                    case "BOTTOM":
+                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "bot");
+                        break;
+                    case "UTILITY":
+                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "sup");
+                        break;
+                }
+            });
         });
     } catch (error) {
         console.error("Error in processMatchList", error);
@@ -257,43 +334,6 @@ function mergeMatchlistAndDB(matchList, databaseList) {
         }
     });
     return databaseList;
-}
-
-/**
- * Takes one of the losingMatchups and calculates a weighted League Nemesis
- * prioritizing lossRatio then encounters. Weights are added to prevent
- * low encounter champions from becoming the League Nemesis.
- *
- * @param {Map} losingMatchups A map representing the losing matchups for a lane
- */
-function calculateNemesis(losingMatchups) {
-    let nemesis = null;
-    let highestWeightedLossRatio = 0;
-    let highestLosses = 0;
-    let encounter = 0;
-    let numberOfGames = 0;
-
-    losingMatchups.forEach((value, key) => {
-        numberOfGames += 1;
-        const { losses, encounters, lossRatio } = value;
-        const weightedLossRatio = lossRatio * Math.log(encounters + 1);
-
-        // Check if the current champion's weighted loss ratio is higher than the highest recorded,
-        // or if the weighted loss ratio is the same but the total losses are higher
-        if (
-            weightedLossRatio > highestWeightedLossRatio ||
-            (weightedLossRatio === highestWeightedLossRatio && losses > highestLosses)
-        ) {
-            highestWeightedLossRatio = weightedLossRatio;
-            highestLosses = losses;
-            encounter = encounters;
-            nemesis = key;
-        }
-    });
-
-    console.log(
-        `Nemesis: ${nemesis}, Weighted Loss Ratio: ${highestWeightedLossRatio}, Encounters: ${encounter}, Total Losses: ${highestLosses}, Number of games queried: ${numberOfGames}`
-    );
 }
 
 /**
@@ -326,4 +366,4 @@ function sortMaps(map) {
     return sortedMatchupsArray;
 }
 
-export { createReturnObjects, mergeMatchlistAndDB, calculateNemesis, sortMaps };
+export { createReturnObjects, mergeMatchlistAndDB, sortMaps };
