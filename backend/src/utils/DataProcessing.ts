@@ -1,7 +1,7 @@
 /**
  * @brief This is a catch-all file that exports methods for processing data. 
  */
-import { Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from './Interfaces.ts';
+import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from './Interfaces.ts';
 import { getClient } from "../services/ClientManager.js";
 
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
@@ -52,11 +52,13 @@ function emptyGameModeUserData(): GameModeUserData {
  * 
  * @param {Array} matchList
  * @param {String} summonerName
+ * @param {Object} numberOfGames
  * @returns returnObject holds enemy and user data
  */
 async function createReturnObjects(
     matchList: Array<any>,
-    summonerName: string
+    summonerName: string,
+    numberOfGames: { totalGames: number, losses: number },
 ) {
     const enemy: Enemy = {
         normals: emptyGameModeEnemyData(),
@@ -72,7 +74,7 @@ async function createReturnObjects(
         aram: []
     };
 
-    await processMatchList(summonerName, matchList, enemy, user);
+    await processMatchList(summonerName, matchList, enemy, user, numberOfGames);
 
     console.log(enemy);
     console.log(user);
@@ -180,12 +182,14 @@ const updateUserData = (
  * @param matchList Holds recently fetched match list
  * @param enemy Object that holds enemy data
  * @param user Object that holds user data
+ * @param numberOfGames Keeps track of number of losses total, between DB and ML
  */
 async function processMatchList(
     summonerName: string,
     matchList: Array<any>,
     enemy: Enemy,
-    user: User
+    user: User,
+    numberOfGames: { totalGames: number, losses: number },
 ) {
     try {
         // Fetch match data all at the same time
@@ -197,10 +201,6 @@ async function processMatchList(
                 })
             )
         );
-
-        // Keeps track of how many games the user loss from this set of match lists
-        // Will be displayed on the client side after summing with the DB variable
-        let numberOfLosses: number;
 
         matchDetails.forEach((match) => {
             if (!match) return; // Skip if match details couldn't be fetched
@@ -215,11 +215,10 @@ async function processMatchList(
             // The opposing team is naturally the other side
             const opposingTeam: string = userTeam === "blue" ? "red" : "blue";
 
-            // Check to see if user won this game
+            // Check to see if user won this game and if not
+            // update the loss counter
             const userTeamWon: boolean = match.teams.get(userTeam).win;
-
-            // If the user loss this game then increment
-            if (!userTeamWon) numberOfLosses += 1;
+            if (!userTeamWon) numberOfGames.losses += 1;
 
             // Grab game queue type (follow reference on Riot Dev Docs)
             // https://static.developer.riotgames.com/docs/lol/queues.json
@@ -317,23 +316,109 @@ async function processMatchList(
 }
 
 /**
- * Merge recent games matchlist into existing database matchlist and updating lossRatio accordingly
- *
- * @param {Map} matchList Matchlist map with user's most recent games with champion names mapped to losses, encounters, lossRatio
- * @param {Map} databaseList Matchlist map for a user from the database with champion names mapped to losses, encounters, lossRatio
+ * This function takes in either a 'user' or 'enemy' db/ml object and differentiates
+ * between ARAM and other game modes. If it's ARAM it goes straight to merging champions.
+ * Otherwise, it loops through each game mode. 
+ * 
+ * @param db Database returnObject. Passed in either user data or enemy data
+ * @param ml Match list returnObject. Passed in either user data or enemy data
+ * @param isUser Flag to indicate if user or enemy data was passed in
  */
-function mergeMatchlistAndDB(matchList, databaseList) {
-    matchList.forEach((MLmatchup, champName) => {
-        let DBmatchup = databaseList.get(champName);
-        if (DBmatchup) {
-            DBmatchup.losses += MLmatchup.losses;
-            DBmatchup.encounters += MLmatchup.encounters;
-            DBmatchup.lossRatio = DBmatchup.losses / DBmatchup.encounters;
-        } else {
-            databaseList.set(champName, MLmatchup);
+function mergeEnemyUserData(db: User | Enemy, ml: User | Enemy, isUser: boolean = false) {
+    // For each gamemode (normal, ranked, flex, aram)
+    for (let gameMode in ml) {
+        // If it's ARAM, jump straight to merging stats as ARAM doesn't have
+        // different lanes
+        if (gameMode == "ARAM") {
+            // Throw in check to make sure DB has an ARAM array
+            if (!db[gameMode]) {
+                db[gameMode] = [];
+            }
+
+            mergeLanes(db[gameMode], ml[gameMode], isUser);
         }
-    });
-    return databaseList;
+        // Otherwise, if it's not ARAM then break it down by lane
+        else {
+            // Throw in check to make sure DB has this gameMode array
+            if (!db[gameMode]) {
+                db[gameMode] = {
+                    overall: [],
+                    top: [],
+                    jng: [],
+                    mid: [],
+                    bot: [],
+                    sup: []
+                };
+            }
+
+            mergeGameModeData(db[gameMode], ml[gameMode], isUser);
+        }
+    }
+}
+
+/**
+ * This function takes in a db/ml object passed down by game mode. For each game mode,
+ * pass it down further to process the lane arrays.
+ * 
+ * @param db_gameMode db object->gameMode (ie. normals, ranked, etc)
+ * @param ml_gameMode ml object->gameMode 
+ * @param isUser Flag to indicate if user or enemy data was passed in
+ */
+function mergeGameModeData(db_gameMode: GameModeUserData | GameModeEnemyData, ml_gameMode: GameModeUserData | GameModeEnemyData, isUser: boolean = false) {
+    for (let lane in ml_gameMode) {
+        if (!db_gameMode[lane]) {
+            db_gameMode[lane] = [];
+        }
+
+        mergeLanes(db_gameMode[lane], ml_gameMode[lane], isUser);
+    }
+}
+
+/**
+ * This function takes in a db/ml object passed down by lane. For each champion in the lane,
+ * merge the stats.
+ * 
+ * @param db_gameMode_lane db object->gameMode->lane[] (ie. overall, top, etc)
+ * @param ml_gameMode_lane ml object->gameMode->lane[]
+ * @param isUser Flag to indicate if user or enemy data was passed in
+ */
+function mergeLanes(db_gameMode_lane: (ChampionUserData | ChampionEnemyData)[], ml_gameMode_lane: (ChampionUserData | ChampionEnemyData)[], isUser: boolean = false) {
+    // For each champion in the match list object
+    ml_gameMode_lane.forEach((ml_champ) => {
+        // Check to see if the champion exists in the database
+        let db_champ = db_gameMode_lane.find(c => c.champName === ml_champ.champName);
+
+        // If it does, merge the stats
+        if (db_champ) {
+            mergeStats(db_champ, ml_champ, isUser);
+        }
+        // Otherwise, push the champion to the database
+        else {
+            db_gameMode_lane.push({ ...ml_champ });
+        }
+    })
+}
+
+/**
+ * This function takes in a champion of enemy or user type and merges the data.
+ * 
+ * @param db_champ db object->gameMode->lane[].champion (ie. overall, top, etc)
+ * @param ml_champ ml object->gameMode->lane[].champion 
+ * @param isUser Flag to indicate if user or enemy data was passed in
+ */
+function mergeStats(db_champ: ChampionUserData | ChampionEnemyData, ml_champ: ChampionUserData | ChampionEnemyData, isUser: boolean = false) {
+    // If this is user data, use the appropriate properties
+    if (isUser) {
+        (db_champ as ChampionUserData).wins += (ml_champ as ChampionUserData).wins;
+        (db_champ as ChampionUserData).picks += (ml_champ as ChampionUserData).picks;
+        (db_champ as ChampionUserData).winRate = (ml_champ as ChampionUserData).wins / (ml_champ as ChampionUserData).picks;
+    }
+    // Otherwise, use enemy properties
+    else {
+        (db_champ as ChampionEnemyData).losses += (ml_champ as ChampionEnemyData).losses;
+        (db_champ as ChampionEnemyData).encounters += (ml_champ as ChampionEnemyData).encounters;
+        (db_champ as ChampionEnemyData).lossRate = (ml_champ as ChampionEnemyData).losses / (ml_champ as ChampionEnemyData).encounters;
+    }
 }
 
 /**
@@ -344,26 +429,26 @@ function mergeMatchlistAndDB(matchList, databaseList) {
  * @param {Map} losingMatchups A map representing the losing matchups for a lane
  * @returns losingMatchups sorted
  */
-function sortMaps(map) {
-    const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
-        champion: key,
-        losses: value.losses,
-        encounters: value.encounters,
-        lossRatio: value.lossRatio,
-    }));
+// function sortMaps(map) {
+//     const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
+//         champion: key,
+//         losses: value.losses,
+//         encounters: value.encounters,
+//         lossRatio: value.lossRatio,
+//     }));
 
-    const sortedMatchupsArray = matchupsArray.sort((a, b) => {
-        const weightA = a.lossRatio * Math.log(a.encounters + 1);
-        const weightB = b.lossRatio * Math.log(b.encounters + 1);
+//     const sortedMatchupsArray = matchupsArray.sort((a, b) => {
+//         const weightA = a.lossRatio * Math.log(a.encounters + 1);
+//         const weightB = b.lossRatio * Math.log(b.encounters + 1);
 
-        if (weightB !== weightA) {
-            return weightB - weightA;
-        }
-        return b.losses - a.losses;
-    });
+//         if (weightB !== weightA) {
+//             return weightB - weightA;
+//         }
+//         return b.losses - a.losses;
+//     });
 
-    console.log("SORTED!");
-    return sortedMatchupsArray;
-}
+//     console.log("SORTED!");
+//     return sortedMatchupsArray;
+// }
 
-export { createReturnObjects, mergeMatchlistAndDB, sortMaps };
+export { createReturnObjects, mergeEnemyUserData };

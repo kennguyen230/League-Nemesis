@@ -5,56 +5,52 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeMatchlistAndDB, createReturnObjects, calculateNemesis, sortMaps, createReturnObjects } from '../utils/DataProcessing.js';
+import { mergeMatchlistAndDB, createReturnObjects, sortMaps } from '../utils/DataProcessing.js';
 
 async function queryForMaps(summonerName, tag) {
     try {
-        // Grab base info from user
+        // Grab PUUID from user and attempt to find in DB
         const puuid = await getPUUID(summonerName, tag);
-        let db = await getSummonerByPUUID(puuid);
+        const db_returnObject = await getSummonerByPUUID(puuid);
 
-        // Variables to be saved to DB
-        let lastGameTimestamp = db ? db.lastGameTimestamp : -1;
-        let numberOfGames = 0;
+        // Variables to be populated in the following functions by either DB or ML
+        let lastGameTimestamp = -1;
+        let numberOfGames = { totalGames: 0, losses: 0 };
         let returnObject;
 
-        // Check to see if the user was in the database
-        if (db) {
-            console.log("Player present in database");
-            console.log("Updated LGTS from DB: ", lastGameTimestamp);
-            numberOfGames = db.totalGames;
+        // If the user exists in the DB grab the LGTS to use for fetching match list
+        // data. As well, fetch the numberOfGames tally to update 
+        if (db_returnObject) {
+            console.log("LGTS from DB: ", lastGameTimestamp);
+            lastGameTimestamp = db_returnObject.lastGameTimestamp;
+            numberOfGames = db_returnObject.numberOfGames;
         }
 
-        // Fetch new data from Riot and determine which object to send to client
+        // Fetch new data from Riot then determine which object to send to client
         const matchlist = await getRecentGames(puuid, lastGameTimestamp);
         if (matchlist) {
-            // Update the total number of games held in the DB for a player
-            // numberOfGames += matchlist.length;
-
-            // Update LGTS for the database for future use
+            // After the match list data has been fetched, can update LGTS for next time's use
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);
+            numberOfGames.totalGames += matchlist.length;
 
-            // Take fetched matchlist and turn into maps
-            const mlMaps = await createReturnObjects(matchlist, summonerName);
+            // Process match list and produce enemy and user objects as well as updating numberOfGames.losses
+            const ml_returnObject = await createReturnObjects(matchlist, summonerName, numberOfGames);
 
-            // returnObject can either be just the fetch matchlist or the fetched matchlist
-            // concatenated with what is in the database
-            returnObject = db ? mergeEachMap(mlMaps, extractStatsFromDB(db)) : mlMaps;
+            // If there is data from the database, merge with data from ML. Otherwise, returnObject is set to ML
+            returnObject = db_returnObject ? mergeObjects(extractStatsFromDB(db_returnObject), ml_returnObject) : ml_returnObject;
 
-            // Save to database or update existing user data
-            await (db ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject, numberOfGames);
-        } else {
+            // Save a new user to database or update an existing user
+            // await (db_returnObject ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject, numberOfGames);
+        }
+        else {
             // In the case where the user is a new account with no games played yet
-            if (!db) {
+            if (!db_returnObject) {
                 throw new Error("No matchlist found and summoner not in database");
             }
             // Otherwise, the database maps exist so return that
-            returnObject = extractStatsFromDB(db);
+            returnObject = extractStatsFromDB(db_returnObject);
         }
-
-        // Calculate and log the League Nemesis
-        // calculateNemesis(returnObject.overall);
 
         // Sort the maps before returning
         Object.keys(returnObject).forEach(lane => {
@@ -73,41 +69,33 @@ async function queryForMaps(summonerName, tag) {
 }
 
 /**
- * Helper function that separates the 6 maps into its own
+ * This function's purpose is to take a db & ml return object and
+ * concatenate the user and enemy data within. They are merged into
+ * the db object, which is the one that should be sent to the client
+ * and saved to the database.
  * 
- * @param {Object} db Holds 6 maps with data from db
- * @returns The stats decoupled
+ * @param {Object} db The returnObject holding database data
+ * @param {Object} ml The returnObject holding match list data
  */
-function extractStatsFromDB(db) {
-    return {
-        overall: db.overallStats,
-        top: db.topStats,
-        jng: db.jungleStats,
-        mid: db.midStats,
-        bot: db.botStats,
-        sup: db.supportStats
-    };
+function mergeObjects(db, ml) {
+    mergeEnemyUserData(db.user, ml.user, true);
+    mergeEnemyUserData(db.enemy, ml.enemy, false);
+    return db;
 }
 
 /**
- * This function takes in ml and db which are an object that only 6 other maps: overall, top, jng, mid, ad, sup.
- * It attempts to merge each individual map before wrapping it up into an object again and returning.
+ * The purpose of this function is to extract the enemy and user object
+ * to be able to merge with the ML enemy and user object
  * 
- * @param {Object} ml Holds 6 maps with data from matchlist only
- * @param {Object} db Holds 6 maps with data from db only
- * @returns An object that contains the merged maps
+ * @param {Object} db The DB object that stores all user data 
+ * (enemy/user stats, puuid, summonerName, etc)
+ * @returns Returns only the enemy and user objects
  */
-function mergeEachMap(ml, db) {
-    let mergedMap = {}; // Object to hold all merged maps
-
-    Object.keys(ml).forEach(role => {
-        const mlRole = ml[role];
-        const dbRole = db[role];
-        const merged = mergeMatchlistAndDB(mlRole, dbRole);
-        mergedMap[role] = merged; // Add the merged map to the corresponding role in the new object
-    });
-
-    return mergedMap; // Return the object containing all merged maps
+function extractStatsFromDB(db) {
+    return {
+        enemy: db.enemyStats,
+        user: db.userStats
+    };
 }
 
 /**
@@ -115,15 +103,12 @@ function mergeEachMap(ml, db) {
  * This function decouples those two things using '#' as the delimiter and
  * returns them separated
  * 
- * @param {String} input Summoner Name#Tag
+ * @param {String} input 'Summoner Name#Tag'
  * @returns Decoupled summoner name & tag
  */
 function parseSummonerInput(input) {
     const [summonerName, tag] = input.split('#');
-    return {
-        summonerName,
-        tag
-    };
+    return { summonerName, tag };
 }
 
 export { queryForMaps, parseSummonerInput }

@@ -43,3 +43,8 @@ export interface User {
     flex: GameModeUserData;
     aram: ChampionUserData[];
 }
+
+export interface UserEnemyData {
+    userData: User,
+    enemyData: Enemy
+}

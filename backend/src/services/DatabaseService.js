@@ -4,27 +4,25 @@
 // TODO: Create better way to handle errors. Potentially want to throw the errors to SummonerRoutes page so we can send a res msg
 import { SummonerProfile } from '../models/SummonerProfileModel.js';
 
-async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchups, totalGames) {
+async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
     try {
-        if (!summonerName || !PUUID || !lastGameTimestamp || !allMatchups) {
-            throw new Error('All required fields must be provided')
+        if (!summonerName || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
+            throw new Error('All required fields must be provided');
         }
 
-        // TODO: Add type validation for each parameter
         const newSummoner = {
             summonerName,
             PUUID,
-            overallStats: allMatchups.overall,
-            topStats: allMatchups.top,
-            jungleStats: allMatchups.jng,
-            midStats: allMatchups.mid,
-            botStats: allMatchups.bot,
-            supportStats: allMatchups.sup,
             lastGameTimestamp,
-            totalGames
-        }
+            numberOfGames,
+            enemyStats,
+            userStats
+        };
 
-        await SummonerProfile.create(newSummoner);
+        await SummonerProfile.create(newSummoner).then(result => {
+            console.log(result);
+        })
+
         return true;
     } catch (error) {
         console.error('Error saving new summoner: ', error.message);
@@ -32,23 +30,19 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, allMatchu
     }
 }
 
-async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, updatedMaps, totalGames) {
+async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
     try {
-        if (!summonerName || !PUUID || !lastGameTimestamp || !updatedMaps) {
-            throw new Error('All required fields must be provided')
+        if (!summonerName || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
+            throw new Error('All required fields must be provided');
         }
 
         const update = {
             $set: {
                 summonerName: summonerName,
                 lastGameTimestamp: lastGameTimestamp,
-                overallStats: updatedMaps.overall,
-                topStats: updatedMaps.top,
-                jungleStats: updatedMaps.jng,
-                midStats: updatedMaps.mid,
-                botStats: updatedMaps.bot,
-                supportStats: updatedMaps.sup,
-                totalGames: totalGames
+                numberOfGames: numberOfGames,
+                enemyStats: enemyStats,
+                userStats: userStats
             }
         };
 
@@ -62,6 +56,7 @@ async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, upd
             console.log('Summoner not found in database with the given PUUID:', PUUID);
             return null;
         }
+
     } catch (error) {
         console.error('Error updating summoner in database:', error.message);
         throw error;
@@ -75,11 +70,10 @@ async function getSummonerByPUUID(PUUID) {
         const player = await SummonerProfile.findOne({ PUUID });
 
         if (!player) {
-            console.log('No player found in database')
-            return null
-        }
-        else {
-            console.log('Player found in database')
+            console.log('No player found in database');
+            return null;
+        } else {
+            console.log('Player found in database');
         }
 
         return player;
@@ -95,7 +89,6 @@ async function deleteSummonerByPUUID(PUUID) {
 
         const result = await SummonerProfile.findOneAndDelete({ PUUID });
 
-        // TODO: Return something instead of console logging
         if (result) {
             console.log('Successfully deleted summoner');
             return true;
@@ -103,10 +96,11 @@ async function deleteSummonerByPUUID(PUUID) {
             console.log('User not found in database');
             return false;
         }
+
     } catch (error) {
         console.error('Error deleting summoner from database: ', error.message);
         return false;
     }
 }
 
-export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID }
+export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID };

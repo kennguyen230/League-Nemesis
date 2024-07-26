@@ -6,29 +6,117 @@
 
 import mongoose from "mongoose";
 
-// Schema for individual champion stats as well as the champion's icon and description
-const championSchema = new mongoose.Schema({
-    losses: {
-        type: Number,
-        required: true
-    },
+// Schema for individual champion enemy stats
+const championEnemyStatsSchema = new mongoose.Schema({
     encounters: {
         type: Number,
         required: true
     },
-    lossRatio: {
+    losses: {
         type: Number,
         required: true
     },
+    lossRate: {
+        type: Number,
+        required: true
+    }
 }, { _id: false });
 
-// Embedding championSchema in a Map structure for each role and overall stats
-const roleStatsSchema = {
-    type: Map,
-    of: championSchema
-};
+// Schema for individual champion user stats
+const championUserStatsSchema = new mongoose.Schema({
+    encounters: {
+        type: Number,
+        required: true
+    },
+    wins: {
+        type: Number,
+        required: true
+    },
+    winRate: {
+        type: Number,
+        required: true
+    }
+}, { _id: false });
 
-// Updated summonerSchema to reflect role-based statistics and game type differentiation
+// Schema for role-based enemy statistics
+const roleEnemyStatsSchema = new mongoose.Schema({
+    overall: {
+        type: [championEnemyStatsSchema],
+        default: []
+    },
+    top: {
+        type: [championEnemyStatsSchema],
+        default: []
+    },
+    jng: {
+        type: [championEnemyStatsSchema],
+        default: []
+    },
+    mid: {
+        type: [championEnemyStatsSchema],
+        default: []
+    },
+    bot: {
+        type: [championEnemyStatsSchema],
+        default: []
+    },
+    sup: {
+        type: [championEnemyStatsSchema],
+        default: []
+    }
+}, { _id: false });
+
+// Schema for role-based user statistics
+const roleUserStatsSchema = new mongoose.Schema({
+    overall: {
+        type: [championUserStatsSchema],
+        default: []
+    },
+    top: {
+        type: [championUserStatsSchema],
+        default: []
+    },
+    jng: {
+        type: [championUserStatsSchema],
+        default: []
+    },
+    mid: {
+        type: [championUserStatsSchema],
+        default: []
+    },
+    bot: {
+        type: [championUserStatsSchema],
+        default: []
+    },
+    sup: {
+        type: [championUserStatsSchema],
+        default: []
+    }
+}, { _id: false });
+
+// Schema for game mode enemy statistics
+const gameModeEnemySchema = new mongoose.Schema({
+    normals: roleEnemyStatsSchema,
+    ranked: roleEnemyStatsSchema,
+    flex: roleEnemyStatsSchema,
+    aram: {
+        type: [championEnemyStatsSchema],
+        default: []
+    }
+}, { _id: false });
+
+// Schema for game mode user statistics
+const gameModeUserSchema = new mongoose.Schema({
+    normals: roleUserStatsSchema,
+    ranked: roleUserStatsSchema,
+    flex: roleUserStatsSchema,
+    aram: {
+        type: [championUserStatsSchema],
+        default: []
+    }
+}, { _id: false });
+
+// Top level object that holds all user data to be saved to DB
 const summonerSchema = new mongoose.Schema({
     summonerName: {
         type: String,
@@ -38,24 +126,20 @@ const summonerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    overallStats: roleStatsSchema,
-    topStats: roleStatsSchema,
-    jungleStats: roleStatsSchema,
-    midStats: roleStatsSchema,
-    botStats: roleStatsSchema,
-    supportStats: roleStatsSchema,
     lastGameTimestamp: {
         type: Number,
         required: true
     },
-    totalGames: {
+    numberOfLosses: {
         type: Number,
         required: true
-    }
+    },
+    enemyStats: gameModeEnemySchema,
+    userStats: gameModeUserSchema,
 }, {
     timestamps: true
 });
 
 // summonerprofiles is the name of the collection in the database
 // as collections are the lowercased plural form of what we call it
-export const SummonerProfile = mongoose.model('UpdatedSummonerProfile', summonerSchema); 
+export const SummonerProfile = mongoose.model('Summoner', summonerSchema);
