@@ -4,10 +4,47 @@
  */
 import express from 'express';
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID } from '../services/DatabaseService.js';
-import { queryForMaps, parseSummonerInput } from '../controllers/SummonerController.js';
+import { fetchUserData, parseSummonerInput } from '../controllers/SummonerController.js';
 import { getPUUID, getPlayerIcon, getPlayerLevel } from '../services/RiotGamesService.js';
 
 const router = express.Router();
+
+router.get('/querySummonerEnemyData', async (req, res) => {
+    try {
+        console.log("Inside querySummonerEnemyData!!!");
+
+        const summonerName = req.query.summoner;
+        const tag = req.query.tag;
+
+        const puuid = getPUUID(summonerName, tag);
+
+        const [enemyReturnObject, numberOfGames] = await fetchUserData(summonerName, tag);
+        if (enemyReturnObject) {
+            console.log("Querying for enemy data in /querySummonerEnemyData succesfull");
+
+            const normal_overallEnemyData = enemyReturnObject.normals.overall;
+
+            const returnData = {
+                name: summonerName,
+                tag: tag,
+                level: await getPlayerLevel(puuid),
+                icon: await getPlayerIcon(puuid),
+                games: numberOfGames,
+                normalOverallEnemyData: normal_overallEnemyData,
+            }
+
+            res.status(200).send(returnData);
+        } else {
+            console.log("Querying for enemy data in /querySummonerEnemyData unsuccessful." +
+                "This may be because of an incorrect summoner name input resulting in fetching " +
+                "of a non-existent account or an erroneous tag input.");
+            res.status(404).send("Querying enemy data unsuccessful");
+        }
+    } catch (error) {
+        console.error("Error querying for enemy data. Error: ", error);
+        res.status(500).send("Error querying enemy data")
+    }
+})
 
 router.get('/querySummoner', async (req, res) => {
     try {

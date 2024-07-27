@@ -1,13 +1,13 @@
 /**
  * @brief Purpose of this file is to bring together all the services/hooks we've created so far
  * that grab and process our data. This includes RiotGamesServices, DatabaseServices, and DataProcessing.
- * All these services combined will generate the appropriate map to return to the client.
+ * All these services combined will generate the appropriate object to return to the client.
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeMatchlistAndDB, createReturnObjects, sortMaps } from '../utils/DataProcessing.js';
+import { mergeEnemyUserData, createReturnObjects } from '../utils/DataProcessing.ts';
 
-async function queryForMaps(summonerName, tag) {
+async function fetchUserData(summonerName, tag) {
     try {
         // Grab PUUID from user and attempt to find in DB
         const puuid = await getPUUID(summonerName, tag);
@@ -48,22 +48,22 @@ async function queryForMaps(summonerName, tag) {
             if (!db_returnObject) {
                 throw new Error("No matchlist found and summoner not in database");
             }
-            // Otherwise, the database maps exist so return that
+            // Otherwise, the database object exists so return that
             returnObject = extractStatsFromDB(db_returnObject);
         }
 
-        // Sort the maps before returning
-        Object.keys(returnObject).forEach(lane => {
-            returnObject[lane] = sortMaps(returnObject[lane]);
-        });
+        // Object.keys(returnObject).forEach(lane => {
+        //     returnObject[lane] = sortMaps(returnObject[lane]);
+        // });
 
-        // Log maps and total # of games
+        // Log returnObject and total # of games
         console.log(returnObject);
-        console.log("Total number of games: ", numberOfGames);
+        console.log("Total number of games: ", numberOfGames.totalGames);
+        console.log("Total number of losses: ", numberOfGames.losses);
 
         return [returnObject, numberOfGames];
     } catch (error) {
-        console.error('Error in queryForMaps:', error);
+        console.error('Error in fetchUserData:', error);
         return null;
     }
 }
@@ -111,4 +111,4 @@ function parseSummonerInput(input) {
     return { summonerName, tag };
 }
 
-export { queryForMaps, parseSummonerInput }
+export { fetchUserData, parseSummonerInput }
