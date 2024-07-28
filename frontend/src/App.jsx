@@ -42,7 +42,7 @@ function App() {
       <h1>League Nemesis</h1>
       <input type="text" onChange={(e) => setSummonerName(e.target.value)} />
       <input type="text" onChange={(e) => setSummonerTag(e.target.value)} />
-      <button onClick={queryLNData()}>Get LN Data</button>
+      <button onClick={() => queryLNData()}>Get LN Data</button>
 
       {lossRateMap.length > 0 && (
         <div className="table-container">

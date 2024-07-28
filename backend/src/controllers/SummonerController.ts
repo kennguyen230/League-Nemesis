@@ -5,7 +5,7 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeEnemyUserData, createReturnObjects } from '../utils/DataProcessing.ts';
+import { mergeEnemyUserData, createReturnObjects } from '../utils/DataProcessing.js';
 
 async function fetchUserData(summonerName, tag) {
     try {
@@ -29,6 +29,7 @@ async function fetchUserData(summonerName, tag) {
         // Fetch new data from Riot then determine which object to send to client
         const matchlist = await getRecentGames(puuid, lastGameTimestamp);
         if (matchlist) {
+            // console.log(matchlist);
             // After the match list data has been fetched, can update LGTS for next time's use
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);

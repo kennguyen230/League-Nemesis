@@ -116,6 +116,18 @@ const gameModeUserSchema = new mongoose.Schema({
     }
 }, { _id: false });
 
+// Schema for counting the number of overall games and losses
+const numberOfGames = new mongoose.Schema({
+    totalGames: {
+        type: Number,
+        required: true
+    },
+    losses: {
+        type: Number,
+        required: true
+    },
+}, { _id: false });
+
 // Top level object that holds all user data to be saved to DB
 const summonerSchema = new mongoose.Schema({
     summonerName: {
@@ -130,10 +142,7 @@ const summonerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    numberOfLosses: {
-        type: Number,
-        required: true
-    },
+    numberOfGames: numberOfGames,
     enemyStats: gameModeEnemySchema,
     userStats: gameModeUserSchema,
 }, {

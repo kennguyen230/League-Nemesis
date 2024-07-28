@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: "./config.env" });
 
 const config = {
-    port: process.env.PORT || 3000,
+    port: 5000,
     host: process.env.HOST || 'localhost',
     mongoURI: process.env.MONGO_URI,
     apiKey: process.env.API_KEY,

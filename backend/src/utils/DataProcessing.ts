@@ -1,7 +1,7 @@
 /**
  * @brief This is a catch-all file that exports methods for processing data. 
  */
-import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from './Interfaces.ts';
+import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from './Interfaces.js';
 import { getClient } from "../services/ClientManager.js";
 
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions

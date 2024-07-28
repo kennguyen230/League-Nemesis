@@ -107,7 +107,9 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
  */
 async function getNewUserMatchlist(puuid) {
     try {
+        console.log("inside getNewUserML")
         const summoner = await client.summoners.fetchByPlayerId(puuid);
+        console.log(summoner);
 
         // TODO: Make a matchHistoryOption object
         let matchList = await summoner.fetchMatchList({ count: COUNT, type: 'normal' });
@@ -138,7 +140,6 @@ async function getNewUserMatchlist(puuid) {
                 }
             }
         }
-        console.log(matchList);
         return matchList;
     } catch (error) {
         console.error("Error in getNewUserMatchlist:", error)
@@ -155,8 +156,22 @@ async function getNewUserMatchlist(puuid) {
  * @returns The endTimestamp of the most recent game a user played
  */
 async function getLastGameTimestamp(matchList) {
-    const match = await client.matches.fetch(matchList[0]);
-    return Math.trunc(match.endTimestamp / 1000);
+    console.log(matchList);
+    console.log("Fetching first match from matchlist");
+    if (matchList && matchList.length > 0) {
+        try {
+            // const match = await client.matches.fetch(matchList[0]);
+            const match = await client.matches.fetch("NA1_5063859408");
+            console.log("Fetched match: ", match);
+            return Math.trunc(match.endTimestamp / 1000);
+        } catch (error) {
+            console.error("Error fetching match: ", error);
+            throw error;  // Rethrow to handle this error in the calling function if needed
+        }
+    } else {
+        console.error("Matchlist is empty or undefined");
+        return -1;
+    }
 }
 
 export { getPUUID, getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel }
