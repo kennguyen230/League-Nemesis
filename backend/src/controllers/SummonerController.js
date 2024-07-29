@@ -62,8 +62,8 @@ async function queryForMaps(summonerName, tag) {
         });
 
         // Log maps and total # of games
-        console.log(returnObject);
-        console.log("Total number of games: ", numberOfGames);
+        // console.log(returnObject);
+        // console.log("Total number of games: ", numberOfGames);
 
         return [returnObject, numberOfGames];
     } catch (error) {

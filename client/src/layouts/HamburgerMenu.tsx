@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -22,6 +23,7 @@ export function HamburgerMenu() {
         <SheetHeader className="mt-16">
           <SheetTitle className="text-right font-vollkorn text-white pr-3 text-xl">
             League Nemesis
+            <Separator className="mt-4"></Separator>
           </SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-4 py-4 mt-4 font-vollkorn text-white">

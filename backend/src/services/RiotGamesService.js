@@ -16,8 +16,12 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @returns A user's PUUID
  */
 async function getPUUID(summonerName, tag) {
-    const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
-    return summoner.playerId;
+    try {
+        const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+        return summoner.playerId;
+    } catch (error) {
+        console.log("Error inside getPUUID(). Error: ", error);
+    }
 }
 
 async function getPlayerIcon(puuid) {
@@ -138,6 +142,7 @@ async function getNewUserMatchlist(puuid) {
                 }
             }
         }
+        console.log("Number of new games fetched: ", matchList.length)
         console.log(matchList);
         return matchList;
     } catch (error) {
@@ -155,8 +160,12 @@ async function getNewUserMatchlist(puuid) {
  * @returns The endTimestamp of the most recent game a user played
  */
 async function getLastGameTimestamp(matchList) {
-    const match = await client.matches.fetch(matchList[0]);
-    return Math.trunc(match.endTimestamp / 1000);
+    try {
+        const match = await client.matches.fetch(matchList[0]);
+        return Math.trunc(match.endTimestamp / 1000);
+    } catch (error) {
+        console.error("Error inside getLastGameTimeStamp(). Error: ", error);
+    }
 }
 
 export { getPUUID, getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel }

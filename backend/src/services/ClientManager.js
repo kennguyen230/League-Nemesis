@@ -14,50 +14,18 @@ async function initializeClient(region) {
     // Check if a client for the specified region already exists
     if (!clientsByRegion[region]) {
         // If not, create a new client instance for the region
+        // TODO: Remove before comitting
+        console.log("API Key: ", config.apiKey);
         const client = new Client(config.apiKey);
 
         console.log("Client initialized with region: " + region);
 
         await client.initialize({
             region: region,
-            cache: {
-                enable: {
-                    api: {
-                        summoner: true,
-                        match: false,
-                        championMastery: false,
-                        clash: false,
-                        currentGame: false,
-                        league: false,
-                    },
-                    dragon: {
-                        champions: true,
-                        items: false,
-                        runes: false,
-                        summonerSpells: false,
-                    }
-                }
-            },
-            storage: {
-                enable: {
-                    api: {
-                        summoner: true,
-                        match: false,
-                        championMastery: false,
-                        clash: false,
-                        currentGame: false,
-                        league: false,
-                    },
-                    dragon: {
-                        champions: true,
-                        items: false,
-                        runes: false,
-                        summonerSpells: false,
-                    }
-                }
-            },
+            cache: false,
+            storage: false,
             fetch: {
-                champions: true,
+                champions: false,
                 items: false,
                 runes: false,
                 summonerSpells: false
@@ -74,3 +42,41 @@ async function initializeClient(region) {
 export async function getClient(region = 'na') {
     return await initializeClient(region);
 }
+
+// TODO: Move back after fixing client instantiation
+// cache: {
+//     enable: {
+//         api: {
+//             summoner: true,
+//             match: false,
+//             championMastery: false,
+//             clash: false,
+//             currentGame: false,
+//             league: false,
+//         },
+//         dragon: {
+//             champions: true,
+//             items: false,
+//             runes: false,
+//             summonerSpells: false,
+//         }
+//     }
+// },
+// storage: {
+//     enable: {
+//         api: {
+//             summoner: true,
+//             match: false,
+//             championMastery: false,
+//             clash: false,
+//             currentGame: false,
+//             league: false,
+//         },
+//         dragon: {
+//             champions: true,
+//             items: false,
+//             runes: false,
+//             summonerSpells: false,
+//         }
+//     }
+// },
