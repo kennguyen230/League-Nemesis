@@ -6,6 +6,7 @@
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
 import { mergeEnemyUserData, createReturnObjects } from '../utils/DataProcessing.js';
+import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
 
 async function fetchUserData(summonerName, tag) {
     try {
@@ -14,7 +15,7 @@ async function fetchUserData(summonerName, tag) {
         const db_returnObject = await getSummonerByPUUID(puuid);
 
         // Variables to be populated in the following functions by either DB or ML
-        let lastGameTimestamp = -1;
+        let lastGameTimestamp: Number = -1;
         let numberOfGames = { totalGames: 0, losses: 0 };
         let returnObject;
 
@@ -29,10 +30,11 @@ async function fetchUserData(summonerName, tag) {
         // Fetch new data from Riot then determine which object to send to client
         const matchlist = await getRecentGames(puuid, lastGameTimestamp);
         if (matchlist) {
-            // console.log(matchlist);
+            console.log(matchlist);
             // After the match list data has been fetched, can update LGTS for next time's use
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);
+            // Then update the total number of games fetched
             numberOfGames.totalGames += matchlist.length;
 
             // Process match list and produce enemy and user objects as well as updating numberOfGames.losses
@@ -58,7 +60,7 @@ async function fetchUserData(summonerName, tag) {
         // });
 
         // Log returnObject and total # of games
-        console.log(returnObject);
+        // console.log(returnObject);
         console.log("Total number of games: ", numberOfGames.totalGames);
         console.log("Total number of losses: ", numberOfGames.losses);
 
@@ -78,7 +80,8 @@ async function fetchUserData(summonerName, tag) {
  * @param {Object} db The returnObject holding database data
  * @param {Object} ml The returnObject holding match list data
  */
-function mergeObjects(db, ml) {
+function mergeObjects(db: { enemy: any; user: any; }, ml: { enemy: any; user: any; }) {
+    console.log("Inside mergeObjects()")
     mergeEnemyUserData(db.user, ml.user, true);
     mergeEnemyUserData(db.enemy, ml.enemy, false);
     return db;

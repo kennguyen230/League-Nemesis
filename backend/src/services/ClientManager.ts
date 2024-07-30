@@ -20,48 +20,48 @@ async function initializeClient(region) {
 
         await client.initialize({
             region: region,
-            // cache: {
-            //     enable: {
-            //         api: {
-            //             summoner: true,
-            //             match: false,
-            //             championMastery: false,
-            //             clash: false,
-            //             currentGame: false,
-            //             league: false,
-            //         },
-            //         dragon: {
-            //             champions: true,
-            //             items: false,
-            //             runes: false,
-            //             summonerSpells: false,
-            //         }
-            //     }
-            // },
-            // storage: {
-            //     enable: {
-            //         api: {
-            //             summoner: true,
-            //             match: false,
-            //             championMastery: false,
-            //             clash: false,
-            //             currentGame: false,
-            //             league: false,
-            //         },
-            //         dragon: {
-            //             champions: true,
-            //             items: false,
-            //             runes: false,
-            //             summonerSpells: false,
-            //         }
-            //     }
-            // },
-            // fetch: {
-            //     champions: true,
-            //     items: false,
-            //     runes: false,
-            //     summonerSpells: false
-            // }
+            cache: {
+                enable: {
+                    api: {
+                        summoner: true,
+                        match: false,
+                        championMastery: false,
+                        clash: false,
+                        currentGame: false,
+                        league: false,
+                    },
+                    dragon: {
+                        champions: true,
+                        items: false,
+                        runes: false,
+                        summonerSpells: false,
+                    }
+                }
+            },
+            storage: {
+                enable: {
+                    api: {
+                        summoner: true,
+                        match: false,
+                        championMastery: false,
+                        clash: false,
+                        currentGame: false,
+                        league: false,
+                    },
+                    dragon: {
+                        champions: true,
+                        items: false,
+                        runes: false,
+                        summonerSpells: false,
+                    }
+                }
+            },
+            fetch: {
+                champions: true,
+                items: false,
+                runes: false,
+                summonerSpells: false
+            }
         });
         // Store the initialized client in the clientsByRegion object
         clientsByRegion[region] = client;

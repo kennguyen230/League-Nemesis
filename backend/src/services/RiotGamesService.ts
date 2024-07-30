@@ -12,7 +12,7 @@ const client = await getClient(); // TODO: Change this into a function call so t
 /**
  * 
  * @param {string} summonerName A user's summoner name
- * @param {string} region The user's region. Defaults to NA
+ * @param {string} tag The Riot tag of the user
  * @returns A user's PUUID
  */
 async function getPUUID(summonerName, tag) {
@@ -36,7 +36,7 @@ async function getPlayerLevel(puuid) {
  * If they are 'Existing' then we grab all the games between their most recent one and the most recent
  * one in our database.
  * 
- * @param {string} summonerName A user's summoner name
+ * @param {string} puuid The user's puuid
  * @param {number} lastGameTimestamp The endTimestamp of the last game we fetched for existing users
  */
 async function getRecentGames(puuid, lastGameTimestamp) {
@@ -50,12 +50,13 @@ async function getRecentGames(puuid, lastGameTimestamp) {
 /**
  * Captures all recent games. Starts at the most recent game found in the database until most recent game the user has played.
  * 
- * @param {string} summonerName The user's summoner name
+ * @param {string} puuid The user's puuid
  * @param {number} lastGameTimestamp The timestamp of the most recent game present in the database for this user in seconds.
  * @returns The most recent matches from the lastGameTimestamp onwards
  */
 async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
     try {
+        console.log("Inside getExistingUserMatchlist")
         const summoner = await client.summoners.fetchByPlayerId(puuid);
         let matchList = await summoner.fetchMatchList({ count: COUNT, startTime: lastGameTimestamp });
 
@@ -86,9 +87,6 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
                 }
             }
         }
-
-        console.log("Number of new games fetched: ", matchList.length)
-        console.log(matchList);
         return matchList.slice(0, -1) // Returns every element except the last one because it will be the same game as lastGameTimestamp
     } catch (error) {
         console.error("Error in getExistingUserMatchlist:", error)
@@ -102,17 +100,16 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
  * however we omit the first element of the appendingArray because it would be a duplicate
  * of the last element in matchList. 
  * 
- * @param {string} summonerName The user's summoner name
+ * @param {string} puuid The user's puuid
  * @returns matchList 
  */
 async function getNewUserMatchlist(puuid) {
     try {
-        console.log("inside getNewUserML")
+        console.log("Inside getNewUserML")
         const summoner = await client.summoners.fetchByPlayerId(puuid);
-        console.log(summoner);
 
         // TODO: Make a matchHistoryOption object
-        let matchList = await summoner.fetchMatchList({ count: COUNT, type: 'normal' });
+        let matchList = await summoner.fetchMatchList({ count: COUNT });
         let length = matchList.length;
         let lastMatchInList = await client.matches.fetch(matchList[length - 1]);
         let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
@@ -156,21 +153,12 @@ async function getNewUserMatchlist(puuid) {
  * @returns The endTimestamp of the most recent game a user played
  */
 async function getLastGameTimestamp(matchList) {
-    console.log(matchList);
-    console.log("Fetching first match from matchlist");
-    if (matchList && matchList.length > 0) {
-        try {
-            // const match = await client.matches.fetch(matchList[0]);
-            const match = await client.matches.fetch("NA1_5063859408");
-            console.log("Fetched match: ", match);
-            return Math.trunc(match.endTimestamp / 1000);
-        } catch (error) {
-            console.error("Error fetching match: ", error);
-            throw error;  // Rethrow to handle this error in the calling function if needed
-        }
-    } else {
-        console.error("Matchlist is empty or undefined");
-        return -1;
+    try {
+        console.log("Inside getLGTS()")
+        const match = await client.matches.fetch(matchList[0]);
+        return Math.trunc(match.endTimestamp / 1000);
+    } catch (error) {
+        console.error("Error inside getLastGameTimestamp(). Error: ", error);
     }
 }
 

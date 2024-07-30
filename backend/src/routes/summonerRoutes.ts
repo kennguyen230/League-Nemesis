@@ -20,7 +20,7 @@ router.get('/querySummonerEnemyData', async (req, res) => {
 
         const [enemyReturnObject, numberOfGames] = await fetchUserData(summonerName, tag);
         if (enemyReturnObject) {
-            console.log("Querying for enemy data in /querySummonerEnemyData succesfull");
+            console.log("Querying for enemy data in /querySummonerEnemyData successful");
 
             const normal_overallEnemyData = enemyReturnObject.normals.overall;
 
