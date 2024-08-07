@@ -22,7 +22,7 @@ router.get('/querySummonerEnemyData', async (req, res) => {
         if (enemyReturnObject) {
             console.log("Querying for enemy data in /querySummonerEnemyData successful");
 
-            const normal_overallEnemyData = enemyReturnObject.normals.overall;
+            const normal_overallEnemyData = enemyReturnObject.enemy.normals.overall;
 
             const returnData = {
                 name: summonerName,

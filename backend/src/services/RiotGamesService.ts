@@ -154,7 +154,7 @@ async function getNewUserMatchlist(puuid) {
  */
 async function getLastGameTimestamp(matchList) {
     try {
-        console.log("Inside getLGTS()")
+        console.log(`Inside getLGTS(). Attempting to update LGTS with match ${matchList[0]}`)
         const match = await client.matches.fetch(matchList[0]);
         return Math.trunc(match.endTimestamp / 1000);
     } catch (error) {

@@ -76,8 +76,8 @@ async function createReturnObjects(
 
     await processMatchList(summonerName, matchList, enemy, user, numberOfGames);
 
-    console.log(enemy);
-    console.log(user);
+    console.dir(user, { depth: null });
+    // console.dir(enemy, { depth: null });
 
     return { enemy, user };
 }
@@ -205,21 +205,6 @@ async function processMatchList(
         matchDetails.forEach((match) => {
             if (!match) return; // Skip if match details couldn't be fetched
 
-            const isRemake: boolean = match.teams.get("blue").participants[0].remake;
-            if (isRemake) return; // Skip if it's a remake
-
-            // Check which side the user is on
-            const userTeam: string = match.teams.get("blue").participants.some(
-                (participant) => participant.summoner.name === summonerName) ? "blue" : "red";
-
-            // The opposing team is naturally the other side
-            const opposingTeam: string = userTeam === "blue" ? "red" : "blue";
-
-            // Check to see if user won this game and if not
-            // update the loss counter
-            const userTeamWon: boolean = match.teams.get(userTeam).win;
-            if (!userTeamWon) numberOfGames.losses += 1;
-
             // Grab game queue type (follow reference on Riot Dev Docs)
             // https://static.developer.riotgames.com/docs/lol/queues.json
             const gameQueue: number = match.queue.queueId;
@@ -245,6 +230,25 @@ async function processMatchList(
                     gameMode = undefined;
             }
 
+            // If the game mode is not one of the ones listed, return early
+            // as it may cause an error in the following match detail calls
+            if (gameMode === undefined) return;
+
+            const isRemake: boolean = match.teams.get("blue").participants[0].remake;
+            if (isRemake) return; // Skip if it's a remake
+
+            // Check which side the user is on
+            const userTeam: string = match.teams.get("blue").participants.some(
+                (participant) => participant.summoner.name === summonerName) ? "blue" : "red";
+
+            // The opposing team is naturally the other side
+            const opposingTeam: string = userTeam === "blue" ? "red" : "blue";
+
+            // Check to see if user won this game and if not
+            // update the loss counter
+            const userTeamWon: boolean = match.teams.get(userTeam).win;
+            if (!userTeamWon) numberOfGames.losses += 1;
+
             // If the game mode is not one of the ones listed, return early as
             // League Nemesis only deals with normals, ranked, flex, and aram
             if (gameMode === undefined) return;
@@ -256,10 +260,12 @@ async function processMatchList(
 
                 // If it is the user, grab their champion and update the user object
                 const champName: string = participant.champion.champ.id;
-                updateUserData(user, champName, userTeamWon, gameMode, "overall");
 
                 // Return early if ARAM, don't need to populate lane data
-                if (gameMode == "aram") return;
+                if (gameMode == "aram") {
+                    updateUserData(user, champName, userTeamWon, gameMode, "overall");
+                    return;
+                }
 
                 // For non-aram game mode, need to also update each individual lane
                 switch (participant.position.team) {
@@ -285,10 +291,12 @@ async function processMatchList(
             match.teams.get(opposingTeam).participants.forEach((participant) => {
                 // Grab champ id of each opponent and update the enemy object
                 const champName: string = participant.champion.champ.id;
-                updateEnemyData(enemy, champName, userTeamWon, gameMode, "overall");
 
                 // Return early if ARAM, don't need to populate lane data
-                if (gameMode == "aram") return;
+                if (gameMode == "aram") {
+                    updateEnemyData(enemy, champName, userTeamWon, gameMode, "overall");
+                    return;
+                }
 
                 // For non-aram game mode, need to also update each individual lane
                 switch (participant.position.team) {

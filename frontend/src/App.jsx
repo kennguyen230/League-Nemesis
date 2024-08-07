@@ -29,7 +29,7 @@ function App() {
           <td>{champion.champName}</td>
           <td>{champion.losses}</td>
           <td>{champion.encounters}</td>
-          <td>{(champion.lossRate * 100).toFixed(2)}%</td>
+          <td>{champion.lossRate.toFixed(2)}%</td>
         </tr>
       );
     });
