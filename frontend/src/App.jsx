@@ -44,7 +44,7 @@ function App() {
       <input type="text" onChange={(e) => setSummonerTag(e.target.value)} />
       <button onClick={() => queryLNData()}>Get LN Data</button>
 
-      {lossRateMap.length > 0 && (
+      {/* {lossRateMap.length > 0 && (
         <div className="table-container">
           <table>
             <thead>
@@ -58,7 +58,7 @@ function App() {
             <tbody>{renderTable()}</tbody>
           </table>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

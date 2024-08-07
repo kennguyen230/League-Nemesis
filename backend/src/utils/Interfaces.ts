@@ -34,6 +34,7 @@ export interface Enemy {
     normals: GameModeEnemyData;
     ranked: GameModeEnemyData;
     flex: GameModeEnemyData;
+    all: GameModeEnemyData;
     aram: ChampionEnemyData[];
 }
 
@@ -41,6 +42,7 @@ export interface User {
     normals: GameModeUserData;
     ranked: GameModeUserData;
     flex: GameModeUserData;
+    all: GameModeUserData;
     aram: ChampionUserData[];
 }
 

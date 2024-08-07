@@ -64,6 +64,7 @@ async function createReturnObjects(
         normals: emptyGameModeEnemyData(),
         ranked: emptyGameModeEnemyData(),
         flex: emptyGameModeEnemyData(),
+        all: emptyGameModeEnemyData(),
         aram: []
     };
 
@@ -71,13 +72,14 @@ async function createReturnObjects(
         normals: emptyGameModeUserData(),
         ranked: emptyGameModeUserData(),
         flex: emptyGameModeUserData(),
+        all: emptyGameModeUserData(),
         aram: []
     };
 
     await processMatchList(summonerName, matchList, enemy, user, numberOfGames);
 
-    console.dir(user, { depth: null });
-    // console.dir(enemy, { depth: null });
+    // console.dir(user, { depth: null });
+    console.dir(enemy, { depth: null });
 
     return { enemy, user };
 }
@@ -119,12 +121,21 @@ const updateEnemyData = (
     };
 
     if (gameMode === 'aram') {
+        // Update aram champion data for the aram array
+        // as well as the all array.overall
         updateChampionData(enemy.aram, champName, userTeamWon);
-    } else {
-        updateChampionData(enemy[gameMode][lane], champName, userTeamWon);
+        updateChampionData(enemy["all"].overall, champName, userTeamWon);
 
-        // Also update the overall data for normals, ranked, and flex
+    } else {
+        // For each match of type gameMode, update the lane
+        // specific array but also the overall array
+        updateChampionData(enemy[gameMode][lane], champName, userTeamWon);
         updateChampionData(enemy[gameMode].overall, champName, userTeamWon);
+
+        // Then, update the all array for each lane then the
+        // all array.overall
+        updateChampionData(enemy["all"][lane], champName, userTeamWon);
+        updateChampionData(enemy["all"].overall, champName, userTeamWon);
     }
 };
 
@@ -165,11 +176,13 @@ const updateUserData = (
 
     if (gameMode === 'aram') {
         updateChampionData(user.aram, champName, userTeamWon);
+        updateChampionData(user["all"].overall, champName, userTeamWon);
     } else {
         updateChampionData(user[gameMode][lane], champName, userTeamWon);
-
-        // Also update the overall data for normals, ranked, and flex
         updateChampionData(user[gameMode].overall, champName, userTeamWon);
+
+        updateChampionData(user["all"][lane], champName, userTeamWon);
+        updateChampionData(user["all"].overall, champName, userTeamWon);
     }
 };
 

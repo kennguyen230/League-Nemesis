@@ -18,11 +18,9 @@ router.get('/querySummonerEnemyData', async (req, res) => {
 
         const puuid = getPUUID(summonerName, tag);
 
-        const [enemyReturnObject, numberOfGames] = await fetchUserData(summonerName, tag);
-        if (enemyReturnObject) {
+        const [returnObject, numberOfGames] = await fetchUserData(summonerName, tag);
+        if (returnObject) {
             console.log("Querying for enemy data in /querySummonerEnemyData successful");
-
-            const normal_overallEnemyData = enemyReturnObject.enemy.normals.overall;
 
             const returnData = {
                 name: summonerName,
@@ -30,7 +28,7 @@ router.get('/querySummonerEnemyData', async (req, res) => {
                 level: await getPlayerLevel(puuid),
                 icon: await getPlayerIcon(puuid),
                 games: numberOfGames,
-                normalOverallEnemyData: normal_overallEnemyData,
+                data: returnObject,
             }
 
             res.status(200).send(returnData);
