@@ -99,6 +99,7 @@ const gameModeEnemySchema = new mongoose.Schema({
     normals: roleEnemyStatsSchema,
     ranked: roleEnemyStatsSchema,
     flex: roleEnemyStatsSchema,
+    all: roleEnemyStatsSchema,
     aram: {
         type: [championEnemyStatsSchema],
         default: []
@@ -110,6 +111,7 @@ const gameModeUserSchema = new mongoose.Schema({
     normals: roleUserStatsSchema,
     ranked: roleUserStatsSchema,
     flex: roleUserStatsSchema,
+    all: roleUserStatsSchema,
     aram: {
         type: [championUserStatsSchema],
         default: []
