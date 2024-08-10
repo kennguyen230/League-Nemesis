@@ -8,33 +8,41 @@ import mongoose from "mongoose";
 
 // Schema for individual champion enemy stats
 const championEnemyStatsSchema = new mongoose.Schema({
+    champName: {
+        type: String,
+        required: false
+    },
     encounters: {
         type: Number,
-        required: true
+        required: false
     },
     losses: {
         type: Number,
-        required: true
+        required: false
     },
     lossRate: {
         type: Number,
-        required: true
+        required: false
     }
 }, { _id: false });
 
 // Schema for individual champion user stats
 const championUserStatsSchema = new mongoose.Schema({
+    champName: {
+        type: String,
+        required: false
+    },
     encounters: {
         type: Number,
-        required: true
+        required: false
     },
     wins: {
         type: Number,
-        required: true
+        required: false
     },
     winRate: {
         type: Number,
-        required: true
+        required: false
     }
 }, { _id: false });
 

@@ -28,7 +28,7 @@ router.get('/querySummonerEnemyData', async (req, res) => {
                 level: await getPlayerLevel(puuid),
                 icon: await getPlayerIcon(puuid),
                 games: numberOfGames,
-                data: returnObject,
+                userdata: returnObject,
             }
 
             res.status(200).send(returnData);

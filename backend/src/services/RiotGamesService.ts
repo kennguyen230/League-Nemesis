@@ -62,7 +62,7 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
 
         // Existing user but they have not played any new games since the last time we fetched data
         if (matchList.length < 2) {
-            console.log("No new games from existing user");
+            console.log("getExistingUserMatchList(): No new games from existing user.");
             return null;
         }
 

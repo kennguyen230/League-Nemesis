@@ -78,7 +78,7 @@ async function createReturnObjects(
 
     await processMatchList(summonerName, matchList, enemy, user, numberOfGames);
 
-    // console.dir(user, { depth: null });
+    console.dir(user, { depth: null });
     console.dir(enemy, { depth: null });
 
     return { enemy, user };
@@ -120,7 +120,7 @@ const updateEnemyData = (
         champData.lossRate = (champData.losses / champData.encounters) * 100;
     };
 
-    if (gameMode === 'aram') {
+    if (gameMode == 'aram') {
         // Update aram champion data for the aram array
         // as well as the all array.overall
         updateChampionData(enemy.aram, champName, userTeamWon);
@@ -174,7 +174,7 @@ const updateUserData = (
         champData.winRate = (champData.wins / champData.picks) * 100;
     };
 
-    if (gameMode === 'aram') {
+    if (gameMode == 'aram') {
         updateChampionData(user.aram, champName, userTeamWon);
         updateChampionData(user["all"].overall, champName, userTeamWon);
     } else {
@@ -345,12 +345,12 @@ async function processMatchList(
  * @param ml Match list returnObject. Passed in either user data or enemy data
  * @param isUser Flag to indicate if user or enemy data was passed in
  */
-function mergeEnemyUserData(db: User | Enemy, ml: User | Enemy, isUser: boolean = false) {
+function mergeUserEnemyData(db: User | Enemy, ml: User | Enemy, isUser: boolean = false) {
     // For each gamemode (normal, ranked, flex, aram)
     for (let gameMode in ml) {
         // If it's ARAM, jump straight to merging stats as ARAM doesn't have
         // different lanes
-        if (gameMode == "ARAM") {
+        if (gameMode == "aram") {
             // Throw in check to make sure DB has an ARAM array
             if (!db[gameMode]) {
                 db[gameMode] = [];
@@ -432,44 +432,60 @@ function mergeStats(db_champ: ChampionUserData | ChampionEnemyData, ml_champ: Ch
     if (isUser) {
         (db_champ as ChampionUserData).wins += (ml_champ as ChampionUserData).wins;
         (db_champ as ChampionUserData).picks += (ml_champ as ChampionUserData).picks;
-        (db_champ as ChampionUserData).winRate = (ml_champ as ChampionUserData).wins / (ml_champ as ChampionUserData).picks;
+        (db_champ as ChampionUserData).winRate = (db_champ as ChampionUserData).wins / (db_champ as ChampionUserData).picks;
     }
     // Otherwise, use enemy properties
     else {
         (db_champ as ChampionEnemyData).losses += (ml_champ as ChampionEnemyData).losses;
         (db_champ as ChampionEnemyData).encounters += (ml_champ as ChampionEnemyData).encounters;
-        (db_champ as ChampionEnemyData).lossRate = (ml_champ as ChampionEnemyData).losses / (ml_champ as ChampionEnemyData).encounters;
+        (db_champ as ChampionEnemyData).lossRate = (db_champ as ChampionEnemyData).losses / (db_champ as ChampionEnemyData).encounters;
     }
 }
 
 /**
- * Takes one of the losingMatchups and sorts based on lossRatio and breaks ties
- * with encounters. There is also weighting involved to prevent matchups with
- * low encounters to top the list. Eg. 1 loss, 1 encounter, 1 loss ratio
- *
- * @param {Map} losingMatchups A map representing the losing matchups for a lane
- * @returns losingMatchups sorted
+ * For every gamemode for a returnObject, sort the lane arrays.
+ * For user data, sort by pick rate.
+ * For enemy data, use a weighted sorting algorithm to sort primarily
+ * by loss rate but also by total losses.
+ * 
+ * @param returnObject The object holding enemy and user data
  */
-// function sortMaps(map) {
-//     const matchupsArray = Array.from(map.entries()).map(([key, value]) => ({
-//         champion: key,
-//         losses: value.losses,
-//         encounters: value.encounters,
-//         lossRatio: value.lossRatio,
-//     }));
+function sortUserEnemyData(returnObject: UserEnemyData) {
+    // Loop through the various gamemodes
+    for (let gameMode in returnObject) {
+        // If it's aram, jump straight to sorting because aram
+        // has no lanes and is itself an array that can be sorted
+        if (gameMode == "aram") {
+            sortEnemyStats(returnObject[gameMode]);
+            sortUserStats(returnObject[gameMode]);
+        }
+        // Otherwise, it has to be broken down another level from
+        // the gamemode to the lane arrays
+        else {
+            for (let lane in returnObject[gameMode]) {
+                sortEnemyStats(returnObject[gameMode][lane])
+                sortUserStats(returnObject[gameMode][lane])
+            }
+        }
+    }
+}
 
-//     const sortedMatchupsArray = matchupsArray.sort((a, b) => {
-//         const weightA = a.lossRatio * Math.log(a.encounters + 1);
-//         const weightB = b.lossRatio * Math.log(b.encounters + 1);
+function sortEnemyStats(laneArr: ChampionEnemyData[]) {
+    laneArr.sort((champ1, champ2) => {
+        const weightedChamp1 = champ1.lossRate * Math.log(champ1.encounters + 1);
+        const weightedChamp2 = champ2.lossRate * Math.log(champ2.encounters + 1);
 
-//         if (weightB !== weightA) {
-//             return weightB - weightA;
-//         }
-//         return b.losses - a.losses;
-//     });
+        if (weightedChamp2 !== weightedChamp1) {
+            return weightedChamp2 - weightedChamp1;
+        }
+        return champ2.losses - champ1.losses;
+    })
+}
 
-//     console.log("SORTED!");
-//     return sortedMatchupsArray;
-// }
+function sortUserStats(userArr: ChampionUserData[]) {
+    userArr.sort((champ1, champ2) => {
+        return champ2.picks - champ1.picks;
+    })
+}
 
-export { createReturnObjects, mergeEnemyUserData };
+export { createReturnObjects, mergeUserEnemyData, sortUserEnemyData };

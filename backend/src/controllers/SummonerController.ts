@@ -5,46 +5,61 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeEnemyUserData, createReturnObjects } from '../utils/DataProcessing.js';
+import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData } from '../utils/DataProcessing.js';
 import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
 
 async function fetchUserData(summonerName, tag) {
     try {
-        // Grab PUUID from user and attempt to find in DB
+        // Grab PUUID from user and attempt to find user in DB
         const puuid = await getPUUID(summonerName, tag);
         const db_returnObject = await getSummonerByPUUID(puuid);
 
-        // Variables to be populated in the following functions by either DB or ML
         let lastGameTimestamp: Number = -1;
         let numberOfGames = { totalGames: 0, losses: 0 };
         let returnObject;
 
-        // If the user exists in the DB grab the LGTS to use for fetching match list
-        // data. As well, fetch the numberOfGames tally to update 
+        // If the db object exists then set LGTS to the one from the db,
+        // that way no gaps exists between the matches fetched
         if (db_returnObject) {
-            console.log("LGTS from DB: ", lastGameTimestamp);
             lastGameTimestamp = db_returnObject.lastGameTimestamp;
+            console.log("LGTS from DB: ", lastGameTimestamp);
             numberOfGames = db_returnObject.numberOfGames;
         }
 
         // Fetch new data from Riot then determine which object to send to client
         const matchlist = await getRecentGames(puuid, lastGameTimestamp);
+
+        // The bulk of processing for the backend happens in this if/else
+        // Inside, if there is a new match list, create a UserEnemy object
+        // from the match list. Then if it's an existing user, merge with
+        // the database UserEnemy object. After merging, sort the data
+        // then save or update the user in the database depending of if it's
+        // a new user or existing user.
+        // If there is no new match list to process, grab the data from the 
+        // database instead.
+        // In a rare instance where there is no match list games to fetch &
+        // there's no database entry, throw an error for now.
         if (matchlist) {
             console.log(matchlist);
-            // After the match list data has been fetched, can update LGTS for next time's use
+
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
             console.log("Updated LGTS from ML: ", lastGameTimestamp);
-            // Then update the total number of games fetched
+
             numberOfGames.totalGames += matchlist.length;
 
-            // Process match list and produce enemy and user objects as well as updating numberOfGames.losses
+            // Process match list and produce enemy and user objects and update numberOfGames.losses
             const ml_returnObject = await createReturnObjects(matchlist, summonerName, numberOfGames);
 
             // If there is data from the database, merge with data from ML. Otherwise, returnObject is set to ML
             returnObject = db_returnObject ? mergeObjects(extractStatsFromDB(db_returnObject), ml_returnObject) : ml_returnObject;
 
+            // After merging occurs, sort the data before saving to the database
+            // Sorting is done inside the matchlist block because it will only be necessary
+            // to sort when there are new games
+            sortUserEnemyData(returnObject);
+
             // Save a new user to database or update an existing user
-            // await (db_returnObject ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, returnObject, numberOfGames);
+            await (db_returnObject ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, numberOfGames, returnObject.enemy, returnObject.user);
         }
         else {
             // In the case where the user is a new account with no games played yet
@@ -54,15 +69,6 @@ async function fetchUserData(summonerName, tag) {
             // Otherwise, the database object exists so return that
             returnObject = extractStatsFromDB(db_returnObject);
         }
-
-        // Object.keys(returnObject).forEach(lane => {
-        //     returnObject[lane] = sortMaps(returnObject[lane]);
-        // });
-
-        // Log returnObject and total # of games
-        // console.log(returnObject);
-        console.log("Total number of games: ", numberOfGames.totalGames);
-        console.log("Total number of losses: ", numberOfGames.losses);
 
         return [returnObject, numberOfGames];
     } catch (error) {
@@ -80,10 +86,10 @@ async function fetchUserData(summonerName, tag) {
  * @param {Object} db The returnObject holding database data
  * @param {Object} ml The returnObject holding match list data
  */
-function mergeObjects(db: { enemy: any; user: any; }, ml: { enemy: any; user: any; }) {
+function mergeObjects(db: { enemy: Enemy, user: User; }, ml: { enemy: Enemy; user: User; }) {
     console.log("Inside mergeObjects()")
-    mergeEnemyUserData(db.user, ml.user, true);
-    mergeEnemyUserData(db.enemy, ml.enemy, false);
+    mergeUserEnemyData(db.user, ml.user, true);
+    mergeUserEnemyData(db.enemy, ml.enemy, false);
     return db;
 }
 
