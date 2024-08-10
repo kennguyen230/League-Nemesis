@@ -1,14 +1,14 @@
 export interface ChampionEnemyData {
     champName: string;
-    encounters: number;
     losses: number;
+    encounters: number;
     lossRate: number;
 }
 
 export interface ChampionUserData {
     champName: string;
-    picks: number;
     wins: number;
+    picks: number;
     winRate: number;
 }
 

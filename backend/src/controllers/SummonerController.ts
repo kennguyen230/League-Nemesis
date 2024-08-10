@@ -56,7 +56,7 @@ async function fetchUserData(summonerName, tag) {
             // After merging occurs, sort the data before saving to the database
             // Sorting is done inside the matchlist block because it will only be necessary
             // to sort when there are new games
-            sortUserEnemyData(returnObject);
+            sortUserEnemyData(returnObject.user, returnObject.enemy);
 
             // Save a new user to database or update an existing user
             await (db_returnObject ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, numberOfGames, returnObject.enemy, returnObject.user);
@@ -66,8 +66,10 @@ async function fetchUserData(summonerName, tag) {
             if (!db_returnObject) {
                 throw new Error("No matchlist found and summoner not in database");
             }
+
             // Otherwise, the database object exists so return that
             returnObject = extractStatsFromDB(db_returnObject);
+            console.log("returnObject set to database data")
         }
 
         return [returnObject, numberOfGames];
@@ -94,17 +96,22 @@ function mergeObjects(db: { enemy: Enemy, user: User; }, ml: { enemy: Enemy; use
 }
 
 /**
- * The purpose of this function is to extract the enemy and user object
- * to be able to merge with the ML enemy and user object
+ * Helper function to extract the enemy and user data from the 
+ * database object. Need to convert from a Mongoose object to
+ * a plain javascript object to avoid extra properties that make
+ * it difficult to work with later.
  * 
- * @param {Object} db The DB object that stores all user data 
- * (enemy/user stats, puuid, summonerName, etc)
+ * @param {Object} db The DB object that stores all user data,
+ * including user & enemy stats along with LGTS, summoner name,
+ * puuid, etc.
  * @returns Returns only the enemy and user objects
  */
 function extractStatsFromDB(db) {
+    const dbObject = db.toObject();
+
     return {
-        enemy: db.enemyStats,
-        user: db.userStats
+        enemy: dbObject.enemyStats,
+        user: dbObject.userStats
     };
 }
 

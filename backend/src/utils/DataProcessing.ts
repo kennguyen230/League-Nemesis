@@ -9,8 +9,8 @@ const client = await getClient(); // TODO: Change this into a function call so t
 function emptyChampionEnemyData(): ChampionEnemyData {
     return {
         champName: "",
-        encounters: 0,
         losses: 0,
+        encounters: 0,
         lossRate: 0
     }
 }
@@ -18,8 +18,8 @@ function emptyChampionEnemyData(): ChampionEnemyData {
 function emptyChampionUserData(): ChampionUserData {
     return {
         champName: "",
-        picks: 0,
         wins: 0,
+        picks: 0,
         winRate: 0
     }
 }
@@ -78,7 +78,9 @@ async function createReturnObjects(
 
     await processMatchList(summonerName, matchList, enemy, user, numberOfGames);
 
+    console.log("createReturnObjects(): User");
     console.dir(user, { depth: null });
+    console.log("createReturnObjects(): Enemy");
     console.dir(enemy, { depth: null });
 
     return { enemy, user };
@@ -450,21 +452,21 @@ function mergeStats(db_champ: ChampionUserData | ChampionEnemyData, ml_champ: Ch
  * 
  * @param returnObject The object holding enemy and user data
  */
-function sortUserEnemyData(returnObject: UserEnemyData) {
-    // Loop through the various gamemodes
-    for (let gameMode in returnObject) {
+function sortUserEnemyData(returnObjectUser: User, returnObjectEnemy: Enemy) {
+    console.log("Inside sortUserEnemyData()")
+
+    // Loop through each gamemode in the enemy/user objects
+    for (let gameMode in returnObjectEnemy) {
         // If it's aram, jump straight to sorting because aram
         // has no lanes and is itself an array that can be sorted
-        if (gameMode == "aram") {
-            sortEnemyStats(returnObject[gameMode]);
-            sortUserStats(returnObject[gameMode]);
-        }
-        // Otherwise, it has to be broken down another level from
-        // the gamemode to the lane arrays
-        else {
-            for (let lane in returnObject[gameMode]) {
-                sortEnemyStats(returnObject[gameMode][lane])
-                sortUserStats(returnObject[gameMode][lane])
+        if (gameMode === "aram") {
+            sortEnemyStats(returnObjectEnemy[gameMode]);
+            sortUserStats(returnObjectUser[gameMode]);
+        } else {
+            // Otherwise, loop through the lanes and sort the underlying arrays
+            for (let lane in returnObjectEnemy[gameMode]) {
+                sortEnemyStats(returnObjectEnemy[gameMode][lane]);
+                sortUserStats(returnObjectUser[gameMode][lane]);
             }
         }
     }
@@ -479,13 +481,13 @@ function sortEnemyStats(laneArr: ChampionEnemyData[]) {
             return weightedChamp2 - weightedChamp1;
         }
         return champ2.losses - champ1.losses;
-    })
+    });
 }
 
 function sortUserStats(userArr: ChampionUserData[]) {
     userArr.sort((champ1, champ2) => {
         return champ2.picks - champ1.picks;
-    })
+    });
 }
 
 export { createReturnObjects, mergeUserEnemyData, sortUserEnemyData };

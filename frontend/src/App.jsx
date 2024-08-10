@@ -13,9 +13,22 @@ function App() {
       })
       .then((response) => {
         console.log(response.data);
-        setLossRateMap(response.data.normalOverallEnemyData);
+        setLossRateMap(response.data.userdata.enemy.normals.overall);
       })
       .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function getRealName(champName) {
+    const url = `https://ddragon.leagueoflegends.com/cdn/14.13.1/data/en_US/champion/${champName}.json`;
+    axios
+      .get(url)
+      .then(function (response) {
+        console.log(response);
+        return response.data[champName].name;
+      })
+      .catch(function (error) {
         console.error(error);
       });
   }
@@ -26,6 +39,7 @@ function App() {
     lossRateMap.forEach((champion) => {
       rows.push(
         <tr key={champion.champName}>
+          {/* <td>{getRealName(champion.champName)}</td> */}
           <td>{champion.champName}</td>
           <td>{champion.losses}</td>
           <td>{champion.encounters}</td>
@@ -44,7 +58,7 @@ function App() {
       <input type="text" onChange={(e) => setSummonerTag(e.target.value)} />
       <button onClick={() => queryLNData()}>Get LN Data</button>
 
-      {/* {lossRateMap.length > 0 && (
+      {lossRateMap.length > 0 && (
         <div className="table-container">
           <table>
             <thead>
@@ -58,7 +72,7 @@ function App() {
             <tbody>{renderTable()}</tbody>
           </table>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

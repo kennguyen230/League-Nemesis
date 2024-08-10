@@ -10,19 +10,19 @@ import mongoose from "mongoose";
 const championEnemyStatsSchema = new mongoose.Schema({
     champName: {
         type: String,
-        required: false
-    },
-    encounters: {
-        type: Number,
-        required: false
+        required: true
     },
     losses: {
         type: Number,
-        required: false
+        required: true
+    },
+    encounters: {
+        type: Number,
+        required: true
     },
     lossRate: {
         type: Number,
-        required: false
+        required: true
     }
 }, { _id: false });
 
@@ -30,19 +30,19 @@ const championEnemyStatsSchema = new mongoose.Schema({
 const championUserStatsSchema = new mongoose.Schema({
     champName: {
         type: String,
-        required: false
-    },
-    encounters: {
-        type: Number,
-        required: false
+        required: true
     },
     wins: {
         type: Number,
-        required: false
+        required: true
+    },
+    picks: {
+        type: Number,
+        required: true
     },
     winRate: {
         type: Number,
-        required: false
+        required: true
     }
 }, { _id: false });
 
