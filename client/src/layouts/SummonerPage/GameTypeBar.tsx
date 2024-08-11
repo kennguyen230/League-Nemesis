@@ -13,6 +13,9 @@ const GameTypeBar = () => {
         Ranked
       </Button>
       <Button className="w-24 h-7 text-xs bg-gray-400 border border-gray-300 md:w-32">
+        Flex
+      </Button>
+      <Button className="w-24 h-7 text-xs bg-gray-400 border border-gray-300 md:w-32">
         ARAM
       </Button>
     </div>

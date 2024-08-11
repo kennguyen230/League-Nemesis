@@ -5,8 +5,8 @@
 import { getClient } from './ClientManager.js'
 
 /* CONSTANTS */
-const COUNT = 20; // How many game we fetch per call
-const NEW_USER_ML_SIZE = 20; // How many games we hope to fetch for a new user's match list array
+const COUNT = 100; // How many game we fetch per call
+const NEW_USER_ML_SIZE = 100; // How many games we hope to fetch for a new user's match list array
 const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
 /**
@@ -15,9 +15,15 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @param {string} tag The Riot tag of the user
  * @returns A user's PUUID
  */
-async function getPUUID(summonerName, tag) {
-    const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
-    return summoner.playerId;
+async function getPUUID(summonerName, tag, res) {
+    try {
+        const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+        return summoner.playerId;
+    } catch (error) {
+        console.error("Error in getPUUID(). Error: ", error);
+        res.status(500).send(`Error retrieving account information for ${summonerName}`);
+        return null;
+    }
 }
 
 async function getPlayerIcon(puuid) {

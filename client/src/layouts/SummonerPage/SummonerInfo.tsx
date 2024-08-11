@@ -18,7 +18,7 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
       {/* Summoner Icon */}
       <img
         src={summonerIcon}
-        alt="Teemo"
+        alt="summonerIcon"
         className="w-20 rounded-md border md:w-24"
       />
 

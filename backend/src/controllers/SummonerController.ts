@@ -5,7 +5,7 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData } from '../utils/DataProcessing.js';
+import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData, getProperChampionName } from '../utils/DataProcessing.js';
 import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
 
 async function fetchUserData(summonerName, tag) {
@@ -71,6 +71,9 @@ async function fetchUserData(summonerName, tag) {
             returnObject = extractStatsFromDB(db_returnObject);
             console.log("returnObject set to database data")
         }
+
+        // Before sending to client, get the proper name (eg. Chogath = Cho'Gath)
+        await getProperChampionName(returnObject);
 
         return [returnObject, numberOfGames];
     } catch (error) {

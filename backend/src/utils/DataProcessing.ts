@@ -490,4 +490,52 @@ function sortUserStats(userArr: ChampionUserData[]) {
     });
 }
 
-export { createReturnObjects, mergeUserEnemyData, sortUserEnemyData };
+async function getProperChampionName(returnObject: UserEnemyData) {
+    console.log("Inside getProperChampionName()");
+
+    // Helper function to fetch and update the champion name
+    async function getName(championEntry: ChampionUserData | ChampionEnemyData) {
+        try {
+            const fetchedChampion = await client.champions.fetch(championEntry.champName);
+            if (fetchedChampion && fetchedChampion.name) {
+                championEntry.champName = fetchedChampion.name;
+            } else {
+                console.warn(`Champion ${championEntry.champName} not found, keeping original name.`);
+            }
+        } catch (error) {
+            console.error(`Failed to fetch name for ${championEntry.champName}:`, error);
+        }
+    }
+
+    // Array to hold all promises
+    const promises: Promise<void>[] = [];
+
+    // Loop through each side (userData and enemyData)
+    for (let side in returnObject) {
+        // Loop through each game mode (normals, ranked, flex, all, aram)
+        for (let gameMode in returnObject[side]) {
+            if (gameMode === "aram") {
+                // For ARAM, iterate directly over the array of champions
+                for (let champion of returnObject[side][gameMode]) {
+                    promises.push(getName(champion));
+                }
+            } else {
+                // For other game modes, iterate over each lane
+                for (let lane in returnObject[side][gameMode]) {
+                    for (let champion of returnObject[side][gameMode][lane]) {
+                        promises.push(getName(champion));
+                    }
+                }
+            }
+        }
+    }
+
+    // Wait for all name fetching to complete
+    await Promise.all(promises);
+    console.log("All champion names have been updated");
+}
+
+
+
+
+export { createReturnObjects, mergeUserEnemyData, sortUserEnemyData, getProperChampionName };
