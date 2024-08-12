@@ -8,11 +8,16 @@ import LeagueNemesisStatisticsBar from "@/layouts/SummonerPage/LeagueNemesisStat
 import { columns } from "@/layouts/SummonerPage/ChampionsColumn";
 import { ChampionsTable } from "@/layouts/SummonerPage/ChampionsTable";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SummonerPageComponent = (summoner) => {
   const [displayGameMode, setDisplayGameMode] = useState("all");
   const [displayLane, setDisplayLane] = useState("overall");
+
+  useEffect(() => {
+    setDisplayGameMode("all");
+    setDisplayLane("overall");
+  }, [summoner]);
 
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
@@ -28,12 +33,19 @@ const SummonerPageComponent = (summoner) => {
         />
 
         {/* ie. Normals, ARAM, Ranked, etc */}
-        <GameTypeBar></GameTypeBar>
+        <GameTypeBar
+          summoner={summoner}
+          setDisplayGameMode={setDisplayGameMode}
+        ></GameTypeBar>
 
         {/* Front and center picture of LN */}
         <LeagueNemesisDisplay
           champion={
-            summoner.summoner.userdata.enemy[displayGameMode][displayLane][0]
+            displayGameMode === "aram"
+              ? summoner.summoner.userdata.enemy[displayGameMode][0]
+              : summoner.summoner.userdata.enemy[displayGameMode][
+                  displayLane
+                ][0]
           }
           topText={displayGameMode}
           gameCount={summoner.summoner.games.totalGames}
@@ -42,12 +54,23 @@ const SummonerPageComponent = (summoner) => {
         {/* Statistics correlating to the LN */}
         <LeagueNemesisStatisticsBar
           champion={
-            summoner.summoner.userdata.enemy[displayGameMode][displayLane][0]
+            displayGameMode === "aram"
+              ? summoner.summoner.userdata.enemy[displayGameMode][0]
+              : summoner.summoner.userdata.enemy[displayGameMode][
+                  displayLane
+                ][0]
           }
         />
 
         {/* Detailed table view of champions based off role */}
-        {/* <ChampionsTable columns={columns} data={summoner.summoner.maps} /> */}
+        <ChampionsTable
+          columns={columns}
+          data={
+            displayGameMode === "aram"
+              ? summoner.summoner.userdata.enemy[displayGameMode]
+              : summoner.summoner.userdata.enemy[displayGameMode][displayLane]
+          }
+        />
       </div>
       <Footer />
     </div>

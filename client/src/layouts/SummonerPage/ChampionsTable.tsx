@@ -83,10 +83,10 @@ export function ChampionsTable<TData, TValue>({
         <Input
           placeholder="Search champions"
           value={
-            (table.getColumn("champion")?.getFilterValue() as string) ?? ""
+            (table.getColumn("champName")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("champion")?.setFilterValue(event.target.value)
+            table.getColumn("champName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

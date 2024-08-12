@@ -4,11 +4,11 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export type ChampionEntry = {
-  champion: string;
+  champName: string;
   icon: string;
   losses: number;
   encounters: number;
-  lossRatio: number;
+  lossRate: number;
 };
 
 export const columns: ColumnDef<ChampionEntry>[] = [
@@ -21,21 +21,21 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     enableSorting: false,
   },
   {
-    accessorKey: "champion",
+    accessorKey: "champName",
     header: "Champion",
     cell: ({ row }) => {
       return (
         <div className="flex items-center justify-start gap-2 md:gap-3 w-2/3">
           <img
             src={
-              "https://ddragon.leagueoflegends.com/cdn/14.13.1/img/champion/" +
-              row.getValue("champion") +
+              "https://ddragon.leagueoflegends.com/cdn/14.15.1/img/champion/" +
+              row.getValue("champName") +
               ".png"
             }
             alt="Icon"
             className="w-10 rounded-md"
           />
-          <div className="text-md">{row.getValue("champion")}</div>
+          <div className="text-md">{row.getValue("champName")}</div>
         </div>
       );
     },
@@ -83,7 +83,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     },
   },
   {
-    accessorKey: "lossRatio",
+    accessorKey: "lossRate",
     header: ({ column }) => {
       return (
         <Button
@@ -98,7 +98,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-center md:w-1/2 text-lg">
-          {row.getValue("lossRatio").toFixed(2) * 100}%
+          {row.getValue("lossRate").toFixed(2)}%
         </div>
       );
     },
