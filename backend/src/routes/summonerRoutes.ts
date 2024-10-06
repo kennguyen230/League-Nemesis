@@ -11,26 +11,34 @@ const router = express.Router();
 
 router.get('/querySummoner', async (req, res) => {
     try {
-        console.log("Inside querySummoner!!!");
+        console.log("(summnerRoutes.ts) Inside querySummoner!!!");
 
+        // Grab params from client
+        const region = req.query.region;
+        console.log("(summonerRoutes.ts)", region);
         const { summonerName, tag } = parseSummonerInput(req.query.summoner);
 
-        const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
-        const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
+        // TODO: Use regex or another method to make sure summonerName and tag are valid inputs
+        // const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
+        // const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
 
-        if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
-            return res.status(400).send("Invalid summoner name or tag.");
-        }
+        // if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
+        //     console.log("Invalid summoner name or tag");
+        //     return res.status(400).send("Invalid summoner name or tag.");
+        // }
 
+        // Attempt to get puuid from the summoner name and tag passed in
         const puuid = await getPUUID(summonerName, tag, res);
         if (!puuid) {
-            // Early return if PUUID is not found or an error occurred
-            return;
+            console.log("(summonerRoutes.ts) Querying user data unsucessful. No puuid associated with this summoner and tag.")
+            res.status(404).send("Querying user data unsucessful. No puuid associated with this summoner and tag")
         }
 
+        // Attempt to fetch games. Puuid is not passed in because the summoner name
+        // will be necessary to discern which team the user is on
         const [returnObject, numberOfGames] = await fetchUserData(summonerName, tag);
         if (returnObject) {
-            console.log("Querying for enemy data in /querySummonerEnemyData successful");
+            console.log("(summonerRoutes.ts) Querying for enemy data in /querySummonerEnemyData successful");
 
             const returnData = {
                 name: summonerName,
@@ -43,13 +51,13 @@ router.get('/querySummoner', async (req, res) => {
 
             res.status(200).send(returnData);
         } else {
-            console.log("Querying for enemy data in /querySummonerEnemyData unsuccessful." +
+            console.log("(summonerRoutes.ts) Querying for enemy data in /querySummonerEnemyData unsuccessful." +
                 "This may be because of an incorrect summoner name input resulting in fetching " +
                 "of a non-existent account or an erroneous tag input.");
             res.status(404).send("Querying enemy data unsuccessful");
         }
     } catch (error) {
-        console.error("Error querying for enemy data. Error: ", error);
+        console.error("(summonerRoutes.ts) Error querying for enemy data. Error: ", error);
         res.status(500).send("Error querying enemy data")
     }
 })

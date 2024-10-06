@@ -25,7 +25,7 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, numberOfG
 
         return true;
     } catch (error) {
-        console.error('Error saving new summoner: ', error.message);
+        console.error('(DatabaseService.ts) Error saving new summoner: ', error.message);
         return null;
     }
 }
@@ -50,15 +50,15 @@ async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, num
 
         const result = await SummonerProfile.findOneAndUpdate({ PUUID }, update, options);
         if (result) {
-            console.log('Successfully updated summoner:', result);
+            console.log('(DatabaseService.ts) Successfully updated summoner:', result);
             return result;
         } else {
-            console.log('Summoner not found in database with the given PUUID:', PUUID);
+            console.log('(DatabaseService.ts) Summoner not found in database with the given PUUID:', PUUID);
             return null;
         }
 
     } catch (error) {
-        console.error('Error updating summoner in database:', error.message);
+        console.error('(DatabaseService.ts) Error updating summoner in database:', error.message);
         throw error;
     }
 }
@@ -70,15 +70,15 @@ async function getSummonerByPUUID(PUUID) {
         const player = await SummonerProfile.findOne({ PUUID });
 
         if (!player) {
-            console.log('No player found in database');
+            console.log('(DatabaseService.ts) No player found in database');
             return null;
         } else {
-            console.log('Player found in database');
+            console.log('(DatabaseService.ts) Player found in database');
         }
 
         return player;
     } catch (error) {
-        console.error('Error fetching player from database: ', error.message);
+        console.error('(DatabaseService.ts) Error fetching player from database: ', error.message);
         return null;
     }
 }
@@ -90,15 +90,15 @@ async function deleteSummonerByPUUID(PUUID) {
         const result = await SummonerProfile.findOneAndDelete({ PUUID });
 
         if (result) {
-            console.log('Successfully deleted summoner');
+            console.log('(DatabaseService.ts) Successfully deleted summoner');
             return true;
         } else {
-            console.log('User not found in database');
+            console.log('(DatabaseService.ts) User not found in database');
             return false;
         }
 
     } catch (error) {
-        console.error('Error deleting summoner from database: ', error.message);
+        console.error('(DatabaseService.ts) Error deleting summoner from database: ', error.message);
         return false;
     }
 }

@@ -78,9 +78,9 @@ async function createReturnObjects(
 
     await processMatchList(summonerName, matchList, enemy, user, numberOfGames);
 
-    console.log("createReturnObjects(): User");
+    console.log("(DataProcessing.ts) createReturnObjects(): User");
     console.dir(user, { depth: null });
-    console.log("createReturnObjects(): Enemy");
+    console.log("(DataProcessing.ts) createReturnObjects(): Enemy");
     console.dir(enemy, { depth: null });
 
     return { enemy, user };
@@ -211,7 +211,7 @@ async function processMatchList(
         const matchDetails = await Promise.all(
             matchList.map((matchId) =>
                 client.matches.fetch(matchId).catch((error: any) => {
-                    console.error(`Failed to fetch match ${matchId}:`, error);
+                    console.error(`(DataProcessing.ts) Failed to fetch match ${matchId}:`, error);
                     return null; // Return null if there's an error fetching a match
                 })
             )
@@ -334,7 +334,7 @@ async function processMatchList(
             });
         });
     } catch (error) {
-        console.error("Error in processMatchList", error);
+        console.error("(DataProcessing.ts) Error in processMatchList", error);
     }
 }
 
@@ -453,7 +453,7 @@ function mergeStats(db_champ: ChampionUserData | ChampionEnemyData, ml_champ: Ch
  * @param returnObject The object holding enemy and user data
  */
 function sortUserEnemyData(returnObjectUser: User, returnObjectEnemy: Enemy) {
-    console.log("Inside sortUserEnemyData()")
+    console.log("(DataProcessing.ts) Inside sortUserEnemyData()")
 
     // Loop through each gamemode in the enemy/user objects
     for (let gameMode in returnObjectEnemy) {
@@ -491,7 +491,7 @@ function sortUserStats(userArr: ChampionUserData[]) {
 }
 
 async function getProperChampionName(returnObject: UserEnemyData) {
-    console.log("Inside getProperChampionName()");
+    console.log("(DataProcessing.ts) Inside getProperChampionName()");
 
     // Helper function to fetch and update the champion name
     async function getName(championEntry: ChampionUserData | ChampionEnemyData) {
@@ -500,10 +500,10 @@ async function getProperChampionName(returnObject: UserEnemyData) {
             if (fetchedChampion && fetchedChampion.name) {
                 championEntry.champName = fetchedChampion.name;
             } else {
-                console.warn(`Champion ${championEntry.champName} not found, keeping original name.`);
+                console.error(`(DataProcessing.ts) Champion ${championEntry.champName} not found, keeping original name.`);
             }
         } catch (error) {
-            console.error(`Failed to fetch name for ${championEntry.champName}:`, error);
+            console.error(`(DataProcessing.ts) Failed to fetch name for ${championEntry.champName}:`, error);
         }
     }
 
@@ -529,10 +529,9 @@ async function getProperChampionName(returnObject: UserEnemyData) {
             }
         }
     }
-
     // Wait for all name fetching to complete
     await Promise.all(promises);
-    console.log("All champion names have been updated");
+    console.log("(DataProcessing.ts) All champion names have been updated");
 }
 
 

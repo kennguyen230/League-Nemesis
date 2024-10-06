@@ -11,7 +11,7 @@ export function HamburgerMenu() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button>
+        <Button className="bg-[#11161D] hover:rounded-lg hover:bg-slate-900/90">
           <i
             className="fa-solid fa-bars fa-xl"
             style={{ color: "#ffffff" }}

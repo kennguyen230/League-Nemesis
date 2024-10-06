@@ -20,7 +20,7 @@ async function getPUUID(summonerName, tag, res) {
         const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
         return summoner.playerId;
     } catch (error) {
-        console.error("Error in getPUUID(). Error: ", error);
+        console.error("(RiotGamesService.ts) Error in getPUUID(). Error: ", error);
         res.status(500).send(`Error retrieving account information for ${summonerName}`);
         return null;
     }
@@ -62,13 +62,13 @@ async function getRecentGames(puuid, lastGameTimestamp) {
  */
 async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
     try {
-        console.log("Inside getExistingUserMatchlist")
+        console.log("(RiotGamesService.ts) Inside getExistingUserMatchlist")
         const summoner = await client.summoners.fetchByPlayerId(puuid);
         let matchList = await summoner.fetchMatchList({ count: COUNT, startTime: lastGameTimestamp });
 
         // Existing user but they have not played any new games since the last time we fetched data
         if (matchList.length < 2) {
-            console.log("No new games from existing user.");
+            console.log("(RiotGamesService.ts) No new games from existing user.");
             return null;
         }
 
@@ -86,7 +86,7 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
             } catch (innerError) {
                 // This error should only occur if it's a new user and we fetch a game that's not ARAM, Normals, or Ranked
                 if (innerError.response && innerError.response.status === 404) {
-                    console.error("Fetched an invalid match. Exiting with remaining match list.", innerError)
+                    console.error("(RiotGamesService.ts) Fetched an invalid match. Exiting with remaining match list.", innerError)
                     break;
                 } else {
                     throw innerError; // Rethrows error we encountered an erorr that wasnt 404
@@ -95,7 +95,7 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
         }
         return matchList.slice(0, -1) // Returns every element except the last one because it will be the same game as lastGameTimestamp
     } catch (error) {
-        console.error("Error in getExistingUserMatchlist:", error)
+        console.error("(RiotGamesService.ts) Error in getExistingUserMatchlist:", error)
     }
 
 }
@@ -111,7 +111,7 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
  */
 async function getNewUserMatchlist(puuid) {
     try {
-        console.log("Inside getNewUserML")
+        console.log("(RiotGamesService.ts) Inside getNewUserML")
         const summoner = await client.summoners.fetchByPlayerId(puuid);
 
         // TODO: Make a matchHistoryOption object
@@ -136,7 +136,7 @@ async function getNewUserMatchlist(puuid) {
             }
             catch (innerError) {
                 if (innerError.response && innerError.response.status === 404) {
-                    console.error("Fetched an invalid match. Exiting with remaining match list.", innerError)
+                    console.error("(RiotGamesService.ts) Fetched an invalid match. Exiting with remaining match list.", innerError)
                     break;
                 } else {
                     throw innerError; // Rethrows error we encountered an erorr that wasnt 404
@@ -145,7 +145,7 @@ async function getNewUserMatchlist(puuid) {
         }
         return matchList;
     } catch (error) {
-        console.error("Error in getNewUserMatchlist:", error)
+        console.error("(RiotGamesService.ts) Error in getNewUserMatchlist:", error)
     }
 }
 
@@ -160,11 +160,11 @@ async function getNewUserMatchlist(puuid) {
  */
 async function getLastGameTimestamp(matchList) {
     try {
-        console.log(`Inside getLGTS(). Attempting to update LGTS with match ${matchList[0]}`)
+        console.log(`(RiotGamesService.ts) Inside getLGTS(). Attempting to update LGTS with match ${matchList[0]}`)
         const match = await client.matches.fetch(matchList[0]);
         return Math.trunc(match.endTimestamp / 1000);
     } catch (error) {
-        console.error("Error inside getLastGameTimestamp(). Error: ", error);
+        console.error("(RiotGamesService.ts) Error inside getLastGameTimestamp(). Error: ", error);
     }
 }
 

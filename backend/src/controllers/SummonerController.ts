@@ -22,7 +22,7 @@ async function fetchUserData(summonerName, tag) {
         // that way no gaps exists between the matches fetched
         if (db_returnObject) {
             lastGameTimestamp = db_returnObject.lastGameTimestamp;
-            console.log("LGTS from DB: ", lastGameTimestamp);
+            console.log("(SummonerController.ts) LGTS from DB: ", lastGameTimestamp);
             numberOfGames = db_returnObject.numberOfGames;
         }
 
@@ -40,10 +40,10 @@ async function fetchUserData(summonerName, tag) {
         // In a rare instance where there is no match list games to fetch &
         // there's no database entry, throw an error for now.
         if (matchlist) {
-            console.log(matchlist);
+            console.log("(SummonerController.ts)", matchlist);
 
             lastGameTimestamp = await getLastGameTimestamp(matchlist);
-            console.log("Updated LGTS from ML: ", lastGameTimestamp);
+            console.log("(SummonerController.ts) Updated LGTS from ML: ", lastGameTimestamp);
 
             numberOfGames.totalGames += matchlist.length;
 
@@ -53,7 +53,7 @@ async function fetchUserData(summonerName, tag) {
             // If there is data from the database, merge with data from ML. Otherwise, returnObject is set to ML
             returnObject = db_returnObject ? mergeObjects(extractStatsFromDB(db_returnObject), ml_returnObject) : ml_returnObject;
 
-            // After merging occurs, sort the data before saving to the database
+            // After merging w/ db occurs, sort the data before saving to the database
             // Sorting is done inside the matchlist block because it will only be necessary
             // to sort when there are new games
             sortUserEnemyData(returnObject.user, returnObject.enemy);
@@ -64,20 +64,20 @@ async function fetchUserData(summonerName, tag) {
         else {
             // In the case where the user is a new account with no games played yet
             if (!db_returnObject) {
-                throw new Error("No matchlist found and summoner not in database");
+                throw new Error("(SummonerController.ts) No matchlist found and summoner not in database");
             }
 
             // Otherwise, the database object exists so return that
             returnObject = extractStatsFromDB(db_returnObject);
-            console.log("returnObject set to database data")
+            console.log("(SummonerController.ts) returnObject set to database data")
         }
 
         // Before sending to client, get the proper name (eg. Chogath = Cho'Gath)
-        await getProperChampionName(returnObject);
+        // await getProperChampionName(returnObject);
 
         return [returnObject, numberOfGames];
     } catch (error) {
-        console.error('Error in fetchUserData:', error);
+        console.error("(SummonerController.ts) Error in fetchUserData:", error);
         return null;
     }
 }
@@ -92,7 +92,7 @@ async function fetchUserData(summonerName, tag) {
  * @param {Object} ml The returnObject holding match list data
  */
 function mergeObjects(db: { enemy: Enemy, user: User; }, ml: { enemy: Enemy; user: User; }) {
-    console.log("Inside mergeObjects()")
+    console.log("(SummonerController.ts) Inside mergeObjects()")
     mergeUserEnemyData(db.user, ml.user, true);
     mergeUserEnemyData(db.enemy, ml.enemy, false);
     return db;
