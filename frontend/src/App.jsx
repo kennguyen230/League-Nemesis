@@ -4,30 +4,29 @@ import axios from "axios";
 function App() {
   const [summonerName, setSummonerName] = useState("");
   const [summonerTag, setSummonerTag] = useState("");
-  const [puuid, setPuuid] = useState("");
-  const [lossRateMap, setLossRateMap] = useState({});
+  const [lossRateMap, setLossRateMap] = useState([]);
 
-  function getPUUID() {
+  function queryLNData() {
     axios
-      .get(`http://localhost:5000/summoner/getPUUID`, {
+      .get(`http://192.168.1.247:5000/summoner/querySummonerEnemyData`, {
         params: { summoner: summonerName, tag: summonerTag },
       })
-      .then(function (response) {
-        setPuuid(response.data);
+      .then((response) => {
+        console.log(response.data);
+        setLossRateMap(response.data.userdata.enemy.normals.overall);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.error(error);
       });
   }
 
-  function queryMaps() {
+  function getRealName(champName) {
+    const url = `https://ddragon.leagueoflegends.com/cdn/14.13.1/data/en_US/champion/${champName}.json`;
     axios
-      .get(`http://localhost:5000/summoner/queryMaps`, {
-        params: { summoner: summonerName, tag: summonerTag },
-      })
+      .get(url)
       .then(function (response) {
-        console.log(response.data);
-        setLossRateMap(response.data);
+        console.log(response);
+        return response.data[champName].name;
       })
       .catch(function (error) {
         console.error(error);
@@ -36,16 +35,19 @@ function App() {
 
   function renderTable() {
     const rows = [];
-    for (const [champion, stats] of Object.entries(lossRateMap)) {
+
+    lossRateMap.forEach((champion) => {
       rows.push(
-        <tr key={champion}>
-          <td>{champion}</td>
-          <td>{stats.losses}</td>
-          <td>{stats.encounters}</td>
-          <td>{(stats.lossRatio * 100).toFixed(2)}%</td>
+        <tr key={champion.champName}>
+          {/* <td>{getRealName(champion.champName)}</td> */}
+          <td>{champion.champName}</td>
+          <td>{champion.losses}</td>
+          <td>{champion.encounters}</td>
+          <td>{champion.lossRate.toFixed(2)}%</td>
         </tr>
       );
-    }
+    });
+
     return rows;
   }
 
@@ -54,20 +56,17 @@ function App() {
       <h1>League Nemesis</h1>
       <input type="text" onChange={(e) => setSummonerName(e.target.value)} />
       <input type="text" onChange={(e) => setSummonerTag(e.target.value)} />
-      <button onClick={() => getPUUID()}>Get PUUID</button>
-      <button onClick={() => queryMaps()}>Query maps</button>
+      <button onClick={() => queryLNData()}>Get LN Data</button>
 
-      <p>{puuid}</p>
-
-      {Object.keys(lossRateMap).length > 0 && (
+      {lossRateMap.length > 0 && (
         <div className="table-container">
           <table>
             <thead>
               <tr>
                 <th>Champion</th>
                 <th>Losses</th>
-                <th>Total Games</th>
-                <th>Loss Percentage</th>
+                <th>Encounters</th>
+                <th>Loss Rate</th>
               </tr>
             </thead>
             <tbody>{renderTable()}</tbody>

@@ -35,11 +35,13 @@ import { Button } from "@/components/ui/button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  setDisplayLane: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function ChampionsTable<TData, TValue>({
   columns,
   data,
+  setDisplayLane,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -66,14 +68,14 @@ export function ChampionsTable<TData, TValue>({
       {/* Lane dropdown menu */}
       <div className="flex items-center py-4 gap-2">
         {/* Dropdown */}
-        <Select>
+        <Select onValueChange={setDisplayLane}>
           <SelectTrigger className="w-[180px] text-gray-400">
             <SelectValue placeholder="Overall" />
           </SelectTrigger>
           <SelectContent className="font-vollkorn w-[150px]">
             <SelectItem value="overall">Overall</SelectItem>
             <SelectItem value="top">Top</SelectItem>
-            <SelectItem value="jungle">Jungle</SelectItem>
+            <SelectItem value="jng">Jungle</SelectItem>
             <SelectItem value="mid">Mid</SelectItem>
             <SelectItem value="bot">Bot</SelectItem>
             <SelectItem value="sup">Support</SelectItem>
@@ -83,10 +85,10 @@ export function ChampionsTable<TData, TValue>({
         <Input
           placeholder="Search champions"
           value={
-            (table.getColumn("champion")?.getFilterValue() as string) ?? ""
+            (table.getColumn("champName")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("champion")?.setFilterValue(event.target.value)
+            table.getColumn("champName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
