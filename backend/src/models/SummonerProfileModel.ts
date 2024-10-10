@@ -132,7 +132,23 @@ const numberOfGames = new mongoose.Schema({
         type: Number,
         required: true
     },
-    losses: {
+    normals: {
+        type: Number,
+        required: true
+    },
+    aram: {
+        type: Number,
+        required: true
+    },
+    flex: {
+        type: Number,
+        required: true
+    },
+    ranked: {
+        type: Number,
+        required: true
+    },
+    totalLosses: {
         type: Number,
         required: true
     },
@@ -161,4 +177,4 @@ const summonerSchema = new mongoose.Schema({
 
 // summonerprofiles is the name of the collection in the database
 // as collections are the lowercased plural form of what we call it
-export const SummonerProfile = mongoose.model('Summoner', summonerSchema);
+export const SummonerProfile = mongoose.model('Summonered', summonerSchema);

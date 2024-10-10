@@ -58,7 +58,7 @@ function emptyGameModeUserData(): GameModeUserData {
 async function createReturnObjects(
     matchList: Array<any>,
     summonerName: string,
-    numberOfGames: { totalGames: number, losses: number },
+    numberOfGames: { totalGames: number, normals: number, aram: number, flex: number, ranked: number, totalLosses: number },
 ) {
     const enemy: Enemy = {
         normals: emptyGameModeEnemyData(),
@@ -204,7 +204,7 @@ async function processMatchList(
     matchList: Array<any>,
     enemy: Enemy,
     user: User,
-    numberOfGames: { totalGames: number, losses: number },
+    numberOfGames: { totalGames: number, normals: number, aram: number, flex: number, ranked: number, totalLosses: number },
 ) {
     try {
         // Fetch match data all at the same time
@@ -231,15 +231,19 @@ async function processMatchList(
                 case 430:
                 case 490:
                     gameMode = "normals";
+                    numberOfGames.normals += 1;
                     break;
                 case 420:
                     gameMode = "ranked";
+                    numberOfGames.ranked += 1;
                     break;
                 case 440:
                     gameMode = "flex";
+                    numberOfGames.flex += 1;
                     break;
                 case 450:
                     gameMode = "aram";
+                    numberOfGames.aram += 1;
                     break;
                 default:
                     gameMode = undefined;
@@ -262,7 +266,7 @@ async function processMatchList(
             // Check to see if user won this game and if not
             // update the loss counter
             const userTeamWon: boolean = match.teams.get(userTeam).win;
-            if (!userTeamWon) numberOfGames.losses += 1;
+            if (!userTeamWon) numberOfGames.totalLosses += 1;
 
             // If the game mode is not one of the ones listed, return early as
             // League Nemesis only deals with normals, ranked, flex, and aram

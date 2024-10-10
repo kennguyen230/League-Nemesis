@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/querySummoner', async (req, res) => {
     try {
-        console.log("(summnerRoutes.ts) Inside querySummoner!!!");
+        console.log("(summonerRoutes.ts) Inside querySummoner!!!");
 
         // Grab params from client
         const region = req.query.region;

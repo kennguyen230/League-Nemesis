@@ -4,8 +4,6 @@ import axios from "axios";
 const LeagueNemesisStatisticsBar = ({ champion }) => {
   const [epithet, setEpithet] = useState("");
 
-  console.log(champion);
-
   useEffect(() => {
     const fetchChampionData = async () => {
       const url = `https://ddragon.leagueoflegends.com/cdn/14.13.1/data/en_US/champion/${champion.champName}.json`;
@@ -32,15 +30,15 @@ const LeagueNemesisStatisticsBar = ({ champion }) => {
       </div>
       <div className="bg-[#757575] rounded-l-md p-2 drop-shadow-2xl w-1/4 md:p-4">
         <h1>Losses</h1>
-        <h3 className="text-lg">{champion.losses}</h3>
+        <h3 className="text-lg md:text-2xl">{champion.losses}</h3>
       </div>
       <div className="bg-[#757575] rounded-l-md p-2 drop-shadow-2xl w-1/4 md:p-4">
         <h1>Encounters</h1>
-        <h3 className="text-lg">{champion.encounters}</h3>
+        <h3 className="text-lg md:text-2xl">{champion.encounters}</h3>
       </div>
       <div className="bg-red-500 rounded-md p-2 drop-shadow-2xl w-1/4 md:p-4">
         <h1>Loss Ratio</h1>
-        <h3 className="text-lg">{champion.lossRate.toFixed(2)}%</h3>
+        <h3 className="text-lg md:text-2xl">{champion.lossRate.toFixed(2)}%</h3>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ async function fetchUserData(summonerName, tag) {
         const db_returnObject = await getSummonerByPUUID(puuid);
 
         let lastGameTimestamp: Number = -1;
-        let numberOfGames = { totalGames: 0, losses: 0 };
+        let numberOfGames = { totalGames: 0, normals: 0, aram: 0, flex: 0, ranked: 0, totalLosses: 0 };
         let returnObject;
 
         // If the db object exists then set LGTS to the one from the db,
@@ -74,6 +74,8 @@ async function fetchUserData(summonerName, tag) {
 
         // Before sending to client, get the proper name (eg. Chogath = Cho'Gath)
         // await getProperChampionName(returnObject);
+
+        console.log("(SummonerController.ts) Number of games: ", numberOfGames)
 
         return [returnObject, numberOfGames];
     } catch (error) {
