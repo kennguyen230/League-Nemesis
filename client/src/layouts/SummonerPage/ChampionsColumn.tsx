@@ -25,7 +25,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     header: "Champion",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center justify-start gap-2 md:gap-3 w-2/3">
+        <div className="flex items-center justify-start gap-2 mr-10 md:mr-0 md:gap-3 w-2/3">
           <img
             src={
               "https://ddragon.leagueoflegends.com/cdn/14.15.1/img/champion/" +
