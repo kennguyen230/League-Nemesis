@@ -48,6 +48,13 @@ export function ChampionsTable<TData, TValue>({
     []
   );
 
+  // Fixes a bug where if a user sorts the table then does a new search,
+  // the table for the new user will be sorted from the get-go. So on a
+  // new search, reset the table back to default
+  React.useEffect(() => {
+    setSorting([]);
+  }, [data]);
+
   const table = useReactTable({
     data,
     columns,

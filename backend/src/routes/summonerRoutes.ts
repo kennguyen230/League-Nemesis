@@ -14,31 +14,34 @@ router.get('/querySummoner', async (req, res) => {
         console.log("(summonerRoutes.ts) Inside querySummoner!!!");
 
         // Grab params from client
-        const region = req.query.region;
-        console.log("(summonerRoutes.ts)", region);
         const { summonerName, tag } = parseSummonerInput(req.query.summoner);
+        const region = req.query.region;
+        console.log("(summonerRoutes.ts) Summoner name:", summonerName);
+        console.log("(summonerRoutes.ts) Region:", region);
 
-        // TODO: Use regex or another method to make sure summonerName and tag are valid inputs
-        // const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
-        // const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
+        // Regex is in according to Riot guidelines on summoner names
+        // and tag length
+        const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
+        const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
 
-        // if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
-        //     console.log("Invalid summoner name or tag");
-        //     return res.status(400).send("Invalid summoner name or tag.");
-        // }
+        if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
+            console.log("(summonerRoutes.ts) Invalid summoner name or tag");
+            return res.status(400).json({ error: "Invalid summoner name or tag." });
+        }
 
         // Attempt to get puuid from the summoner name and tag passed in
-        const puuid = await getPUUID(summonerName, tag, res);
-        if (!puuid) {
-            console.log("(summonerRoutes.ts) Querying user data unsucessful. No puuid associated with this summoner and tag.")
-            res.status(404).send("Querying user data unsucessful. No puuid associated with this summoner and tag")
+        let puuid;
+        try {
+            puuid = await getPUUID(summonerName, tag);
+        } catch (error) {
+            return res.status(404).json({ error: "No PUUID associated with this summoner name and tag." });
         }
 
         // Attempt to fetch games. Puuid is not passed in because the summoner name
         // will be necessary to discern which team the user is on
         const [returnObject, numberOfGames] = await fetchUserData(summonerName, tag);
         if (returnObject) {
-            console.log("(summonerRoutes.ts) Querying for enemy data in /querySummonerEnemyData successful");
+            console.log("(summonerRoutes.ts) Successfully fetched user data in /querySummonerEnemyData");
 
             const returnData = {
                 name: summonerName,
@@ -49,16 +52,14 @@ router.get('/querySummoner', async (req, res) => {
                 userdata: returnObject,
             }
 
-            res.status(200).send(returnData);
+            return res.status(200).json(returnData);
         } else {
-            console.log("(summonerRoutes.ts) Querying for enemy data in /querySummonerEnemyData unsuccessful." +
-                "This may be because of an incorrect summoner name input resulting in fetching " +
-                "of a non-existent account or an erroneous tag input.");
-            res.status(404).send("Querying enemy data unsuccessful");
+            console.log("(summonerRoutes.ts) Unsuccessfully fetched user data in /querySummonerEnemyData.");
+            return res.status(404).json({ error: "Querying enemy data unsuccessful" });
         }
     } catch (error) {
-        console.error("(summonerRoutes.ts) Error querying for enemy data. Error: ", error);
-        res.status(500).send("Error querying enemy data")
+        console.error("(summonerRoutes.ts) Unexpected error:", error);
+        return res.status(500).json({ error: "An unexpected error occurred." });
     }
 })
 

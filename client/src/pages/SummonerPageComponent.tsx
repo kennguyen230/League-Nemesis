@@ -51,7 +51,7 @@ const SummonerPageComponent = (summoner) => {
 
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
-      <Header isSearchBar={true}></Header>
+      <Header isSearchBar={true} />
 
       <div className="h-full bg-[#182B40] bg-center md:mx-64 pb-10">
         {/* Summoner info at the top of the page */}
