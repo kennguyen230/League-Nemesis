@@ -3,6 +3,7 @@ import { fetchSummonerData } from "@/data/api";
 import { queryOptions } from "@tanstack/react-query";
 
 import SummonerPageComponent from "@/pages/SummonerPageComponent";
+import ErrorSearchPageComponent from "@/pages/ErrorSearchPageComponent";
 
 const getSummonerDetails = (region: string, summonerId: string) =>
   queryOptions({
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/summoner/$region/$id")({
   loader: async ({ params: { region, id }, context: { queryClient } }) =>
     queryClient.ensureQueryData(getSummonerDetails(region, id)),
   component: SummonerPage,
+  errorComponent: ErrorSearchPageComponent,
 });
 
 function SummonerPage() {

@@ -30,6 +30,7 @@ router.get('/querySummoner', async (req, res) => {
         }
 
         // Attempt to get puuid from the summoner name and tag passed in
+        // If no puuid is found then no such player exists in League
         let puuid;
         try {
             puuid = await getPUUID(summonerName, tag);

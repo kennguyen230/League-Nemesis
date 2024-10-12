@@ -4,9 +4,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { useNavigate } from "@tanstack/react-router";
 
+import { Loader2 } from "lucide-react";
+
 const HomePageSearchBar = () => {
   const [summonerName, setSummonerName] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("NA");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
 
   // The routing call that moves the user to a specific summoner
@@ -14,6 +17,10 @@ const HomePageSearchBar = () => {
   // user hits SEARCH on the screen
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Changes the search button to a loading state after
+    // the user hits enter
+    setLoading(true);
 
     const trimmedSummonerName = summonerName.trim();
     if (trimmedSummonerName === "") {
@@ -44,9 +51,16 @@ const HomePageSearchBar = () => {
 
       <Button
         onClick={handleSubmit}
-        className="hidden sm:block md:w-28 mt-2 bg-[#182B40] font-vollkorn"
+        disabled={loading}
+        className="hidden sm:block bg-[#182B40] font-vollkorn md:flex md:justify-center md:items-center md:w-28 mt-2"
       >
-        Search
+        {loading ? (
+          <>
+            <Loader2 className=" animate-spin" />
+          </>
+        ) : (
+          "Search"
+        )}
       </Button>
     </div>
   );

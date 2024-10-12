@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
-import ErrorPageComponent from "@/pages/ErrorPageComponent";
+import ErrorRootPageComponent from "@/pages/ErrorRootPageComponent";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
@@ -10,6 +10,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         <Outlet></Outlet>
       </>
     ),
-    errorComponent: ErrorPageComponent,
+    errorComponent: ErrorRootPageComponent,
   }
 );

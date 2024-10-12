@@ -1,7 +1,11 @@
 import Header from "@/layouts/Header";
 import Footer from "@/layouts/Footer";
 
-const ErrorPageComponent = () => {
+import { Button } from "@/components/ui/button";
+import { Link, useRouter } from "@tanstack/react-router";
+
+const ErrorSearchPageComponent = () => {
+  const { history } = useRouter();
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
       <Header isSearchBar={true} />
@@ -13,6 +17,14 @@ const ErrorPageComponent = () => {
           <h2 className="text-center text-gray-50 text-opacity-75 text-sm">
             Make sure your search is in the format SummonerName#Region
           </h2>
+          <div className="flex gap-4 mt-4">
+            <Button onClick={() => history.go(-1)} className="bg-[#182B40]">
+              Go Back
+            </Button>
+            <Link to="/">
+              <Button className="bg-[#182B40]">Home</Button>
+            </Link>
+          </div>
         </div>
       </div>
       <Footer />
@@ -20,4 +32,4 @@ const ErrorPageComponent = () => {
   );
 };
 
-export default ErrorPageComponent;
+export default ErrorSearchPageComponent;
