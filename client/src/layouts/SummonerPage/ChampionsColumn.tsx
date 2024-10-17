@@ -13,10 +13,20 @@ export type ChampionEntry = {
 
 export const columns: ColumnDef<ChampionEntry>[] = [
   {
-    header: "#",
     accessorKey: "rowNumber",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="w-1"
+        >
+          #
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      return <div className="text-md">{row.index + 1}</div>;
+      return <div className="text-md w-fit ml-3">{row.index + 1}</div>;
     },
     enableSorting: false,
   },
@@ -25,7 +35,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     header: "Champion",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center justify-start gap-2 md:gap-3 w-2/3">
+        <div className="flex items-center justify-start gap-2 mr-10 md:mr-0 md:gap-3 w-2/3">
           <img
             src={
               "https://ddragon.leagueoflegends.com/cdn/14.15.1/img/champion/" +

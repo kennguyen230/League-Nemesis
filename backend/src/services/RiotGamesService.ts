@@ -15,14 +15,13 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @param {string} tag The Riot tag of the user
  * @returns A user's PUUID
  */
-async function getPUUID(summonerName, tag, res) {
+async function getPUUID(summonerName, tag) {
     try {
         const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
         return summoner.playerId;
     } catch (error) {
-        console.error("(RiotGamesService.ts) Error in getPUUID(). Error: ", error);
-        res.status(500).send(`Error retrieving account information for ${summonerName}`);
-        return null;
+        console.error("(RiotGamesService.ts) Error in getPUUID(). Error:", error);
+        throw new Error(`Error retrieving account information for ${summonerName}`);
     }
 }
 
