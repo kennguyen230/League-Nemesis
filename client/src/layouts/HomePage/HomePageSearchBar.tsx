@@ -22,11 +22,13 @@ const HomePageSearchBar = () => {
     // the user hits enter
     setLoading(true);
 
+    // Return if text field is empty and user hits search
     const trimmedSummonerName = summonerName.trim();
     if (trimmedSummonerName === "") {
       return;
     }
 
+    // If no '#' exists in the entry then no tag
     const encodedSummonerName = trimmedSummonerName.replace("#", "%23");
     if (encodedSummonerName === trimmedSummonerName) {
       return;

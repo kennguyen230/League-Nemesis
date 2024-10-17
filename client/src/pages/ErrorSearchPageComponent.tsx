@@ -15,7 +15,7 @@ const ErrorSearchPageComponent = () => {
             No search results for BLANK in the BLANK region.
           </h1>
           <h2 className="text-center text-gray-50 text-opacity-75 text-sm">
-            Make sure your search is in the format SummonerName#Region
+            Make sure your search is in the format SummonerName #Tag
           </h2>
           <div className="flex gap-4 mt-4">
             <Button onClick={() => history.go(-1)} className="bg-[#182B40]">

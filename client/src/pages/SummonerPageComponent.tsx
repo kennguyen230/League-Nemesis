@@ -22,6 +22,7 @@ const SummonerPageComponent = (summoner) => {
   useEffect(() => {
     setDisplayGameMode("all");
     setDisplayLane("overall");
+    window.scrollTo(0, 0);
   }, [summoner]);
 
   // Shorthand aliases to save on typing
