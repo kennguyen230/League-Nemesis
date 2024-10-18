@@ -159,7 +159,7 @@ const updateUserData = (
 ) => {
     const updateChampionData = (champArray: ChampionUserData[], champName: string, userTeamWon: boolean) => {
         // Check to see if this entry already exists
-        let champData = champArray.find(champ => champ.champName === champName);
+        let champData = champArray.find(champ => champ.champName.toLowerCase() === champName.toLowerCase());
 
         // If not, create a default entry with the champ name
         if (!champData) {
@@ -275,7 +275,7 @@ async function processMatchList(
             // Populate user object
             match.teams.get(userTeam).participants.forEach((participant) => {
                 // Loop through list of participants until the user is found
-                if (participant.summoner.name !== summonerName) return;
+                if (participant.summoner.name.trim().toLowerCase() !== summonerName.trim().toLowerCase()) return;
 
                 // If it is the user, grab their champion and update the user object
                 const champName: string = participant.champion.champ.id;
@@ -476,6 +476,7 @@ function sortUserEnemyData(returnObjectUser: User, returnObjectEnemy: Enemy) {
     }
 }
 
+// The core algorithm to determine a user's League Nemesis
 function sortEnemyStats(laneArr: ChampionEnemyData[]) {
     laneArr.sort((champ1, champ2) => {
         const weightedChamp1 = champ1.lossRate * Math.log(champ1.encounters + 1);
@@ -488,6 +489,7 @@ function sortEnemyStats(laneArr: ChampionEnemyData[]) {
     });
 }
 
+// Sorts user data soley on pick rate
 function sortUserStats(userArr: ChampionUserData[]) {
     userArr.sort((champ1, champ2) => {
         return champ2.picks - champ1.picks;
