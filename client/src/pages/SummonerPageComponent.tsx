@@ -32,8 +32,8 @@ const SummonerPageComponent = (summoner) => {
   // Tracks user's most played champion in every mode
   const mostPlayedChampion =
     displayGameMode === "aram"
-      ? userData[displayGameMode]?.[0]?.champName
-      : userData[displayGameMode]?.[displayLane]?.[0]?.champName;
+      ? userData[displayGameMode]?.[0]?.champId
+      : userData[displayGameMode]?.[displayLane]?.[0]?.champId;
 
   // Tracks user's LN champion in every mode
   const enemyChampionData =

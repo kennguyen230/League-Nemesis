@@ -8,7 +8,7 @@ import { Link } from "@tanstack/react-router";
 
 const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
   const [summonerName, setSummonerName] = useState<string>("");
-  const [selectedRegion, setSelectedRegion] = useState<string>("NA");
+  const [selectedRegion, setSelectedRegion] = useState<string>("na");
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -56,7 +56,7 @@ const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
           selectedRegion={selectedRegion}
           setSelectedRegion={setSelectedRegion}
           onEnter={handleSubmit}
-          height="h-10" // Corrected class name
+          height="h-10"
           fontSize="text-xs"
         />
       )}

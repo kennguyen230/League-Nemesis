@@ -5,17 +5,23 @@ const RegionDropdown = ({ selectedRegion, setSelectedRegion, fontSize }) => {
   const dropdownRef = useRef(null);
 
   const regions = [
-    "NA",
-    "KR",
-    "EUW",
-    "EUNE",
-    "JP",
-    "OCE",
-    "BR",
-    "LAN",
-    "LAS",
-    "RU",
-    "TR",
+    "na",
+    "kr",
+    "euw",
+    "eune",
+    "jp",
+    "oce",
+    "br",
+    "lan",
+    "las",
+    "ru",
+    "tr",
+    "pbe",
+    "sg",
+    "th",
+    "tw",
+    "vn",
+    "ph",
   ];
 
   const toggleDropdown = () => {
@@ -35,10 +41,6 @@ const RegionDropdown = ({ selectedRegion, setSelectedRegion, fontSize }) => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
 
   return (
@@ -49,7 +51,7 @@ const RegionDropdown = ({ selectedRegion, setSelectedRegion, fontSize }) => {
           onClick={toggleDropdown}
           className="text-white text-xs md:text-sm font-vollkorn flex items-center justify-center w-full"
         >
-          {selectedRegion} &#9662;
+          {selectedRegion.toUpperCase()} &#9662;
         </button>
       </div>
       {/* The dropdown menu */}
@@ -65,10 +67,10 @@ const RegionDropdown = ({ selectedRegion, setSelectedRegion, fontSize }) => {
               <button
                 key={region}
                 onClick={() => handleRegionSelect(region)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left font-vollkorn border-b"
                 role="menuitem"
               >
-                {region}
+                {region.toUpperCase()}
               </button>
             ))}
           </div>

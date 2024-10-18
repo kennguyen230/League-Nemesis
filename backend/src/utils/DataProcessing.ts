@@ -2,13 +2,11 @@
  * @brief This is a catch-all file that exports methods for processing data. 
  */
 import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from './Interfaces.js';
-import { getClient } from "../services/ClientManager.js";
-
-const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
 function emptyChampionEnemyData(): ChampionEnemyData {
     return {
         champName: "",
+        champId: "",
         losses: 0,
         encounters: 0,
         lossRate: 0
@@ -18,6 +16,7 @@ function emptyChampionEnemyData(): ChampionEnemyData {
 function emptyChampionUserData(): ChampionUserData {
     return {
         champName: "",
+        champId: "",
         wins: 0,
         picks: 0,
         winRate: 0
@@ -59,6 +58,7 @@ async function createReturnObjects(
     matchList: Array<any>,
     summonerName: string,
     numberOfGames: { totalGames: number, normals: number, aram: number, flex: number, ranked: number, totalLosses: number },
+    client
 ) {
     const enemy: Enemy = {
         normals: emptyGameModeEnemyData(),
@@ -76,7 +76,7 @@ async function createReturnObjects(
         aram: []
     };
 
-    await processMatchList(summonerName, matchList, enemy, user, numberOfGames);
+    await processMatchList(summonerName, matchList, enemy, user, numberOfGames, client);
 
     console.log("(DataProcessing.ts) createReturnObjects(): User");
     console.dir(user, { depth: null });
@@ -91,6 +91,7 @@ async function createReturnObjects(
  * 
  * @param enemy Object that holds all user data
  * @param champName Name of champion
+ * @param champId Id of champion (ex. Khazix instead of Kha'zix)
  * @param userTeamWon Flag to indicate if user won the current match
  * @param gameMode Normals vs ranked vs aram vs flex
  * @param lane Which lane to process for
@@ -98,18 +99,20 @@ async function createReturnObjects(
 const updateEnemyData = (
     enemy: Enemy,
     champName: string,
+    champId: string,
     userTeamWon: boolean,
     gameMode: keyof Enemy,
     lane: keyof GameModeEnemyData
 ) => {
     // Nested function that update enemy data for each entry
-    const updateChampionData = (champArray: ChampionEnemyData[], champName: string, userTeamWon: boolean) => {
+    const updateChampionData = (champArray: ChampionEnemyData[], champId: string, userTeamWon: boolean) => {
         // Check to see if this entry already exists
-        let champData = champArray.find(champ => champ.champName === champName);
+        let champData = champArray.find(champ => champ.champId === champId);
 
         // If not, create a default entry with the champ name
         if (!champData) {
             champData = emptyChampionEnemyData();
+            champData.champId = champId;
             champData.champName = champName;
             champArray.push(champData);
         }
@@ -125,19 +128,19 @@ const updateEnemyData = (
     if (gameMode == 'aram') {
         // Update aram champion data for the aram array
         // as well as the all array.overall
-        updateChampionData(enemy.aram, champName, userTeamWon);
-        updateChampionData(enemy["all"].overall, champName, userTeamWon);
+        updateChampionData(enemy.aram, champId, userTeamWon);
+        updateChampionData(enemy["all"].overall, champId, userTeamWon);
 
     } else {
         // For each match of type gameMode, update the lane
         // specific array but also the overall array
-        updateChampionData(enemy[gameMode][lane], champName, userTeamWon);
-        updateChampionData(enemy[gameMode].overall, champName, userTeamWon);
+        updateChampionData(enemy[gameMode][lane], champId, userTeamWon);
+        updateChampionData(enemy[gameMode].overall, champId, userTeamWon);
 
         // Then, update the all array for each lane then the
         // all array.overall
-        updateChampionData(enemy["all"][lane], champName, userTeamWon);
-        updateChampionData(enemy["all"].overall, champName, userTeamWon);
+        updateChampionData(enemy["all"][lane], champId, userTeamWon);
+        updateChampionData(enemy["all"].overall, champId, userTeamWon);
     }
 };
 
@@ -146,6 +149,7 @@ const updateEnemyData = (
  * 
  * @param user Object that holds all user data
  * @param champName Name of champion
+ * @param champId Id of champion (ex. Khazix instead of Kha'zix)
  * @param userTeamWon Flag to indicate if user won the current match
  * @param gameMode Normals vs ranked vs aram vs flex
  * @param lane Which lane to process for
@@ -153,17 +157,23 @@ const updateEnemyData = (
 const updateUserData = (
     user: User,
     champName: string,
+    champId: string,
     userTeamWon: boolean,
     gameMode: keyof User,
     lane: keyof GameModeUserData
 ) => {
-    const updateChampionData = (champArray: ChampionUserData[], champName: string, userTeamWon: boolean) => {
+    const updateChampionData = (champArray: ChampionUserData[], champId: string, userTeamWon: boolean) => {
         // Check to see if this entry already exists
+<<<<<<< Updated upstream
         let champData = champArray.find(champ => champ.champName.toLowerCase() === champName.toLowerCase());
+=======
+        let champData = champArray.find(champ => champ.champId === champId);
+>>>>>>> Stashed changes
 
         // If not, create a default entry with the champ name
         if (!champData) {
             champData = emptyChampionUserData();
+            champData.champId = champId;
             champData.champName = champName;
             champArray.push(champData);
         }
@@ -177,14 +187,14 @@ const updateUserData = (
     };
 
     if (gameMode == 'aram') {
-        updateChampionData(user.aram, champName, userTeamWon);
-        updateChampionData(user["all"].overall, champName, userTeamWon);
+        updateChampionData(user.aram, champId, userTeamWon);
+        updateChampionData(user["all"].overall, champId, userTeamWon);
     } else {
-        updateChampionData(user[gameMode][lane], champName, userTeamWon);
-        updateChampionData(user[gameMode].overall, champName, userTeamWon);
+        updateChampionData(user[gameMode][lane], champId, userTeamWon);
+        updateChampionData(user[gameMode].overall, champId, userTeamWon);
 
-        updateChampionData(user["all"][lane], champName, userTeamWon);
-        updateChampionData(user["all"].overall, champName, userTeamWon);
+        updateChampionData(user["all"][lane], champId, userTeamWon);
+        updateChampionData(user["all"].overall, champId, userTeamWon);
     }
 };
 
@@ -198,6 +208,7 @@ const updateUserData = (
  * @param enemy Object that holds enemy data
  * @param user Object that holds user data
  * @param numberOfGames Keeps track of number of losses total, between DB and ML
+ * @param client The Shieldbowjs client
  */
 async function processMatchList(
     summonerName: string,
@@ -205,6 +216,7 @@ async function processMatchList(
     enemy: Enemy,
     user: User,
     numberOfGames: { totalGames: number, normals: number, aram: number, flex: number, ranked: number, totalLosses: number },
+    client
 ) {
     try {
         // Fetch match data all at the same time
@@ -275,33 +287,42 @@ async function processMatchList(
             // Populate user object
             match.teams.get(userTeam).participants.forEach((participant) => {
                 // Loop through list of participants until the user is found
+<<<<<<< Updated upstream
                 if (participant.summoner.name.trim().toLowerCase() !== summonerName.trim().toLowerCase()) return;
+=======
+                if (participant.summoner.name !== summonerName) {
+                    console.log(participant.summoner.name);
+                    return;
+                }
+                console.log("FOUND USER");
+>>>>>>> Stashed changes
 
                 // If it is the user, grab their champion and update the user object
-                const champName: string = participant.champion.champ.id;
+                const champName: string = participant.champion.champ.name;
+                const champId: string = participant.champion.champ.id;
 
                 // Return early if ARAM, don't need to populate lane data
                 if (gameMode == "aram") {
-                    updateUserData(user, champName, userTeamWon, gameMode, "overall");
+                    updateUserData(user, champName, champId, userTeamWon, gameMode, "overall");
                     return;
                 }
 
                 // For non-aram game mode, need to also update each individual lane
                 switch (participant.position.team) {
                     case "TOP":
-                        updateUserData(user, champName, userTeamWon, gameMode, "top");
+                        updateUserData(user, champName, champId, userTeamWon, gameMode, "top");
                         break;
                     case "JUNGLE":
-                        updateUserData(user, champName, userTeamWon, gameMode, "jng");
+                        updateUserData(user, champName, champId, userTeamWon, gameMode, "jng");
                         break;
                     case "MIDDLE":
-                        updateUserData(user, champName, userTeamWon, gameMode, "mid");
+                        updateUserData(user, champName, champId, userTeamWon, gameMode, "mid");
                         break;
                     case "BOTTOM":
-                        updateUserData(user, champName, userTeamWon, gameMode, "bot");
+                        updateUserData(user, champName, champId, userTeamWon, gameMode, "bot");
                         break;
                     case "UTILITY":
-                        updateUserData(user, champName, userTeamWon, gameMode, "sup");
+                        updateUserData(user, champName, champId, userTeamWon, gameMode, "sup");
                         break;
                 }
             })
@@ -309,30 +330,31 @@ async function processMatchList(
             // Populate enemy data
             match.teams.get(opposingTeam).participants.forEach((participant) => {
                 // Grab champ id of each opponent and update the enemy object
-                const champName: string = participant.champion.champ.id;
+                const champName: string = participant.champion.champ.name;
+                const champId: string = participant.champion.champ.id;
 
                 // Return early if ARAM, don't need to populate lane data
                 if (gameMode == "aram") {
-                    updateEnemyData(enemy, champName, userTeamWon, gameMode, "overall");
+                    updateEnemyData(enemy, champName, champId, userTeamWon, gameMode, "overall");
                     return;
                 }
 
                 // For non-aram game mode, need to also update each individual lane
                 switch (participant.position.team) {
                     case "TOP":
-                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "top");
+                        updateEnemyData(enemy, champName, champId, userTeamWon, gameMode, "top");
                         break;
                     case "JUNGLE":
-                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "jng");
+                        updateEnemyData(enemy, champName, champId, userTeamWon, gameMode, "jng");
                         break;
                     case "MIDDLE":
-                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "mid");
+                        updateEnemyData(enemy, champName, champId, userTeamWon, gameMode, "mid");
                         break;
                     case "BOTTOM":
-                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "bot");
+                        updateEnemyData(enemy, champName, champId, userTeamWon, gameMode, "bot");
                         break;
                     case "UTILITY":
-                        updateEnemyData(enemy, champName, userTeamWon, gameMode, "sup");
+                        updateEnemyData(enemy, champName, champId, userTeamWon, gameMode, "sup");
                         break;
                 }
             });
@@ -413,7 +435,7 @@ function mergeLanes(db_gameMode_lane: (ChampionUserData | ChampionEnemyData)[], 
     // For each champion in the match list object
     ml_gameMode_lane.forEach((ml_champ) => {
         // Check to see if the champion exists in the database
-        let db_champ = db_gameMode_lane.find(c => c.champName === ml_champ.champName);
+        let db_champ = db_gameMode_lane.find(c => c.champId === ml_champ.champId);
 
         // If it does, merge the stats
         if (db_champ) {
@@ -496,51 +518,4 @@ function sortUserStats(userArr: ChampionUserData[]) {
     });
 }
 
-async function getProperChampionName(returnObject: UserEnemyData) {
-    console.log("(DataProcessing.ts) Inside getProperChampionName()");
-
-    // Helper function to fetch and update the champion name
-    async function getName(championEntry: ChampionUserData | ChampionEnemyData) {
-        try {
-            const fetchedChampion = await client.champions.fetch(championEntry.champName);
-            if (fetchedChampion && fetchedChampion.name) {
-                championEntry.champName = fetchedChampion.name;
-            } else {
-                console.error(`(DataProcessing.ts) Champion ${championEntry.champName} not found, keeping original name.`);
-            }
-        } catch (error) {
-            console.error(`(DataProcessing.ts) Failed to fetch name for ${championEntry.champName}:`, error);
-        }
-    }
-
-    // Array to hold all promises
-    const promises: Promise<void>[] = [];
-
-    // Loop through each side (userData and enemyData)
-    for (let side in returnObject) {
-        // Loop through each game mode (normals, ranked, flex, all, aram)
-        for (let gameMode in returnObject[side]) {
-            if (gameMode === "aram") {
-                // For ARAM, iterate directly over the array of champions
-                for (let champion of returnObject[side][gameMode]) {
-                    promises.push(getName(champion));
-                }
-            } else {
-                // For other game modes, iterate over each lane
-                for (let lane in returnObject[side][gameMode]) {
-                    for (let champion of returnObject[side][gameMode][lane]) {
-                        promises.push(getName(champion));
-                    }
-                }
-            }
-        }
-    }
-    // Wait for all name fetching to complete
-    await Promise.all(promises);
-    console.log("(DataProcessing.ts) All champion names have been updated");
-}
-
-
-
-
-export { createReturnObjects, mergeUserEnemyData, sortUserEnemyData, getProperChampionName };
+export { createReturnObjects, mergeUserEnemyData, sortUserEnemyData };
