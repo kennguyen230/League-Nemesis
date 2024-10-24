@@ -164,11 +164,7 @@ const updateUserData = (
 ) => {
     const updateChampionData = (champArray: ChampionUserData[], champId: string, userTeamWon: boolean) => {
         // Check to see if this entry already exists
-<<<<<<< Updated upstream
         let champData = champArray.find(champ => champ.champName.toLowerCase() === champName.toLowerCase());
-=======
-        let champData = champArray.find(champ => champ.champId === champId);
->>>>>>> Stashed changes
 
         // If not, create a default entry with the champ name
         if (!champData) {
@@ -287,15 +283,7 @@ async function processMatchList(
             // Populate user object
             match.teams.get(userTeam).participants.forEach((participant) => {
                 // Loop through list of participants until the user is found
-<<<<<<< Updated upstream
                 if (participant.summoner.name.trim().toLowerCase() !== summonerName.trim().toLowerCase()) return;
-=======
-                if (participant.summoner.name !== summonerName) {
-                    console.log(participant.summoner.name);
-                    return;
-                }
-                console.log("FOUND USER");
->>>>>>> Stashed changes
 
                 // If it is the user, grab their champion and update the user object
                 const champName: string = participant.champion.champ.name;

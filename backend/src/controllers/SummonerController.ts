@@ -8,11 +8,7 @@ import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../s
 import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData, getProperChampionName } from '../utils/DataProcessing.js';
 import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
 
-<<<<<<< Updated upstream
-async function fetchUserData(summonerName: string, tag: any) {
-=======
 async function fetchUserData(summonerName, tag, region, client) {
->>>>>>> Stashed changes
     try {
         // Grab PUUID from user and attempt to find user in DB
         const puuid = await getPUUID(summonerName, tag, client);

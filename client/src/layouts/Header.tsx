@@ -1,5 +1,9 @@
 import LNLogoSmall from "@/assets/image/LNLogoSmall.png";
 import SmallSearchBar from "./SmallSearchBar";
+import DialogPopup from "./DialogPopup";
+import NewUserModal from "./NewUserModal";
+
+import { checkNewUser } from "@/data/api";
 
 import { HamburgerMenu } from "./HamburgerMenu";
 import { useState } from "react";
@@ -9,9 +13,10 @@ import { Link } from "@tanstack/react-router";
 const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
   const [summonerName, setSummonerName] = useState<string>("");
   const [selectedRegion, setSelectedRegion] = useState<string>("na");
+  const [newUser, setNewUser] = useState<boolean>(false);
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedSummonerName = summonerName.trim();
@@ -26,6 +31,10 @@ const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
 
     console.log("Searching for summoner: ", encodedSummonerName);
     console.log("In the region: ", selectedRegion);
+    const newUser = await checkNewUser(selectedRegion, summonerName);
+    if (newUser) {
+      setNewUser(true);
+    }
     navigate({ to: `/summoner/${selectedRegion}/${encodedSummonerName}` });
   };
 
@@ -65,6 +74,14 @@ const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
       <div className="hidden md:block">
         <HamburgerMenu></HamburgerMenu>
       </div>
+
+      <DialogPopup
+        isOpen={newUser}
+        setIsOpen={setNewUser}
+        title={""}
+      >
+        <NewUserModal></NewUserModal>
+      </DialogPopup>
     </header>
   );
 };

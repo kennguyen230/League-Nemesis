@@ -107,4 +107,15 @@ async function deleteSummonerByPUUID(PUUID) {
     }
 }
 
-export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID };
+
+async function checkForNewUserByPUUID(PUUID) {
+    try {
+        if (!PUUID) throw new Error('PUUID not defined');
+        return await SummonerProfile.exists({ PUUID });
+    } catch (error) {
+        console.error('(DatabaseService.ts) Error searching for new summoner from database: ', error.message);
+        return false;
+    }
+}
+
+export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID };
