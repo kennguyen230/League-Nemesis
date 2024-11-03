@@ -2,12 +2,9 @@
  * @brief This file holds all methods that make API calls to Riot Games via Shieldbow.
  */
 
-import { getClient } from './ClientManager.js'
-
 /* CONSTANTS */
 const COUNT = 100; // How many game we fetch per call
 const NEW_USER_ML_SIZE = 100; // How many games we hope to fetch for a new user's match list array
-const client = await getClient(); // TODO: Change this into a function call so that we can select different regions
 
 /**
  * 
@@ -15,7 +12,7 @@ const client = await getClient(); // TODO: Change this into a function call so t
  * @param {string} tag The Riot tag of the user
  * @returns A user's PUUID
  */
-async function getPUUID(summonerName, tag) {
+async function getPUUID(summonerName, tag, client) {
     try {
         const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
         return summoner.playerId;
@@ -25,12 +22,12 @@ async function getPUUID(summonerName, tag) {
     }
 }
 
-async function getPlayerIcon(puuid) {
+async function getPlayerIcon(puuid, client) {
     const summoner = await client.summoners.fetchByPlayerId(puuid)
     return summoner.profileIcon;
 }
 
-async function getPlayerLevel(puuid) {
+async function getPlayerLevel(puuid, client) {
     const summoner = await client.summoners.fetchByPlayerId(puuid)
     return summoner.level;
 }
@@ -44,11 +41,11 @@ async function getPlayerLevel(puuid) {
  * @param {string} puuid The user's puuid
  * @param {number} lastGameTimestamp The endTimestamp of the last game we fetched for existing users
  */
-async function getRecentGames(puuid, lastGameTimestamp) {
+async function getRecentGames(puuid, lastGameTimestamp, client) {
     if (lastGameTimestamp === -1) {
-        return await getNewUserMatchlist(puuid);
+        return await getNewUserMatchlist(puuid, client);
     } else {
-        return await getExistingUserMatchlist(puuid, lastGameTimestamp);
+        return await getExistingUserMatchlist(puuid, lastGameTimestamp, client);
     }
 }
 
@@ -59,7 +56,7 @@ async function getRecentGames(puuid, lastGameTimestamp) {
  * @param {number} lastGameTimestamp The timestamp of the most recent game present in the database for this user in seconds.
  * @returns The most recent matches from the lastGameTimestamp onwards
  */
-async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
+async function getExistingUserMatchlist(puuid, lastGameTimestamp, client) {
     try {
         console.log("(RiotGamesService.ts) Inside getExistingUserMatchlist")
         const summoner = await client.summoners.fetchByPlayerId(puuid);
@@ -108,12 +105,11 @@ async function getExistingUserMatchlist(puuid, lastGameTimestamp) {
  * @param {string} puuid The user's puuid
  * @returns matchList 
  */
-async function getNewUserMatchlist(puuid) {
+async function getNewUserMatchlist(puuid, client) {
     try {
         console.log("(RiotGamesService.ts) Inside getNewUserML")
         const summoner = await client.summoners.fetchByPlayerId(puuid);
 
-        // TODO: Make a matchHistoryOption object
         let matchList = await summoner.fetchMatchList({ count: COUNT });
         let length = matchList.length;
         let lastMatchInList = await client.matches.fetch(matchList[length - 1]);
@@ -157,7 +153,7 @@ async function getNewUserMatchlist(puuid) {
  * @param {Array} matchList A user's matchlist
  * @returns The endTimestamp of the most recent game a user played
  */
-async function getLastGameTimestamp(matchList) {
+async function getLastGameTimestamp(matchList, client) {
     try {
         console.log(`(RiotGamesService.ts) Inside getLGTS(). Attempting to update LGTS with match ${matchList[0]}`)
         const match = await client.matches.fetch(matchList[0]);

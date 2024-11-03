@@ -12,6 +12,10 @@ const championEnemyStatsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    champId: {
+        type: String,
+        required: true
+    },
     losses: {
         type: Number,
         required: true
@@ -29,6 +33,10 @@ const championEnemyStatsSchema = new mongoose.Schema({
 // Schema for individual champion user stats
 const championUserStatsSchema = new mongoose.Schema({
     champName: {
+        type: String,
+        required: true
+    },
+    champId: {
         type: String,
         required: true
     },
@@ -160,6 +168,13 @@ const summonerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    tag: {
+        type: String,
+    },
+    region: {
+        type: String,
+        required: true
+    },
     PUUID: {
         type: String,
         required: true
@@ -177,4 +192,4 @@ const summonerSchema = new mongoose.Schema({
 
 // summonerprofiles is the name of the collection in the database
 // as collections are the lowercased plural form of what we call it
-export const SummonerProfile = mongoose.model('Summonered', summonerSchema);
+export const SummonerProfile = mongoose.model('Summoner', summonerSchema);

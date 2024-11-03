@@ -16,7 +16,7 @@ export function DialogPopup({
   children: React.ReactNode;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  title: string;
+  title?: string;
   description?: string;
 }) {
   return (
@@ -25,7 +25,7 @@ export function DialogPopup({
         <DialogHeader>
           <DialogTitle className="text-white text-left">
             <h1 className="text-xl">{title}</h1>
-            <hr className="mb-2 mt-2" />
+            {title && <hr className="mb-2 mt-2" />}
           </DialogTitle>
           {description && (
             <DialogDescription className="text-white text-left">

@@ -32,8 +32,8 @@ const SummonerPageComponent = (summoner) => {
   // Tracks user's most played champion in every mode
   const mostPlayedChampion =
     displayGameMode === "aram"
-      ? userData[displayGameMode]?.[0]?.champName
-      : userData[displayGameMode]?.[displayLane]?.[0]?.champName;
+      ? userData[displayGameMode]?.[0]?.champId
+      : userData[displayGameMode]?.[displayLane]?.[0]?.champId;
 
   // Tracks user's LN champion in every mode
   const enemyChampionData =
@@ -76,7 +76,7 @@ const SummonerPageComponent = (summoner) => {
 
         {/* ie. Normals, ARAM, Ranked, etc */}
         <GameTypeBar
-          summoner={summoner}
+          summoner={summoner} // Pass in summoner so that the GameTypeBar resets on new search
           setDisplayGameMode={setDisplayGameMode}
         />
 

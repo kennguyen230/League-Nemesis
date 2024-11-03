@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export type ChampionEntry = {
   champName: string;
+  champId: string;
   icon: string;
   losses: number;
   encounters: number;
@@ -39,11 +40,12 @@ export const columns: ColumnDef<ChampionEntry>[] = [
           <img
             src={
               "https://ddragon.leagueoflegends.com/cdn/14.15.1/img/champion/" +
-              row.getValue("champName") +
+              row.original.champId +
               ".png"
             }
             alt="Icon"
             className="w-10 rounded-md"
+            loading="eager"
           />
           <div className="text-md">{row.getValue("champName")}</div>
         </div>

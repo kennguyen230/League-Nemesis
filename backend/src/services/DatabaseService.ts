@@ -4,14 +4,16 @@
 // TODO: Create better way to handle errors. Potentially want to throw the errors to SummonerRoutes page so we can send a res msg
 import { SummonerProfile } from '../models/SummonerProfileModel.js';
 
-async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
+async function saveNewSummoner(summonerName, tag, region, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
     try {
-        if (!summonerName || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
+        if (!summonerName || !tag || !region || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
             throw new Error('All required fields must be provided');
         }
 
         const newSummoner = {
             summonerName,
+            tag,
+            region,
             PUUID,
             lastGameTimestamp,
             numberOfGames,
@@ -30,15 +32,17 @@ async function saveNewSummoner(summonerName, PUUID, lastGameTimestamp, numberOfG
     }
 }
 
-async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
+async function updateSummonerByPUUID(summonerName, tag, region, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
     try {
-        if (!summonerName || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
+        if (!summonerName || !tag || !region || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
             throw new Error('All required fields must be provided');
         }
 
         const update = {
             $set: {
                 summonerName: summonerName,
+                tag: tag,
+                region: region,
                 lastGameTimestamp: lastGameTimestamp,
                 numberOfGames: numberOfGames,
                 enemyStats: enemyStats,
@@ -65,7 +69,7 @@ async function updateSummonerByPUUID(summonerName, PUUID, lastGameTimestamp, num
 
 async function getSummonerByPUUID(PUUID) {
     try {
-        if (!PUUID) throw new Error('PUUID not defined');
+        if (!PUUID) throw new Error('(DatabaseService.ts) PUUID not defined');
 
         const player = await SummonerProfile.findOne({ PUUID });
 
@@ -103,4 +107,15 @@ async function deleteSummonerByPUUID(PUUID) {
     }
 }
 
-export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID };
+
+async function checkForNewUserByPUUID(PUUID) {
+    try {
+        if (!PUUID) throw new Error('PUUID not defined');
+        return await SummonerProfile.exists({ PUUID });
+    } catch (error) {
+        console.error('(DatabaseService.ts) Error searching for new summoner from database: ', error.message);
+        return false;
+    }
+}
+
+export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID };

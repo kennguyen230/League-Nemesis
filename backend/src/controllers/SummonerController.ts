@@ -5,13 +5,13 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData, getProperChampionName } from '../utils/DataProcessing.js';
+import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData } from '../utils/DataProcessing.js';
 import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
 
-async function fetchUserData(summonerName: string, tag: any) {
+async function fetchUserData(summonerName, tag, region, client) {
     try {
         // Grab PUUID from user and attempt to find user in DB
-        const puuid = await getPUUID(summonerName, tag);
+        const puuid = await getPUUID(summonerName, tag, client);
         const db_returnObject = await getSummonerByPUUID(puuid);
 
         let lastGameTimestamp: Number = -1;
@@ -27,7 +27,7 @@ async function fetchUserData(summonerName: string, tag: any) {
         }
 
         // Fetch new data from Riot then determine which object to send to client
-        const matchlist = await getRecentGames(puuid, lastGameTimestamp);
+        const matchlist = await getRecentGames(puuid, lastGameTimestamp, client);
 
         // The bulk of processing for the backend happens in this if/else
         // Inside, if there is a new match list, create a UserEnemy object
@@ -42,13 +42,13 @@ async function fetchUserData(summonerName: string, tag: any) {
         if (matchlist) {
             console.log("(SummonerController.ts)", matchlist);
 
-            lastGameTimestamp = await getLastGameTimestamp(matchlist);
+            lastGameTimestamp = await getLastGameTimestamp(matchlist, client);
             console.log("(SummonerController.ts) Updated LGTS from ML: ", lastGameTimestamp);
 
             numberOfGames.totalGames += matchlist.length;
 
             // Process match list and produce enemy and user objects and update numberOfGames.losses
-            const ml_returnObject = await createReturnObjects(matchlist, summonerName, numberOfGames);
+            const ml_returnObject = await createReturnObjects(matchlist, summonerName, numberOfGames, client);
 
             // If there is data from the database, merge with data from ML. Otherwise, returnObject is set to ML
             returnObject = db_returnObject ? mergeObjects(extractStatsFromDB(db_returnObject), ml_returnObject) : ml_returnObject;
@@ -59,7 +59,8 @@ async function fetchUserData(summonerName: string, tag: any) {
             sortUserEnemyData(returnObject.user, returnObject.enemy);
 
             // Save a new user to database or update an existing user
-            await (db_returnObject ? updateSummonerByPUUID : saveNewSummoner)(summonerName, puuid, lastGameTimestamp, numberOfGames, returnObject.enemy, returnObject.user);
+            await (db_returnObject ? updateSummonerByPUUID : saveNewSummoner)(summonerName, tag, region, puuid,
+                lastGameTimestamp, numberOfGames, returnObject.enemy, returnObject.user);
         }
         else {
             // In the case where the user is a new account with no games played yet
@@ -71,11 +72,6 @@ async function fetchUserData(summonerName: string, tag: any) {
             returnObject = extractStatsFromDB(db_returnObject);
             console.log("(SummonerController.ts) returnObject set to database data")
         }
-
-        // Before sending to client, get the proper name (eg. Chogath = Cho'Gath)
-        // await getProperChampionName(returnObject);
-
-        console.log("(SummonerController.ts) Number of games: ", numberOfGames)
 
         return [returnObject, numberOfGames];
     } catch (error) {
@@ -129,7 +125,8 @@ function extractStatsFromDB(db) {
  * @returns Decoupled summoner name & tag
  */
 function parseSummonerInput(input) {
-    const [summonerName, tag] = input.split('#');
+    let [summonerName, tag] = input.split('#');
+    summonerName = summonerName.trim();
     return { summonerName, tag };
 }
 
