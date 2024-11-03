@@ -5,7 +5,7 @@
  */
 import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
-import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData, getProperChampionName } from '../utils/DataProcessing.js';
+import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData } from '../utils/DataProcessing.js';
 import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
 
 async function fetchUserData(summonerName, tag, region, client) {
@@ -73,11 +73,6 @@ async function fetchUserData(summonerName, tag, region, client) {
             console.log("(SummonerController.ts) returnObject set to database data")
         }
 
-        // Before sending to client, get the proper name (eg. Chogath = Cho'Gath)
-        // await getProperChampionName(returnObject);
-
-        console.log("(SummonerController.ts) Number of games: ", numberOfGames)
-
         return [returnObject, numberOfGames];
     } catch (error) {
         console.error("(SummonerController.ts) Error in fetchUserData:", error);
@@ -130,7 +125,8 @@ function extractStatsFromDB(db) {
  * @returns Decoupled summoner name & tag
  */
 function parseSummonerInput(input) {
-    const [summonerName, tag] = input.split('#');
+    let [summonerName, tag] = input.split('#');
+    summonerName = summonerName.trim();
     return { summonerName, tag };
 }
 

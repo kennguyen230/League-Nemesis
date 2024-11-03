@@ -75,11 +75,7 @@ const Header: React.FC<{ isSearchBar: boolean }> = ({ isSearchBar }) => {
         <HamburgerMenu></HamburgerMenu>
       </div>
 
-      <DialogPopup
-        isOpen={newUser}
-        setIsOpen={setNewUser}
-        title={""}
-      >
+      <DialogPopup isOpen={newUser} setIsOpen={setNewUser} title={""}>
         <NewUserModal></NewUserModal>
       </DialogPopup>
     </header>

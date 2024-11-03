@@ -5,22 +5,22 @@ import { Button } from "@/components/ui/button.tsx";
 import { useNavigate } from "@tanstack/react-router";
 
 import { Loader2 } from "lucide-react";
+import { checkNewUser } from "@/data/api.tsx";
+import DialogPopup from "../DialogPopup.tsx";
+import NewUserModal from "../NewUserModal.tsx";
 
 const HomePageSearchBar = () => {
   const [summonerName, setSummonerName] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("NA");
   const [loading, setLoading] = useState(false);
+  const [newUser, setNewUser] = useState<boolean>(false);
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
 
   // The routing call that moves the user to a specific summoner
   // page. The call is triggered by an keyboard ENTER or when the
   // user hits SEARCH on the screen
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Changes the search button to a loading state after
-    // the user hits enter
-    setLoading(true);
 
     // Return if text field is empty and user hits search
     const trimmedSummonerName = summonerName.trim();
@@ -34,8 +34,16 @@ const HomePageSearchBar = () => {
       return;
     }
 
+    // Changes the search button to a loading state after
+    // the user hits enter
+    setLoading(true);
+
     console.log("Searching for summoner: ", encodedSummonerName);
     console.log("In the region: ", selectedRegion);
+    const newUser = await checkNewUser(selectedRegion, summonerName);
+    if (newUser) {
+      setNewUser(true);
+    }
     navigate({ to: `/summoner/${selectedRegion}/${encodedSummonerName}` });
   };
 
@@ -58,12 +66,20 @@ const HomePageSearchBar = () => {
       >
         {loading ? (
           <>
-            <Loader2 className=" animate-spin" />
+            <Loader2 className="animate-spin" />
           </>
         ) : (
           "Search"
         )}
       </Button>
+
+      {loading && (
+        <Loader2 className="md:hidden animate-spin text-white mt-3"></Loader2>
+      )}
+
+      <DialogPopup isOpen={newUser} setIsOpen={setNewUser} title={""}>
+        <NewUserModal></NewUserModal>
+      </DialogPopup>
     </div>
   );
 };

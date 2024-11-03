@@ -11,7 +11,7 @@ function emptyChampionEnemyData(): ChampionEnemyData {
         encounters: 0,
         lossRate: 0
     }
-}
+};
 
 function emptyChampionUserData(): ChampionUserData {
     return {
@@ -21,7 +21,7 @@ function emptyChampionUserData(): ChampionUserData {
         picks: 0,
         winRate: 0
     }
-}
+};
 
 function emptyGameModeEnemyData(): GameModeEnemyData {
     return {
@@ -266,7 +266,8 @@ async function processMatchList(
 
             // Check which side the user is on
             const userTeam: string = match.teams.get("blue").participants.some(
-                (participant) => participant.summoner.name === summonerName) ? "blue" : "red";
+                (participant) => participant.summoner.name.trim().toLowerCase() === summonerName.trim().toLowerCase())
+                ? "blue" : "red";
 
             // The opposing team is naturally the other side
             const opposingTeam: string = userTeam === "blue" ? "red" : "blue";

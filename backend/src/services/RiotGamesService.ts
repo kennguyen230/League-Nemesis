@@ -3,8 +3,8 @@
  */
 
 /* CONSTANTS */
-const COUNT = 20; // How many game we fetch per call
-const NEW_USER_ML_SIZE = 20; // How many games we hope to fetch for a new user's match list array
+const COUNT = 100; // How many game we fetch per call
+const NEW_USER_ML_SIZE = 100; // How many games we hope to fetch for a new user's match list array
 
 /**
  * 

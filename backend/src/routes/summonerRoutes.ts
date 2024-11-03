@@ -10,6 +10,10 @@ import { getClient } from '../services/ClientManager.js'
 
 const router = express.Router();
 
+router.head('/checkNewUserTest', async (req, res) => {
+    return res.status(201).send();
+})
+
 router.head('/checkNewUser', async (req, res) => {
     try {
         console.log("(summonerRoutes.ts) Inside checkNewUser!!!");
@@ -47,13 +51,13 @@ router.head('/checkNewUser', async (req, res) => {
         if (newUser) {
             return res.status(200).send();
         } else if (newUser == null) {
-            return res.status(404).send();
+            return res.status(201).send();
         }
     } catch (error) {
         console.error("(summonerRoutes.ts) Unexpected error:", error);
         return res.status(500).json({ error: "An unexpected error occurred." });
     }
-}) 
+})
 
 router.get('/querySummoner', async (req, res) => {
     try {

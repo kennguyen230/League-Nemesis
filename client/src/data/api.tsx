@@ -3,7 +3,7 @@ import axios from "axios";
 export const fetchSummonerData = async (region: string, summonerId: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:5000/summoner/querySummoner`,
+      `http://192.168.1.247:5000/summoner/querySummoner`,
       {
         params: { region, summoner: summonerId },
       }
@@ -16,8 +16,8 @@ export const fetchSummonerData = async (region: string, summonerId: string) => {
 
 export const checkNewUser = async (region: string, summonerId: string) => {
   try {
-    const response = await axios.get(
-      `http://localhost:5000/summoner/checkNewUser`,
+    const response = await axios.head(
+      `http://192.168.1.247:5000/summoner/checkNewUser`,
       {
         params: { region, summoner: summonerId },
       }
@@ -25,10 +25,10 @@ export const checkNewUser = async (region: string, summonerId: string) => {
 
     if (response.status == 200) {
       return false; // Status 200 indicates user exists in db
-    } else {
-      return true; // Otherwise a status 404 which indicates new user
+    } else if (response.status == 201) {
+      return true; // Status 201 indicates user does not exist
     }
   } catch (error) {
     console.error("Error checking for new user: ", error);
   }
-}
+};

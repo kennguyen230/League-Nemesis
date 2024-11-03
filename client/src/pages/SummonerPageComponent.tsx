@@ -76,7 +76,7 @@ const SummonerPageComponent = (summoner) => {
 
         {/* ie. Normals, ARAM, Ranked, etc */}
         <GameTypeBar
-          summoner={summoner}
+          summoner={summoner} // Pass in summoner so that the GameTypeBar resets on new search
           setDisplayGameMode={setDisplayGameMode}
         />
 
