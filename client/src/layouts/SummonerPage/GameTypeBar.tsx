@@ -15,7 +15,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
   }
 
   return (
-    <div className="flex bg-gray-500 font-vollkorn overflow-x-auto whitespace-nowrap text-white">
+    <div className="flex bg-gray-600 font-vollkorn overflow-x-auto whitespace-nowrap text-white">
       <Button
         id="all"
         onClick={handleGameModeClick}

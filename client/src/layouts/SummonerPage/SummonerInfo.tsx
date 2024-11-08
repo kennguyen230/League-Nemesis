@@ -19,8 +19,8 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
 
   return (
     <div
-      className="relative bg-cover bg-center p-16 font-vollkorn md:p-20 md:bg-center"
-      style={{ backgroundImage: `url(${championSplashUrl})` }}
+      className="relative p-16 font-vollkorn md:p-20 bg-gradient-to-r from-[#182B40] from-15% to-neutral-900"
+      // style={{ backgroundImage: `url(${championSplashUrl})` }}
     >
       <div className="absolute flex gap-3 justify start items-center top-4 left-2 bg-gray-900 bg-opacity-75 text-white py-2 pl-2 pr-6 rounded md:gap-6 md:py-4 md:pl-4 md:pr-24 md:text-2xl md:top-4 md:left-4">
         {/* Summoner Icon */}
