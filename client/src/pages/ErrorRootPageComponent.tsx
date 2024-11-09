@@ -8,7 +8,7 @@ const ErrorRootPageComponent = () => {
   const { history } = useRouter();
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
-      <Header isSearchBar={true} />
+      <Header showSearchBar={true} />
       <div className="h-screen bg-[#182B40] bg-center py-16 font-vollkorn md:mx-64 md:p-10 md:flex md:justify-center md:items-start">
         <div className="flex flex-col gap-4 px-4 justify-center items-center border bg-red-500 h-96 md:w-11/12">
           <h1 className="text-center text-lg text-white md:text-2xl">

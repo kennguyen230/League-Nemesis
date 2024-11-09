@@ -266,11 +266,11 @@ async function processMatchList(
 
             // Check which side the user is on
             const userTeam: string = match.teams.get("blue").participants.some(
-                (participant) => participant.summoner.name.trim().toLowerCase() === summonerName.trim().toLowerCase())
+                (participant) => participant.summoner.name.trim().toLowerCase() == summonerName.trim().toLowerCase())
                 ? "blue" : "red";
 
             // The opposing team is naturally the other side
-            const opposingTeam: string = userTeam === "blue" ? "red" : "blue";
+            const opposingTeam: string = userTeam == "blue" ? "red" : "blue";
 
             // Check to see if user won this game and if not
             // update the loss counter
@@ -284,7 +284,7 @@ async function processMatchList(
             // Populate user object
             match.teams.get(userTeam).participants.forEach((participant) => {
                 // Loop through list of participants until the user is found
-                if (participant.summoner.name.trim().toLowerCase() !== summonerName.trim().toLowerCase()) return;
+                if (participant.summoner.name.trim().toLowerCase() != summonerName.trim().toLowerCase()) return;
 
                 // If it is the user, grab their champion and update the user object
                 const champName: string = participant.champion.champ.name;

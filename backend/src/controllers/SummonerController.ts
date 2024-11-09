@@ -3,15 +3,14 @@
  * that grab and process our data. This includes RiotGamesServices, DatabaseServices, and DataProcessing.
  * All these services combined will generate the appropriate object to return to the client.
  */
-import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
+import { getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
 import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData } from '../utils/DataProcessing.js';
-import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
+import { Enemy, User } from "../utils/Interfaces.js"
 
-async function fetchUserData(summonerName, tag, region, client) {
+async function fetchUserData(summonerName, tag, region, client, puuid) {
     try {
         // Grab PUUID from user and attempt to find user in DB
-        const puuid = await getPUUID(summonerName, tag, client);
         const db_returnObject = await getSummonerByPUUID(puuid);
 
         let lastGameTimestamp: Number = -1;

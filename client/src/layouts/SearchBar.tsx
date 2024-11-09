@@ -47,7 +47,12 @@ const SearchBar = ({
     const newUser = await checkNewUser(region, summonerName);
     if (newUser) setIsNew(true);
 
-    navigate({ to: `/summoner/${region}/${encodedSummonerName}` });
+    navigate({ to: `/summoner/${region}/${encodedSummonerName}` })
+      .then(() => setIsLoading(false))
+      .catch((error) => {
+        console.error("Navigation error:", error);
+        setIsLoading(false);
+      });
   };
 
   const handleInputChange = (event) => {
@@ -95,7 +100,7 @@ const SearchBar = ({
       )}
 
       <DialogPopup isOpen={isNew} setIsOpen={setIsNew} title={""}>
-        <NewUserModal></NewUserModal>
+        <NewUserModal isLoading={isLoading}></NewUserModal>
       </DialogPopup>
     </div>
   );

@@ -5,37 +5,32 @@
 import express from 'express';
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID } from '../services/DatabaseService.js';
 import { fetchUserData, parseSummonerInput } from '../controllers/SummonerController.js';
-import { getPUUID, getPlayerIcon, getPlayerLevel } from '../services/RiotGamesService.js';
+import { getPUUID, getPlayerIcon, getPlayerLevel, getPlayerInfo } from '../services/RiotGamesService.js';
 import { getClient } from '../services/ClientManager.js'
 
 const router = express.Router();
-
-router.head('/checkNewUserTest', async (req, res) => {
-    return res.status(201).send();
-})
 
 router.head('/checkNewUser', async (req, res) => {
     try {
         console.log("(summonerRoutes.ts) Inside checkNewUser!!!");
         const { summonerName, tag } = parseSummonerInput(req.query.summoner);
         const region = req.query.region;
-        console.log("(summonerRoutes.ts) Summoner name:", summonerName);
 
-        // Regex is in according to Riot guidelines on summoner names
-        // and tag length
+        // Validate input for proper summoner name and tag lengths
         const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
         const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
-
         if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
             console.log("(summonerRoutes.ts) Invalid summoner name or tag");
             return res.status(400).json({ error: "Invalid summoner name or tag." });
         }
-
-        // Get an instance of the client singleton
         if (typeof region !== 'string') {
             return res.status(400).send('Invalid region');
         }
+
+        // Get an instance of the client
         const client = await getClient(region.toLowerCase());
+
+        console.log("(summonerRoutes.ts) Summoner name:", summonerName);
         console.log("(summonerRoutes.ts) Region:", region.toLowerCase());
 
         // Attempt to get puuid from the summoner name and tag passed in
@@ -66,43 +61,47 @@ router.get('/querySummoner', async (req, res) => {
         // Grab params from client
         const { summonerName, tag } = parseSummonerInput(req.query.summoner);
         const region = req.query.region;
-        console.log("(summonerRoutes.ts) Summoner name:", summonerName);
 
-        // Regex is in according to Riot guidelines on summoner names
-        // and tag length
+        // Validate input for proper summoner name and tag lengths
         const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
         const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
-
         if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
             console.log("(summonerRoutes.ts) Invalid summoner name or tag");
             return res.status(400).json({ error: "Invalid summoner name or tag." });
         }
-
-        // Get an instance of the client singleton
         if (typeof region !== 'string') {
-            return res.status(400).send('Invalid region');
+            return res.status(400).send('Invalid region input');
         }
-        const client = await getClient(region.toLowerCase());
-        console.log("(summonerRoutes.ts) Region:", region.toLowerCase());
 
-        // Attempt to get puuid from the summoner name and tag passed in
-        // If no puuid is found then no such player exists in League
+        // Get an instance of the client
+        const client = await getClient(region.toLowerCase());
+
+        // Get player info from Riot, including the summoner name and tag
+        // that way the capitalization is correct
         let puuid;
+        let summoner;
+        let summonerTag;
         try {
-            puuid = await getPUUID(summonerName, tag, client);
+            const playerInfo = await getPlayerInfo(summonerName, tag, client);
+            summoner = playerInfo.username;
+            summonerTag = playerInfo.userTag;
+            puuid = playerInfo.playerId;
         } catch (error) {
             return res.status(404).json({ error: "No PUUID associated with this summoner name and tag." });
         }
 
-        // Attempt to fetch games. Puuid is not passed in because the summoner name
-        // will be necessary to discern which team the user is on
-        const [returnObject, numberOfGames] = await fetchUserData(summonerName, tag, region, client);
+        console.log("(summonerRoutes.ts) Summoner name:", summoner);
+        console.log("(summonerRoutes.ts) Summoner tag:", summonerTag);
+        console.log("(summonerRoutes.ts) Region:", region.toLowerCase());
+
+        // Attempt to fetch games
+        const [returnObject, numberOfGames] = await fetchUserData(summoner, summonerTag, region, client, puuid);
         if (returnObject) {
             console.log("(summonerRoutes.ts) Successfully fetched user data in /querySummonerEnemyData");
 
             const returnData = {
-                name: summonerName,
-                tag: tag,
+                name: summoner,
+                tag: summonerTag,
                 level: await getPlayerLevel(puuid, client),
                 icon: await getPlayerIcon(puuid, client),
                 games: numberOfGames,
