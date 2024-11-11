@@ -3,12 +3,27 @@
  * the entry way into the server. 
  */
 import express from 'express';
-import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID } from '../services/DatabaseService.js';
+import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID, findUserBySummonerName } from '../services/DatabaseService.js';
 import { fetchUserData, parseSummonerInput } from '../controllers/SummonerController.js';
 import { getPUUID, getPlayerIcon, getPlayerLevel, getPlayerInfo } from '../services/RiotGamesService.js';
 import { getClient } from '../services/ClientManager.js'
 
 const router = express.Router();
+
+router.get('/autoSuggestUsers', async (req, res) => {
+    const { summonerName, region } = req.query;
+
+    try {
+        if (!summonerName || !region) {
+            return res.status(400).json({ error: "Summoner name and region are required" });
+        }
+
+        const suggestions = await findUserBySummonerName(summonerName, region);
+        res.json(suggestions);
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
+})
 
 router.head('/checkNewUser', async (req, res) => {
     try {
@@ -60,7 +75,7 @@ router.get('/querySummoner', async (req, res) => {
 
         // Grab params from client
         const { summonerName, tag } = parseSummonerInput(req.query.summoner);
-        const region = req.query.region;
+        let region = req.query.region;
 
         // Validate input for proper summoner name and tag lengths
         const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
@@ -72,9 +87,10 @@ router.get('/querySummoner', async (req, res) => {
         if (typeof region !== 'string') {
             return res.status(400).send('Invalid region input');
         }
+        region = region.toLowerCase();
 
         // Get an instance of the client
-        const client = await getClient(region.toLowerCase());
+        const client = await getClient(region);
 
         // Get player info from Riot, including the summoner name and tag
         // that way the capitalization is correct
@@ -92,7 +108,7 @@ router.get('/querySummoner', async (req, res) => {
 
         console.log("(summonerRoutes.ts) Summoner name:", summoner);
         console.log("(summonerRoutes.ts) Summoner tag:", summonerTag);
-        console.log("(summonerRoutes.ts) Region:", region.toLowerCase());
+        console.log("(summonerRoutes.ts) Region:", region);
 
         // Attempt to fetch games
         const [returnObject, numberOfGames] = await fetchUserData(summoner, summonerTag, region, client, puuid);

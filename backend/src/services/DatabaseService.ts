@@ -67,11 +67,14 @@ async function updateSummonerByPUUID(summonerName, tag, region, PUUID, lastGameT
     }
 }
 
-async function getSummonerByPUUID(PUUID) {
+async function getSummonerByPUUID(PUUID, region) {
     try {
         if (!PUUID) throw new Error('(DatabaseService.ts) PUUID not defined');
 
-        const player = await SummonerProfile.findOne({ PUUID });
+        const player = await SummonerProfile.findOne({
+            PUUID,
+            region
+        })
 
         if (!player) {
             console.log('(DatabaseService.ts) No player found in database');
@@ -107,7 +110,6 @@ async function deleteSummonerByPUUID(PUUID) {
     }
 }
 
-
 async function checkForNewUserByPUUID(PUUID) {
     try {
         if (!PUUID) throw new Error('PUUID not defined');
@@ -118,4 +120,17 @@ async function checkForNewUserByPUUID(PUUID) {
     }
 }
 
-export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID };
+async function findUserBySummonerName(summonerName, region) {
+    try {
+        const users = await SummonerProfile.find({
+            summonerName: { $regex: new RegExp(summonerName, "i") }, // Case-insensitive partial match
+            region: region,
+        }).limit(5); // Limit the results for performance
+        return users;
+    } catch (error) {
+        console.error('(DatabaseService.ts) Error finding user by summoner name and region: ', error.message);
+        return null;
+    }
+}
+
+export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID, findUserBySummonerName };

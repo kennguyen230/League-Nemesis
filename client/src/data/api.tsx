@@ -32,3 +32,19 @@ export const checkNewUser = async (region: string, summonerId: string) => {
     console.error("Error checking for new user: ", error);
   }
 };
+
+export const autoSuggestUsers = async (
+  summonerName: string,
+  region: string
+) => {
+  try {
+    const response = await axios.get(
+      `http://192.168.1.247:5000/summoner/autoSuggestUsers`,
+      { params: { summonerName, region } }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in auto suggest: ", error);
+  }
+};

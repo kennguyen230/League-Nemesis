@@ -3,7 +3,7 @@ import { Loader2 } from "lucide-react";
 
 const NewUserModal = ({ isLoading }) => {
   return (
-    <div className="flex flex-col md:flex-row gap-8 items-center justify-evenly">
+    <div className="flex flex-col md:flex-row gap-8 items-center h-fit">
       <img
         src={Creezer}
         alt="Creezer"

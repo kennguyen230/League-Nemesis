@@ -50,13 +50,13 @@ function emptyGameModeUserData(): GameModeUserData {
  * which holds data on an enemy/user based on gametype + lane
  * 
  * @param {Array} matchList
- * @param {String} summonerName
+ * @param {String} puuid
  * @param {Object} numberOfGames
  * @returns returnObject holds enemy and user data
  */
 async function createReturnObjects(
     matchList: Array<any>,
-    summonerName: string,
+    puuid: string,
     numberOfGames: { totalGames: number, normals: number, aram: number, flex: number, ranked: number, totalLosses: number },
     client
 ) {
@@ -76,7 +76,7 @@ async function createReturnObjects(
         aram: []
     };
 
-    await processMatchList(summonerName, matchList, enemy, user, numberOfGames, client);
+    await processMatchList(puuid, matchList, enemy, user, numberOfGames, client);
 
     console.log("(DataProcessing.ts) createReturnObjects(): User");
     console.dir(user, { depth: null });
@@ -199,7 +199,7 @@ const updateUserData = (
  * on which side won, which side the user is on, and what game mode it is. Uses this data
  * to populate enemy/user object.
  * 
- * @param summonerName Summoner name from client
+ * @param puuid The unique identifier for an account
  * @param matchList Holds recently fetched match list
  * @param enemy Object that holds enemy data
  * @param user Object that holds user data
@@ -207,7 +207,7 @@ const updateUserData = (
  * @param client The Shieldbowjs client
  */
 async function processMatchList(
-    summonerName: string,
+    puuid: string,
     matchList: Array<any>,
     enemy: Enemy,
     user: User,
@@ -231,7 +231,6 @@ async function processMatchList(
             // Grab game queue type (follow reference on Riot Dev Docs)
             // https://static.developer.riotgames.com/docs/lol/queues.json
             const gameQueue: number = match.queue.queueId;
-
             // Then determine game mode based off the queue ID
             let gameMode: keyof Enemy | keyof User | undefined;
             switch (gameQueue) {
@@ -266,7 +265,7 @@ async function processMatchList(
 
             // Check which side the user is on
             const userTeam: string = match.teams.get("blue").participants.some(
-                (participant) => participant.summoner.name.trim().toLowerCase() == summonerName.trim().toLowerCase())
+                (participant) => participant.summoner.playerId == puuid)
                 ? "blue" : "red";
 
             // The opposing team is naturally the other side
@@ -284,7 +283,7 @@ async function processMatchList(
             // Populate user object
             match.teams.get(userTeam).participants.forEach((participant) => {
                 // Loop through list of participants until the user is found
-                if (participant.summoner.name.trim().toLowerCase() != summonerName.trim().toLowerCase()) return;
+                if (participant.summoner.playerId != puuid) return;
 
                 // If it is the user, grab their champion and update the user object
                 const champName: string = participant.champion.champ.name;
