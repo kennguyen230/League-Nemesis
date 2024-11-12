@@ -3,10 +3,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { checkNewUser, autoSuggestUsers } from "@/data/api";
 import { Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import DialogPopup from "./DialogPopup";
 import NewUserModal from "./NewUserModal";
 import RegionSelector from "./RegionSelector";
-import { Input } from "@/components/ui/input";
 
 const SearchBar = ({ height, fontSize, isHomePage }) => {
   // User search bar keyboard input
@@ -14,7 +14,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
   // Keeps track of auto suggested users
   const [suggestions, setSuggestions] = useState([]);
   // Keeps track of the current region being searched for based off the dropdown menu
-  const [region, setRegion] = useState("NA");
+  const [region, setRegion] = useState("na");
   // Flag for rendering spinner
   const [isLoading, setIsLoading] = useState(false);
   // Pings api to indicate whether this user is in the db to display new user modal
@@ -25,6 +25,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
   const dropdownRef = useRef(null);
 
+  // Auto suggest api call
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (summonerName.length < 2) {
@@ -46,6 +47,8 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
     return () => clearTimeout(debounceFetch);
   }, [summonerName, region]);
 
+  // Sets state to 'loading', checks for new user for popup,
+  // and begins routing to summoner page
   const performSearch = async (name) => {
     setIsLoading(true);
 
@@ -61,15 +64,25 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
       });
   };
 
+  // Returns early if already loading a user, otherwise trim the
+  // input and check for a tag
   const handleSubmit = async (event) => {
+    if (isLoading) {
+      return;
+    }
+
     event.preventDefault();
     const trimmedName = summonerName.trim();
     if (!trimmedName || !trimmedName.includes("#")) return;
     await performSearch(trimmedName);
   };
 
+  // For when the user clicks one of the suggested accounts in the
+  // auto suggest dropdown. Take the summoner in the row wholesale,
+  // close the dropdown, and begin routing
   const handleSuggestionClick = async (event, suggestion) => {
     event.preventDefault();
+
     const fullName = `${suggestion.summonerName}#${suggestion.tag}`;
     setSummonerName(fullName);
     setIsOpen(false);
@@ -92,19 +105,23 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full px-4 md:px-0">
+    <div
+      className={`flex ${isHomePage ? "flex-col" : "flex-col md:flex-row"} justify-center items-center gap-1 w-full px-4 md:px-0`}
+    >
       <div
         className={`flex min-w-[22rem] max-w-[45rem] w-full mt-4 md:mt-0 ${height} md:px-0 relative`}
       >
         <RegionSelector selectedRegion={region} setSelectedRegion={setRegion} />
+
         <form onSubmit={handleSubmit} className="w-full flex font-vollkorn">
           <Input
-            placeholder="Summoner Name"
+            placeholder="Summoner Name #Tag"
             className={`${fontSize} border-none w-full h-full rounded-none rounded-r-md focus-visible:ring-offset-0 focus-visible:ring-0`}
             onChange={handleInputChange}
             value={summonerName}
           />
         </form>
+
         {isOpen && suggestions.length > 0 && (
           <div
             ref={dropdownRef}
@@ -138,12 +155,16 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
       )}
 
       {isLoading && (
-        <Loader2 className="animate-spin text-white mt-3"></Loader2>
+        <Loader2
+          className={`${isHomePage ? "md:hidden" : "visible"} mt-3 md:mt-0 animate-spin text-white`}
+        />
       )}
 
-      <DialogPopup isOpen={isNew} setIsOpen={setIsNew} title="">
-        <NewUserModal isLoading={isLoading} />
-      </DialogPopup>
+      {isLoading && (
+        <DialogPopup isOpen={isNew} setIsOpen={setIsNew} title="">
+          <NewUserModal />
+        </DialogPopup>
+      )}
     </div>
   );
 };

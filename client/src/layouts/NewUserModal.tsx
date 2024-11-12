@@ -1,7 +1,7 @@
 import Creezer from "@/assets/image/creezer.png";
 import { Loader2 } from "lucide-react";
 
-const NewUserModal = ({ isLoading }) => {
+const NewUserModal = () => {
   return (
     <div className="flex flex-col md:flex-row gap-8 items-center h-fit">
       <img
@@ -18,7 +18,7 @@ const NewUserModal = ({ isLoading }) => {
         </p>
         <p className="mt-2 opacity-75">Thanks for being patient!</p>
       </div>
-      {isLoading && <Loader2 className="animate-spin" />}
+      <Loader2 className="animate-spin md:ml-10" />
     </div>
   );
 };
