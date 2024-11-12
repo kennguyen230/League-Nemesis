@@ -15,11 +15,11 @@ async function initializeClient(region) {
     if (!clientsByRegion[region]) {
         // If not, create a new client instance for the region
         const client = new Client(config.apiKey);
-
         console.log("Client initialized with region: " + region);
 
         await client.initialize({
             region: region,
+            locale: 'en_US',
             cache: {
                 enable: {
                     api: {
@@ -65,6 +65,8 @@ async function initializeClient(region) {
         });
         // Store the initialized client in the clientsByRegion object
         clientsByRegion[region] = client;
+
+        await client.updatePatch('14.22', false);
     }
     // Return the client instance for the requested region
     return clientsByRegion[region];
