@@ -13,9 +13,11 @@ import { useState } from "react";
 
 import AboutPageModal from "./AboutPageModal";
 import ContactPageModal from "./ContactPageModal";
+import FAQPageModal from "./FAQPageModal";
 
 export function HamburgerMenu() {
   const [isAboutDialogOpen, setIsAboutDialogOpen] = useState<boolean>(false);
+  const [isFaqDialogOpen, setIsFaqDialogOpen] = useState<boolean>(false);
   const [isContactDialogOpen, setIsContactDialogOpen] =
     useState<boolean>(false);
 
@@ -28,6 +30,15 @@ export function HamburgerMenu() {
         title={"About"}
       >
         <AboutPageModal></AboutPageModal>
+      </DialogPopup>
+
+      {/* FAQ modal */}
+      <DialogPopup
+        isOpen={isFaqDialogOpen}
+        setIsOpen={setIsFaqDialogOpen}
+        title={"FAQ"}
+      >
+        <FAQPageModal></FAQPageModal>
       </DialogPopup>
 
       {/* Contact modal */}
@@ -63,7 +74,11 @@ export function HamburgerMenu() {
             >
               About
             </Button>
-            <Button variant="ghost" className="justify-end">
+            <Button
+              variant="ghost"
+              className="justify-end"
+              onClick={() => setIsFaqDialogOpen(true)}
+            >
               FAQ
             </Button>
             <Button

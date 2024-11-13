@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-
 interface SummonerInfoProps {
   summonerName: string;
   summonerTag: string;
@@ -43,7 +41,6 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
           <h3 className="text-sm text-white mb-1 md:text-base">
             Level {summonerLevel}
           </h3>
-          <Button className="w-20 h-7 bg-[#4377B5] md:w-32">Update</Button>
         </div>
       </div>
     </div>
