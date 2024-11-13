@@ -166,6 +166,7 @@ const numberOfGames = new mongoose.Schema({
 const summonerSchema = new mongoose.Schema({
     summonerName: {
         type: String,
+        index: true,
         required: true
     },
     tag: {

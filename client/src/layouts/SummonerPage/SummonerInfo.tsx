@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-
 interface SummonerInfoProps {
   summonerName: string;
   summonerTag: string;
@@ -16,10 +14,10 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
   mostPlayedChampion,
 }) => {
   const championSplashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${mostPlayedChampion}_0.jpg`;
-
+  console.log("Most played champion: ", mostPlayedChampion);
   return (
     <div
-      className="relative bg-cover bg-center p-16 font-vollkorn md:p-20 md:bg-center"
+      className="relative p-16 font-vollkorn md:p-20 bg-gradient-to-r from-[#182B40] from-45% to-neutral-900 bg-auto"
       style={{ backgroundImage: `url(${championSplashUrl})` }}
     >
       <div className="absolute flex gap-3 justify start items-center top-4 left-2 bg-gray-900 bg-opacity-75 text-white py-2 pl-2 pr-6 rounded md:gap-6 md:py-4 md:pl-4 md:pr-24 md:text-2xl md:top-4 md:left-4">
@@ -43,7 +41,6 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
           <h3 className="text-sm text-white mb-1 md:text-base">
             Level {summonerLevel}
           </h3>
-          <Button className="w-20 h-7 bg-[#4377B5] md:w-32">Update</Button>
         </div>
       </div>
     </div>

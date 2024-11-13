@@ -52,9 +52,9 @@ const SummonerPageComponent = (summoner) => {
 
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
-      <Header isSearchBar={true} />
+      <Header showSearchBar={true} />
 
-      <div className="h-full bg-[#182B40] bg-center md:mx-64 pb-10">
+      <div className="h-full bg-gradient-to-r from-[#182B40] from-20% to-neutral-900 md:mx-64 pb-10">
         {/* Summoner info at the top of the page */}
         {mostPlayedChampion ? (
           <SummonerInfo

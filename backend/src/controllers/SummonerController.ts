@@ -3,16 +3,15 @@
  * that grab and process our data. This includes RiotGamesServices, DatabaseServices, and DataProcessing.
  * All these services combined will generate the appropriate object to return to the client.
  */
-import { getPUUID, getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
+import { getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
 import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
 import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData } from '../utils/DataProcessing.js';
-import { UserEnemyData, Enemy, User, GameModeEnemyData, GameModeUserData, ChampionEnemyData, ChampionUserData } from "../utils/Interfaces.js"
+import { Enemy, User } from "../utils/Interfaces.js"
 
-async function fetchUserData(summonerName, tag, region, client) {
+async function fetchUserData(summonerName, tag, region, client, puuid) {
     try {
         // Grab PUUID from user and attempt to find user in DB
-        const puuid = await getPUUID(summonerName, tag, client);
-        const db_returnObject = await getSummonerByPUUID(puuid);
+        const db_returnObject = await getSummonerByPUUID(puuid, region);
 
         let lastGameTimestamp: Number = -1;
         let numberOfGames = { totalGames: 0, normals: 0, aram: 0, flex: 0, ranked: 0, totalLosses: 0 };
@@ -48,7 +47,7 @@ async function fetchUserData(summonerName, tag, region, client) {
             numberOfGames.totalGames += matchlist.length;
 
             // Process match list and produce enemy and user objects and update numberOfGames.losses
-            const ml_returnObject = await createReturnObjects(matchlist, summonerName, numberOfGames, client);
+            const ml_returnObject = await createReturnObjects(matchlist, puuid, numberOfGames, client);
 
             // If there is data from the database, merge with data from ML. Otherwise, returnObject is set to ML
             returnObject = db_returnObject ? mergeObjects(extractStatsFromDB(db_returnObject), ml_returnObject) : ml_returnObject;

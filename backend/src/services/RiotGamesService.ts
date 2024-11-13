@@ -3,21 +3,34 @@
  */
 
 /* CONSTANTS */
-const COUNT = 100; // How many game we fetch per call
-const NEW_USER_ML_SIZE = 100; // How many games we hope to fetch for a new user's match list array
+const COUNT = 20; // How many game we fetch per call
+const NEW_USER_ML_SIZE = 20; // How many games we hope to fetch for a new user's match list array
 
-/**
- * 
- * @param {string} summonerName A user's summoner name
- * @param {string} tag The Riot tag of the user
- * @returns A user's PUUID
- */
 async function getPUUID(summonerName, tag, client) {
     try {
         const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
         return summoner.playerId;
     } catch (error) {
         console.error("(RiotGamesService.ts) Error in getPUUID(). Error:", error);
+        throw new Error(`Error retrieving account information for ${summonerName}`);
+    }
+}
+
+async function getPlayerInfo(summonerName, tag, client) {
+    try {
+        const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+
+        if (!summoner || !summoner.username || !summoner.userTag || !summoner.playerId) {
+            throw new Error(`Incomplete data for summoner ${summonerName}`);
+        }
+
+        return {
+            username: summoner.username,
+            userTag: summoner.userTag,
+            playerId: summoner.playerId,
+        };
+    } catch (error) {
+        console.error(`(RiotGamesService.ts) Error in getPUUID(). Error:`, error);
         throw new Error(`Error retrieving account information for ${summonerName}`);
     }
 }
@@ -163,6 +176,6 @@ async function getLastGameTimestamp(matchList, client) {
     }
 }
 
-export { getPUUID, getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel }
+export { getPUUID, getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel, getPlayerInfo }
 
 

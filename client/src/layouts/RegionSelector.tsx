@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-const RegionDropdown = ({ selectedRegion, setSelectedRegion, fontSize }) => {
+const RegionDropdown = ({ selectedRegion, setSelectedRegion }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
