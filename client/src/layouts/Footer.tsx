@@ -1,5 +1,3 @@
-import LNLogoSmall from "@/assets/image/LNLogoSmall.png";
-
 import { Link } from "@tanstack/react-router";
 
 const Footer = () => {

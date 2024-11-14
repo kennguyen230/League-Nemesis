@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
 
 const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
   const [activeButton, setActiveButton] = useState("all");
