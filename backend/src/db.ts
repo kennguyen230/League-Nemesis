@@ -1,18 +1,19 @@
-import config from './config.js'
+import config from './config.js';
 import mongoose from 'mongoose';
 
+let isConnected = false; // Track connection status
+
 export const connectToDatabase = async () => {
+    if (isConnected) {
+        return;
+    }
+
     try {
-        mongoose
-            .connect(config.mongoURI)
-            .then(() => {
-                console.log('App connected to database');
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        await mongoose.connect(config.mongoURI);
+        isConnected = true;
+        console.log('Connected to MongoDB');
     } catch (error) {
-        console.error("MongoDB connection error:", error);
+        console.error('MongoDB connection error:', error);
         throw error;
     }
-}
+};
