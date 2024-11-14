@@ -3,17 +3,25 @@
  * connected to from here.
  */
 
-import app from './src/app.js'
-import config from './src/config.js'
-import mongoose from 'mongoose';
+import express from 'express';
+import cors from 'cors';
+import summonerRoutes from './src/routes/summonerRoutes.js';
+import { connectToDatabase } from './src/db.js'
 
-mongoose
-    .connect(config.mongoURI)
-    .then(() => {
-        console.log("App connected to database");
-        app.listen(config.port, config.host, () => {
-            console.log(`Server is running on http://${config.host}:${config.port}`);
-        })
-    }).catch((error) => {
-        console.log(error);
-    })
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.status(200).send('Welcome to League Nemesis');
+})
+
+app.use('/summoner', summonerRoutes);
+
+connectToDatabase().catch((error) => {
+    console.error('Failed to connect to MongoDB', error);
+    process.exit(1);
+});
+
+export default app;

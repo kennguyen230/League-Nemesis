@@ -1,13 +1,12 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const fetchSummonerData = async (region: string, summonerId: string) => {
   try {
-    const response = await axios.get(
-      `http://192.168.1.247:5000/summoner/querySummoner`,
-      {
-        params: { region, summoner: summonerId },
-      }
-    );
+    const response = await axios.get(`${API_BASE_URL}/summoner/querySummoner`, {
+      params: { region, summoner: summonerId },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching data from query summoner: ", error);
@@ -16,12 +15,9 @@ export const fetchSummonerData = async (region: string, summonerId: string) => {
 
 export const checkNewUser = async (region: string, summonerId: string) => {
   try {
-    const response = await axios.head(
-      `http://192.168.1.247:5000/summoner/checkNewUser`,
-      {
-        params: { region, summoner: summonerId },
-      }
-    );
+    const response = await axios.head(`${API_BASE_URL}/summoner/checkNewUser`, {
+      params: { region, summoner: summonerId },
+    });
 
     if (response.status == 200) {
       return false; // Status 200 indicates user exists in db
@@ -39,7 +35,7 @@ export const autoSuggestUsers = async (
 ) => {
   try {
     const response = await axios.get(
-      `http://192.168.1.247:5000/summoner/autoSuggestUsers`,
+      `${API_BASE_URL}/summoner/autoSuggestUsers`,
       { params: { summonerName, region } }
     );
 
