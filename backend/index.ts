@@ -10,12 +10,18 @@ import { connectToDatabase } from './src/db.js'
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://league-nemesis-client.vercel.app/'
+}));
 app.use(express.json());
 
 app.get('/', (req, res) => {
     res.status(200).send('Welcome to League Nemesis');
 })
+
+// app.listen(5000, "localhost", () => {
+//     console.log(`Server is running on localhost:5000`);
+// })
 
 app.use('/summoner', summonerRoutes);
 
