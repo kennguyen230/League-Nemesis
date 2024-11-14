@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 
 const RegionDropdown = ({ selectedRegion, setSelectedRegion }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const regions = [
     "na",
