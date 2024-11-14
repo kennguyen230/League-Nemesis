@@ -5,8 +5,8 @@
 
 import express from 'express';
 import cors from 'cors';
-import summonerRoutes from '../src/routes/summonerRoutes.ts';
-import { connectToDatabase } from '../src/db.js'
+import summonerRoutes from './src/routes/summonerRoutes.js';
+import { connectToDatabase } from './src/db.js'
 
 const app = express();
 
