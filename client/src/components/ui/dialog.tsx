@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import ExtendedDialogContentProps from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -33,10 +32,10 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  DialogPrimitive.ExtendedDialogContentProps
->(({ className, children, showOverlay, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay showOverlay={showOverlay} />
+    <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(

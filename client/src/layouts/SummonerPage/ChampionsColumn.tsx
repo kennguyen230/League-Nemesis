@@ -110,7 +110,7 @@ export const columns: ColumnDef<ChampionEntry>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-center md:w-1/2 text-lg">
-          {row.getValue("lossRate").toFixed(2)}%
+          {(row.getValue("lossRate") as number).toFixed(2)}%
         </div>
       );
     },

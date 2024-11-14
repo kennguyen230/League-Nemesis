@@ -12,7 +12,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
   // User search bar keyboard input
   const [summonerName, setSummonerName] = useState("");
   // Keeps track of auto suggested users
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<User[]>([]);
   // Keeps track of the current region being searched for based off the dropdown menu
   const [region, setRegion] = useState("na");
   // Flag for rendering spinner
@@ -23,7 +23,13 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
   const [isOpen, setIsOpen] = useState(false);
   // Routes users to this url after hitting enter or Search
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  interface User {
+    summonerName: string;
+    tag: string;
+    region: string;
+  }
 
   // Auto suggest api call
   useEffect(() => {
