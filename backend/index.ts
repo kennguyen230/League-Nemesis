@@ -10,11 +10,7 @@ import { connectToDatabase } from './src/db.js'
 
 const app = express();
 
-app.use(cors({
-    origin: 'https://league-nemesis-client.vercel.app', // Replace with your actual client URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
