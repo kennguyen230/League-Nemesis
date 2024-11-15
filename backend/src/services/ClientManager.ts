@@ -21,24 +21,7 @@ async function initializeClient(region) {
             region: region,
             locale: 'en_US',
             cache: true,
-            storage: {
-                enable: {
-                    api: {
-                        summoner: true,
-                        match: false,
-                        championMastery: false,
-                        clash: false,
-                        currentGame: false,
-                        league: false,
-                    },
-                    dragon: {
-                        champions: true,
-                        items: false,
-                        runes: false,
-                        summonerSpells: false,
-                    }
-                }
-            },
+            storage: false,
             fetch: {
                 champions: false,
                 items: false,
