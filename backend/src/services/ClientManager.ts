@@ -20,24 +20,7 @@ async function initializeClient(region) {
         await client.initialize({
             region: region,
             locale: 'en_US',
-            cache: {
-                enable: {
-                    api: {
-                        summoner: true,
-                        match: false,
-                        championMastery: false,
-                        clash: false,
-                        currentGame: false,
-                        league: false,
-                    },
-                    dragon: {
-                        champions: true,
-                        items: false,
-                        runes: false,
-                        summonerSpells: false,
-                    }
-                }
-            },
+            cache: true,
             storage: {
                 enable: {
                     api: {
@@ -57,11 +40,12 @@ async function initializeClient(region) {
                 }
             },
             fetch: {
-                champions: true,
+                champions: false,
                 items: false,
                 runes: false,
                 summonerSpells: false
-            }
+            },
+            version: "14.22",
         });
         // Store the initialized client in the clientsByRegion object
         clientsByRegion[region] = client;
