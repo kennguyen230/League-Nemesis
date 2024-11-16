@@ -14,7 +14,6 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
   mostPlayedChampion,
 }) => {
   const championSplashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${mostPlayedChampion}_0.jpg`;
-  console.log("Most played champion: ", mostPlayedChampion);
   return (
     <div
       className="relative p-16 font-vollkorn md:p-20 bg-gradient-to-r from-[#182B40] from-45% to-neutral-900 bg-auto"

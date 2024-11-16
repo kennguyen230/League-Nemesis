@@ -14,9 +14,6 @@ const SummonerPageComponent = (summoner) => {
   const [displayGameMode, setDisplayGameMode] = useState("all");
   const [displayLane, setDisplayLane] = useState("overall");
 
-  console.log(displayGameMode);
-  console.log(displayLane);
-
   // Whenever the user searches for a new summoner,
   // reset the useStates back to default
   useEffect(() => {

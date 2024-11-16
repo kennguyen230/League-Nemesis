@@ -4,7 +4,7 @@ import SearchBar from "@/layouts/SearchBar";
 
 const HomePageComponent = () => {
   return (
-    <div className="flex flex-col relative items-center justify-start h-screen overflow-hidden bg-[#11161D]">
+    <div className="flex flex-col relative items-center justify-start h-screen overflow-hidden bg-[#000000]">
       <Header showSearchBar={false} />
 
       {/* Content of home page */}
@@ -15,7 +15,7 @@ const HomePageComponent = () => {
       </div>
 
       {/* Background of home page */}
-      <div className="bg-home-page-bg opacity-90 h-full relative bg-right-bottom md:bg-left-top bg-cover w-full blur-xs"></div>
+      <div className="bg-home-page-bg opacity-65 h-full relative bg-right-bottom md:bg-left-top bg-cover w-full"></div>
     </div>
   );
 };

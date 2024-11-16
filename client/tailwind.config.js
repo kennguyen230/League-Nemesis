@@ -13,7 +13,7 @@ module.exports = {
         'vollkorn-para': ['Vollkorn', 'sans-serif']
       },
       backgroundImage: {
-        'home-page-bg': "url('@/assets/image/HomeBG.png')",
+        'home-page-bg': "url('@/assets/image/HomeBG.jpg')",
         'summoner-page-bg': "url('@/assets/image/SummonerPageBG.jpg')"
       },
       keyframes: {

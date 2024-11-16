@@ -1,7 +1,4 @@
 const LeagueNemesisDisplay = ({ champion, topText, gameCount }) => {
-  champion
-    ? console.log(`League Nemesis ${topText}`, champion.champName)
-    : console.log("League Nemesis: Null");
   return (
     <div className="relative mt-4 mb-2 mx-4 font-vollkorn md:mx-20 md:mt-6">
       {champion ? (

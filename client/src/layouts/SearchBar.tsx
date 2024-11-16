@@ -115,7 +115,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
       className={`flex ${isHomePage ? "flex-col" : "flex-col md:flex-row"} justify-center items-center gap-1 w-full px-4 md:px-0`}
     >
       <div
-        className={`flex min-w-[22rem] max-w-[45rem] w-full mt-4 md:mt-0 ${height} md:px-0 relative`}
+        className={`flex min-w-[22rem] max-w-[45rem] w-full mt-4 md:mt-0 ${height} md:px-0 relative drop-shadow-lg z-10`}
       >
         <RegionSelector selectedRegion={region} setSelectedRegion={setRegion} />
 
@@ -154,7 +154,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
         <Button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="hidden sm:block bg-[#182B40] font-vollkorn md:flex md:justify-center md:items-center md:w-28 mt-2"
+          className="hidden sm:block bg-[#182B40] font-vollkorn md:flex md:justify-center md:items-center md:w-28 mt-2 drop-shadow-md"
         >
           {isLoading ? <Loader2 className="animate-spin" /> : "Search"}
         </Button>

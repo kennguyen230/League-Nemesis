@@ -21,6 +21,5 @@ export const Route = createFileRoute("/summoner/$region/$id")({
 
 function SummonerPage() {
   const summoner = Route.useLoaderData();
-  console.log(summoner);
   return <SummonerPageComponent summoner={summoner} />;
 }
