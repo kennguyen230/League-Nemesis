@@ -1,3 +1,4 @@
 /backend/config.env
 /backend/node_modules
+/client/src/config.env
 Notes.txt

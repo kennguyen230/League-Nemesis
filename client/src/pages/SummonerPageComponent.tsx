@@ -14,6 +14,8 @@ const SummonerPageComponent = (summoner) => {
   const [displayGameMode, setDisplayGameMode] = useState("all");
   const [displayLane, setDisplayLane] = useState("overall");
 
+  document.title = summoner.summoner.name + "#" + summoner.summoner.tag;
+
   // Whenever the user searches for a new summoner,
   // reset the useStates back to default
   useEffect(() => {
