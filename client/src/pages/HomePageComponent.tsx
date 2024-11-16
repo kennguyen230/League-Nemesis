@@ -3,6 +3,7 @@ import Header from "@/layouts/Header";
 import SearchBar from "@/layouts/SearchBar";
 
 const HomePageComponent = () => {
+  document.title = "League Nemesis";
   return (
     <div className="flex flex-col relative items-center justify-start h-screen overflow-hidden bg-[#000000]">
       <Header showSearchBar={false} />
