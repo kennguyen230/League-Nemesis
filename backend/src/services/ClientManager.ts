@@ -23,7 +23,7 @@ async function initializeClient(region) {
             cache: true,
             storage: false,
             fetch: {
-                champions: false,
+                champions: true,
                 items: false,
                 runes: false,
                 summonerSpells: false
