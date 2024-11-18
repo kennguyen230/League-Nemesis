@@ -21,7 +21,7 @@ async function initializeClient(region) {
         await client.initialize({
             region: region,
             locale: 'en_US',
-            cache: true,
+            cache: false,
             storage: {
                 enable: {
                     api: false,
