@@ -21,7 +21,7 @@ async function initializeClient(region) {
             region: region,
             locale: 'en_US',
             cache: true,
-            storage: false,
+            storage: true,
             fetch: {
                 champions: false,
                 items: false,
