@@ -4,6 +4,7 @@
  * a Client will be instantiated to the 'NA' region. 
  */
 
+import { getTokenSourceMapRange } from 'typescript';
 import config from '../config.js'
 import { Client } from 'shieldbow';
 
@@ -21,7 +22,17 @@ async function initializeClient(region) {
             region: region,
             locale: 'en_US',
             cache: true,
-            storage: true,
+            storage: {
+                enable: {
+                    api: false,
+                    dragon: {
+                        champions: true,
+                        items: false,
+                        runes: false,
+                        summonerSpells: false,
+                    }
+                }
+            },
             fetch: {
                 champions: false,
                 items: false,
