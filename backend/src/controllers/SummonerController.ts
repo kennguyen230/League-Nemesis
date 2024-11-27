@@ -3,8 +3,8 @@
  * that grab and process our data. This includes RiotGamesServices, DatabaseServices, and DataProcessing.
  * All these services combined will generate the appropriate object to return to the client.
  */
-import { getRecentGames, getLastGameTimestamp } from '../services/RiotGamesService.js'
-import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID } from '../services/DatabaseService.js'
+import { getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel } from '../services/RiotGamesService.js'
+import { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, updateStateByPUUID } from '../services/DatabaseService.js'
 import { mergeUserEnemyData, createReturnObjects, sortUserEnemyData } from '../utils/DataProcessing.js';
 import { Enemy, User } from "../utils/Interfaces.js"
 
@@ -13,31 +13,28 @@ async function fetchUserData(summonerName, tag, region, client, puuid) {
         // Grab PUUID from user and attempt to find user in DB
         const db_returnObject = await getSummonerByPUUID(puuid, region);
 
-        let lastGameTimestamp: Number = -1;
-        let numberOfGames = { totalGames: 0, normals: 0, aram: 0, flex: 0, ranked: 0, totalLosses: 0 };
+        let lastGameTimestamp;
+        let numberOfGames;
         let returnObject;
 
-        // If the db object exists then set LGTS to the one from the db,
-        // that way no gaps exists between the matches fetched
         if (db_returnObject) {
+            // Will default to -1 for new users
             lastGameTimestamp = db_returnObject.lastGameTimestamp;
             console.log("(SummonerController.ts) LGTS from DB: ", lastGameTimestamp);
-            numberOfGames = db_returnObject.numberOfGames;
+
+            numberOfGames = {
+                totalGames: db_returnObject.numberOfGames?.totalGames || 0,
+                normals: db_returnObject.numberOfGames?.normals || 0,
+                aram: db_returnObject.numberOfGames?.aram || 0,
+                flex: db_returnObject.numberOfGames?.flex || 0,
+                ranked: db_returnObject.numberOfGames?.ranked || 0,
+                totalLosses: db_returnObject.numberOfGames?.totalLosses || 0
+            };
         }
 
         // Fetch new data from Riot then determine which object to send to client
         const matchlist = await getRecentGames(puuid, lastGameTimestamp, client);
 
-        // The bulk of processing for the backend happens in this if/else
-        // Inside, if there is a new match list, create a UserEnemy object
-        // from the match list. Then if it's an existing user, merge with
-        // the database UserEnemy object. After merging, sort the data
-        // then save or update the user in the database depending of if it's
-        // a new user or existing user.
-        // If there is no new match list to process, grab the data from the 
-        // database instead.
-        // In a rare instance where there is no match list games to fetch &
-        // there's no database entry, throw an error for now.
         if (matchlist) {
             console.log("(SummonerController.ts)", matchlist);
 
@@ -57,9 +54,10 @@ async function fetchUserData(summonerName, tag, region, client, puuid) {
             // to sort when there are new games
             sortUserEnemyData(returnObject.user, returnObject.enemy);
 
-            // Save a new user to database or update an existing user
-            await (db_returnObject ? updateSummonerByPUUID : saveNewSummoner)(summonerName, tag, region, puuid,
-                lastGameTimestamp, numberOfGames, returnObject.enemy, returnObject.user);
+            // Update the document. Will also set the state of the document to 'ready' from 'processing'
+            await updateSummonerByPUUID(summonerName, tag, region, puuid, lastGameTimestamp, numberOfGames, returnObject.enemy, returnObject.user)
+
+            return true;
         }
         else {
             // In the case where the user is a new account with no games played yet
@@ -67,15 +65,14 @@ async function fetchUserData(summonerName, tag, region, client, puuid) {
                 throw new Error("(SummonerController.ts) No matchlist found and summoner not in database");
             }
 
-            // Otherwise, the database object exists so return that
-            returnObject = extractStatsFromDB(db_returnObject);
+            // No new matches to process or sort, just update the state to 'ready' so polling stops
+            await updateStateByPUUID(puuid, 'ready');
             console.log("(SummonerController.ts) returnObject set to database data")
+            return true;
         }
-
-        return [returnObject, numberOfGames];
     } catch (error) {
         console.error("(SummonerController.ts) Error in fetchUserData:", error);
-        return null;
+        return false;
     }
 }
 
@@ -129,4 +126,57 @@ function parseSummonerInput(input) {
     return { summonerName, tag };
 }
 
-export { fetchUserData, parseSummonerInput }
+/**
+ * This function returns default values to be display for a new user
+ * client side
+ * 
+ * @param summonerName The Riot verified name of the summoner
+ * @param summonerTag The Riot verified tag of the summoner
+ * @returns A default object for the client
+ */
+function createDefaultSummoner(summonerName, summonerTag, region, puuid) {
+    // Create a default return object
+    const defaultSummoner = {
+        summonerName,
+        tag: summonerTag,
+        region,
+        PUUID: puuid,
+        lastGameTimestamp: -1
+    };
+
+    // And save the new summoner to the db before continuing;
+    // by default, the state of this document will be 'processing'
+    saveNewSummoner(
+        summonerName,
+        summonerTag,
+        region,
+        puuid,
+        -1
+    );
+
+    return defaultSummoner;
+}
+
+/**
+ * This function returns the current data that exists on a user immediately
+ * so that it can be quickly loaded to the client
+ * 
+ * @param puuid The puuid of the summoner being searched for
+ * @param region The region the account is in
+ * @param client Shieldbow client for fetching icon & level
+ * @returns A return object based off existing user data in the database
+ */
+async function getExistingSummoner(puuid, region, client) {
+    const db_returnObject = await getSummonerByPUUID(puuid, region);
+    return {
+        name: db_returnObject.summonerName,
+        tag: db_returnObject.tag,
+        level: await getPlayerLevel(puuid, client),
+        icon: await getPlayerIcon(puuid, client),
+        games: db_returnObject.numberOfGames,
+        userdata: extractStatsFromDB(db_returnObject)
+    }
+}
+
+
+export { fetchUserData, parseSummonerInput, createDefaultSummoner, getExistingSummoner }

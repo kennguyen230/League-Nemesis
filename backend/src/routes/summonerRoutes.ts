@@ -4,9 +4,10 @@
  */
 import express from 'express';
 import { checkForNewUserByPUUID, findUserBySummonerName } from '../services/DatabaseService.js';
-import { fetchUserData, parseSummonerInput } from '../controllers/SummonerController.js';
+import { fetchUserData, parseSummonerInput, createDefaultSummoner, getExistingSummoner } from '../controllers/SummonerController.js';
 import { getPUUID, getPlayerIcon, getPlayerLevel, getPlayerInfo } from '../services/RiotGamesService.js';
 import { getClient } from '../services/ClientManager.js'
+import { inngest } from '../inngest/inngest.js';
 
 const router = express.Router();
 
@@ -69,9 +70,9 @@ router.head('/checkNewUser', async (req, res) => {
     }
 })
 
-router.get('/querySummoner', async (req, res) => {
+router.get("/querySummoner", async (req, res) => {
     try {
-        console.log("(summonerRoutes.ts) Inside querySummoner!!!");
+        console.log("(summonerRoutes.ts::querySummoner) Inside querySummoner route!!!");
 
         // Grab params from client
         const { summonerName, tag } = parseSummonerInput(req.query.summoner);
@@ -81,13 +82,13 @@ router.get('/querySummoner', async (req, res) => {
         const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
         const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
         if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
-            console.log("(summonerRoutes.ts) Invalid summoner name or tag");
+            console.log("(summonerRoutes.ts::querySummoner) Invalid summoner name or tag");
             return res.status(400).json({ error: "Invalid summoner name or tag." });
         }
         if (typeof region !== 'string') {
             return res.status(400).send('Invalid region input');
         }
-        region = region.toLowerCase();
+        region = region.toLowerCase(); // Shieldbow only works with lowercase region names
 
         // Get an instance of the client
         const client = await getClient(region);
@@ -106,33 +107,55 @@ router.get('/querySummoner', async (req, res) => {
             return res.status(404).json({ error: "No PUUID associated with this summoner name and tag." });
         }
 
-        console.log("(summonerRoutes.ts) Summoner name:", summoner);
-        console.log("(summonerRoutes.ts) Summoner tag:", summonerTag);
-        console.log("(summonerRoutes.ts) Region:", region);
+        // Check to see if this user exists in the database, if they do then send 
+        // back the data that currently exists in the database while the new matches 
+        // get processed. If they don't exist, send back a default summoner object.
+        const isNew = await checkForNewUserByPUUID(puuid);
+        if (isNew) {
+            const newUserObject = createDefaultSummoner(summoner, summonerTag, region, puuid);
 
-        // Attempt to fetch games
-        const [returnObject, numberOfGames] = await fetchUserData(summoner, summonerTag, region, client, puuid);
-        if (returnObject) {
-            console.log("(summonerRoutes.ts) Successfully fetched user data in /querySummonerEnemyData");
+            console.log("(summonerRoutes.ts::querySummoner) New summoner detected. Queuing data fetch.");
+            await inngest.send({
+                name: "fetchdata",
+                data: {
+                    summonerName,
+                    summonerTag,
+                    region,
+                    puuid,
+                },
+            });
 
-            const returnData = {
-                name: summoner,
-                tag: summonerTag,
-                level: await getPlayerLevel(puuid, client),
-                icon: await getPlayerIcon(puuid, client),
-                games: numberOfGames,
-                userdata: returnObject,
-            }
-
-            return res.status(200).json(returnData);
+            return res.status(200).json(newUserObject);
         } else {
-            console.log("(summonerRoutes.ts) Unsuccessfully fetched user data in /querySummonerEnemyData.");
-            return res.status(404).json({ error: "Querying enemy data unsuccessful" });
+            const existingUserObject = await getExistingSummoner(puuid, region, client);
+
+            console.log("(summonerRoutes.ts::querySummoner) Existing summoner detected. Queuing data fetch.");
+            await inngest.send({
+                name: "fetchdata",
+                data: {
+                    summonerName,
+                    summonerTag,
+                    region,
+                    puuid,
+                },
+            });
+
+            return res.status(200).json(existingUserObject);
         }
     } catch (error) {
-        console.error("(summonerRoutes.ts) Unexpected error:", error);
+        console.error("(summonerRoutes.ts::querySummoner) Unexpected error:", error);
         return res.status(500).json({ error: "An unexpected error occurred." });
     }
 })
+
+router.get("/hello", async function (req, res, next) {
+    await inngest.send({
+        name: "test/hello.world",
+        data: {
+            email: "testUser@example.com",
+        },
+    }).catch(err => next(err));
+    res.json({ message: 'Event sent!' });
+});
 
 export default router;

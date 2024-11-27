@@ -112,10 +112,22 @@ const roleUserStatsSchema = new mongoose.Schema({
 
 // Schema for game mode enemy statistics
 const gameModeEnemySchema = new mongoose.Schema({
-    normals: roleEnemyStatsSchema,
-    ranked: roleEnemyStatsSchema,
-    flex: roleEnemyStatsSchema,
-    all: roleEnemyStatsSchema,
+    normals: {
+        type: roleEnemyStatsSchema,
+        default: () => ({})
+    },
+    ranked: {
+        type: roleEnemyStatsSchema,
+        default: () => ({})
+    },
+    flex: {
+        type: roleEnemyStatsSchema,
+        default: () => ({})
+    },
+    all: {
+        type: roleEnemyStatsSchema,
+        default: () => ({})
+    },
     aram: {
         type: [championEnemyStatsSchema],
         default: []
@@ -124,10 +136,22 @@ const gameModeEnemySchema = new mongoose.Schema({
 
 // Schema for game mode user statistics
 const gameModeUserSchema = new mongoose.Schema({
-    normals: roleUserStatsSchema,
-    ranked: roleUserStatsSchema,
-    flex: roleUserStatsSchema,
-    all: roleUserStatsSchema,
+    normals: {
+        type: roleUserStatsSchema,
+        default: () => ({})
+    },
+    ranked: {
+        type: roleUserStatsSchema,
+        default: () => ({})
+    },
+    flex: {
+        type: roleUserStatsSchema,
+        default: () => ({})
+    },
+    all: {
+        type: roleUserStatsSchema,
+        default: () => ({})
+    },
     aram: {
         type: [championUserStatsSchema],
         default: []
@@ -138,27 +162,27 @@ const gameModeUserSchema = new mongoose.Schema({
 const numberOfGames = new mongoose.Schema({
     totalGames: {
         type: Number,
-        required: true
+        default: 0
     },
     normals: {
         type: Number,
-        required: true
+        default: 0
     },
     aram: {
         type: Number,
-        required: true
+        default: 0
     },
     flex: {
         type: Number,
-        required: true
+        default: 0
     },
     ranked: {
         type: Number,
-        required: true
+        default: 0
     },
     totalLosses: {
         type: Number,
-        required: true
+        default: 0
     },
 }, { _id: false });
 
@@ -182,11 +206,25 @@ const summonerSchema = new mongoose.Schema({
     },
     lastGameTimestamp: {
         type: Number,
-        required: true
+        default: -1
     },
-    numberOfGames: numberOfGames,
-    enemyStats: gameModeEnemySchema,
-    userStats: gameModeUserSchema,
+    numberOfGames: {
+        type: numberOfGames,
+        default: () => ({})
+    },
+    enemyStats: {
+        type: gameModeEnemySchema,
+        default: () => ({})
+    },
+    userStats: {
+        type: gameModeUserSchema,
+        default: () => ({})
+    },
+    state: {
+        type: String,
+        enum: ['processing', 'ready'], // Valid states
+        default: 'processing' // Default state
+    }
 }, {
     timestamps: true
 });
