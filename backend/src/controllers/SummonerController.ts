@@ -134,14 +134,15 @@ function parseSummonerInput(input) {
  * @param summonerTag The Riot verified tag of the summoner
  * @returns A default object for the client
  */
-function createDefaultSummoner(summonerName, summonerTag, region, puuid) {
+async function createDefaultSummoner(summonerName, summonerTag, region, puuid, client) {
     // Create a default return object
     const defaultSummoner = {
-        summonerName,
+        name: summonerName,
         tag: summonerTag,
-        region,
-        PUUID: puuid,
-        lastGameTimestamp: -1
+        level: await getPlayerLevel(puuid, client),
+        icon: await getPlayerIcon(puuid, client),
+        games: {},
+        userdata: {}
     };
 
     // And save the new summoner to the db before continuing;

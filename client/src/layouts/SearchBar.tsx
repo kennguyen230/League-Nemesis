@@ -1,11 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { checkNewUser, autoSuggestUsers } from "@/data/api";
+import { autoSuggestUsers } from "@/data/api";
 import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import DialogPopup from "./DialogPopup";
-import NewUserModal from "./NewUserModal";
 import RegionSelector from "./RegionSelector";
 
 const SearchBar = ({ height, fontSize, isHomePage }) => {
@@ -17,8 +15,6 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
   const [region, setRegion] = useState("na");
   // Flag for rendering spinner
   const [isLoading, setIsLoading] = useState(false);
-  // Pings api to indicate whether this user is in the db to display new user modal
-  const [isNew, setIsNew] = useState(false);
   // Indicates whether the autosuggest dropdown is open
   const [isOpen, setIsOpen] = useState(false);
   // Routes users to this url after hitting enter or Search
@@ -59,8 +55,6 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
     setIsLoading(true);
 
     const encodedSummonerName = name.replace("#", "%23");
-    const newUser = await checkNewUser(region, name);
-    if (newUser) setIsNew(true);
 
     navigate({ to: `/summoner/${region}/${encodedSummonerName}` })
       .then(() => setIsLoading(false))
@@ -164,12 +158,6 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
         <Loader2
           className={`${isHomePage ? "md:hidden" : "visible"} mt-3 md:mt-0 animate-spin text-white`}
         />
-      )}
-
-      {isLoading && (
-        <DialogPopup isOpen={isNew} setIsOpen={setIsNew} title="">
-          <NewUserModal />
-        </DialogPopup>
       )}
     </div>
   );
