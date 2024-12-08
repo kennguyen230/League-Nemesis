@@ -8,7 +8,7 @@ import ErrorSearchPageComponent from "@/pages/ErrorSearchPageComponent";
 const getSummonerDetails = (region: string, summonerId: string) =>
   queryOptions({
     queryKey: ["GET_SUMMONER", region, summonerId],
-    queryFn: () => fetchSummonerData(region, summonerId),
+    queryFn: () => fetchSummonerData(summonerId, region),
     staleTime: 5 * 60 * 1000,
   });
 

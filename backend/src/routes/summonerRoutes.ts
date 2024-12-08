@@ -3,7 +3,7 @@
  * the entry way into the server. 
  */
 import express from 'express';
-import { checkForNewUserByPUUID, findUserBySummonerName, getSummonerByPUUID } from '../services/DatabaseService.js';
+import { checkForNewUserByPUUID, findUserBySummonerName } from '../services/DatabaseService.js';
 import { parseSummonerInput, createDefaultSummoner, getExistingSummoner } from '../controllers/SummonerController.js';
 import { getPUUID, getPlayerInfo } from '../services/RiotGamesService.js';
 import { getClient } from '../services/ClientManager.js'
@@ -68,7 +68,8 @@ router.get("/querySummoner", async (req, res) => {
         // get processed. If they don't exist, send back a default summoner object.
         const isNew = await checkForNewUserByPUUID(puuid);
         if (isNew) {
-            const newUserObject = createDefaultSummoner(summoner_name, summoner_tag, region, puuid, client);
+            console.log("NEW USER!!!!!!!!!!!!!!!!")
+            const newUserObject = await createDefaultSummoner(summoner_name, summoner_tag, region, puuid, client);
 
             console.log("(summonerRoutes.ts::querySummoner) New summoner detected. Queuing data fetch.");
             await inngest.send({
@@ -83,6 +84,7 @@ router.get("/querySummoner", async (req, res) => {
 
             return res.status(200).json(newUserObject);
         } else {
+            console.log("EXISTING USER!!!!!!!!!!")
             const existingUserObject = await getExistingSummoner(puuid, region, client);
 
             console.log("(summonerRoutes.ts::querySummoner) Existing summoner detected. Queuing data fetch.");
@@ -104,14 +106,14 @@ router.get("/querySummoner", async (req, res) => {
     }
 })
 
-router.get("/pollSummonerStatus", async function (req, res, next) {
+router.get("/pollSummonerStatus", async function (req, res) {
     try {
         // Grab params from client
         const { summonerName, tag } = parseSummonerInput(req.query.summonerNameAndTag);
         let region = req.query.region;
 
-        if (typeof region !== 'string') {
-            return res.status(400).send('Invalid region input');
+        if (typeof region !== "string") {
+            return res.status(400).send("Invalid region input");
         }
         region = region.toLowerCase(); // Shieldbow only works with lowercase region names
 
@@ -119,7 +121,6 @@ router.get("/pollSummonerStatus", async function (req, res, next) {
         const client = await getClient(region);
 
         // Get player info from Riot, including the summoner name and tag
-        // that way the capitalization is correct
         let puuid;
         let summoner_name;
         let summoner_tag;
@@ -129,17 +130,13 @@ router.get("/pollSummonerStatus", async function (req, res, next) {
             summoner_tag = playerInfo.userTag;
             puuid = playerInfo.playerId;
         } catch (error) {
-            return res.status(404).json({ error: "No PUUID associated with this summoner name and tag." });
+            return res
+                .status(404)
+                .json({ error: "No PUUID associated with this summoner name and tag." });
         }
 
-        const result = await getSummonerByPUUID(puuid, region);
-        if (result.state == 'processing') {
-            return res.status(201);
-        } else {
-            const returnObj = await getExistingSummoner(puuid, region, client);
-            return res.status(200).json(returnObj);
-        }
-        
+        const result = await getExistingSummoner(puuid, region, client);
+        return res.status(200).json(result);
     } catch (error) {
         console.error("(summonerRoutes.ts::pollSummonerStatus) Unexpected error:", error);
         return res.status(500).json({ error: "An unexpected error occurred." });

@@ -34,22 +34,11 @@ export const autoSuggestUsers = async (
   }
 };
 
-export const pollSummonerState = async (
-  summonerName: string,
-  region: string
-) => {
-  try {
-    const response = await axios.get(
-      `${API_BASE_URL}/summoner/pollSummonerStatus`,
-      { params: { summonerName, region } }
-    );
+export const pollSummonerState = async (summonerNameAndTag, region) => {
+  const response = await axios.get(
+    `${API_BASE_URL}/summoner/pollSummonerStatus`,
+    { params: { summonerNameAndTag, region } }
+  );
 
-    if (response.status == 201) {
-      return null;
-    } else if (response.status == 200) {
-      return response.data;
-    }
-
-    return null;
-  } catch (error) {}
+  return response.data;
 };

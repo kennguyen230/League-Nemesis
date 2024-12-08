@@ -22,19 +22,13 @@ async function fetchUserData(summonerName, tag, region, client, puuid) {
             lastGameTimestamp = db_returnObject.lastGameTimestamp;
             console.log("(SummonerController.ts) LGTS from DB: ", lastGameTimestamp);
 
-            numberOfGames = {
-                totalGames: db_returnObject.numberOfGames?.totalGames || 0,
-                normals: db_returnObject.numberOfGames?.normals || 0,
-                aram: db_returnObject.numberOfGames?.aram || 0,
-                flex: db_returnObject.numberOfGames?.flex || 0,
-                ranked: db_returnObject.numberOfGames?.ranked || 0,
-                totalLosses: db_returnObject.numberOfGames?.totalLosses || 0
-            };
+            numberOfGames = db_returnObject.numberOfGames;
         }
 
         // Fetch new data from Riot then determine which object to send to client
         const matchlist = await getRecentGames(puuid, lastGameTimestamp, client);
 
+        // Process the data
         if (matchlist) {
             console.log("(SummonerController.ts)", matchlist);
 
@@ -121,6 +115,7 @@ function extractStatsFromDB(db) {
  * @returns Decoupled summoner name & tag
  */
 function parseSummonerInput(input) {
+    console.log("PARSING SUMMONER INPUT IN POLL:", input);
     let [summonerName, tag] = input.split('#');
     summonerName = summonerName.trim();
     return { summonerName, tag };
@@ -139,10 +134,12 @@ async function createDefaultSummoner(summonerName, summonerTag, region, puuid, c
     const defaultSummoner = {
         name: summonerName,
         tag: summonerTag,
+        region: region,
         level: await getPlayerLevel(puuid, client),
         icon: await getPlayerIcon(puuid, client),
         games: {},
-        userdata: {}
+        userdata: {},
+        state: 'processing'
     };
 
     // And save the new summoner to the db before continuing;
@@ -169,13 +166,16 @@ async function createDefaultSummoner(summonerName, summonerTag, region, puuid, c
  */
 async function getExistingSummoner(puuid, region, client) {
     const db_returnObject = await getSummonerByPUUID(puuid, region);
+
     return {
         name: db_returnObject.summonerName,
         tag: db_returnObject.tag,
+        region: db_returnObject.region,
         level: await getPlayerLevel(puuid, client),
         icon: await getPlayerIcon(puuid, client),
         games: db_returnObject.numberOfGames,
-        userdata: extractStatsFromDB(db_returnObject)
+        userdata: extractStatsFromDB(db_returnObject),
+        state: db_returnObject.state,
     }
 }
 

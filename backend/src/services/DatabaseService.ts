@@ -136,12 +136,11 @@ async function checkForNewUserByPUUID(PUUID) {
 
         if (result) {
             console.log('(DatabaseService.ts::checkForNewUserByPUUID) Found user', PUUID);
-            return true;
+            return false;
         } else {
-            console.log('(DatabaseService.ts::checkForNewUserByPUUID) User not found in database', PUUID);
+            console.log('(DatabaseService.ts::checkForNewUserByPUUID) User not found in database with PUUID: ', PUUID);
+            return true;
         }
-
-        return result;
     } catch (error) {
         console.error('(DatabaseService.ts) Error searching for new summoner from database: ', error.message);
         return false;
