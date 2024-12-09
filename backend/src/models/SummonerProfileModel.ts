@@ -231,4 +231,4 @@ const summonerSchema = new mongoose.Schema({
 
 // summonerprofiles is the name of the collection in the database
 // as collections are the lowercased plural form of what we call it
-export const SummonerProfile = mongoose.model('SummonerTest', summonerSchema);
+export const SummonerProfile = mongoose.model('Summoner', summonerSchema);

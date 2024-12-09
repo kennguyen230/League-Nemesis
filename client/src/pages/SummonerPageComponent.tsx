@@ -10,13 +10,14 @@ import { ChampionsTable } from "@/layouts/SummonerPage/ChampionsTable";
 
 import { useState, useEffect } from "react";
 import { useSummonerPolling } from "@/data/queryHooks";
-// import NewUserModal from "@/layouts/NewUserModal";
-// import DialogPopup from "@/layouts/DialogPopup";
+import NewUserModal from "@/layouts/NewUserModal";
+import DialogPopup from "@/layouts/DialogPopup";
 
 const SummonerPageComponent = (summoner) => {
   const [localSummoner, setLocalSummoner] = useState(summoner.summoner);
   const [displayGameMode, setDisplayGameMode] = useState("all");
   const [displayLane, setDisplayLane] = useState("overall");
+  const [newUser, setNewUser] = useState(false);
 
   // Whenever the user searches for a new summoner,
   // reset the useStates back to default
@@ -29,6 +30,17 @@ const SummonerPageComponent = (summoner) => {
       window.scrollTo(0, 0);
     }
   }, [summoner]);
+
+  // Responsible for displaying the popup when the user is
+  // searching for a new summoner that does not exist in the
+  // database
+  useEffect(() => {
+    if (!localSummoner || !localSummoner.games?.totalGames) {
+      setNewUser(true);
+    } else {
+      setNewUser(false);
+    }
+  }, [localSummoner]);
 
   useSummonerPolling(
     `${localSummoner.name}#${localSummoner.tag}`,
@@ -111,9 +123,9 @@ const SummonerPageComponent = (summoner) => {
           setDisplayLane={setDisplayLane}
         />
 
-        {/* <DialogPopup isOpen={newUser} setIsOpen={setNewUser} title={"New User"}>
+        <DialogPopup isOpen={newUser} setIsOpen={setNewUser}>
           <NewUserModal></NewUserModal>
-        </DialogPopup> */}
+        </DialogPopup>
       </div>
       <Footer />
     </div>

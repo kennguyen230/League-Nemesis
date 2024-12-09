@@ -21,7 +21,7 @@ export const useSummonerPolling = (
 
   // If the status was changed to 'ready', update the summoner data
   const { data, isSuccess } = query;
-  console.log("Inside hook:", data);
+  console.log("In hook:", data);
   if (isSuccess && data?.state === "ready") {
     if (!data) {
       console.warn("Expected SummonerData, but received null.");

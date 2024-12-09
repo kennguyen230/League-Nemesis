@@ -20,16 +20,9 @@ const fetchUserDataFunction = inngest.createFunction(
     { event: "fetchdata" },
     async ({ event }) => {
         const { summoner_name, summoner_tag, region, puuid } = event.data;
-
-        console.log("INNGEST: ", summoner_name)
-        console.log("INNGEST: ", summoner_tag)
-        console.log("INNGEST: ", region)
-        console.log("INNGEST: ", puuid)
         try {
-            // Get an instance of the client
             const client = await getClient(region);
 
-            // Fetch user data
             const result = await fetchUserData(
                 summoner_name,
                 summoner_tag,

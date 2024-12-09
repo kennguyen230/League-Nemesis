@@ -60,7 +60,9 @@ router.get("/querySummoner", async (req, res) => {
             summoner_tag = playerInfo.userTag;
             puuid = playerInfo.playerId;
         } catch (error) {
-            return res.status(404).json({ error: "No PUUID associated with this summoner name and tag." });
+            return res
+                .status(404)
+                .json({ error: "Querying error. No PUUID associated with this summoner name and tag." });
         }
 
         // Check to see if this user exists in the database, if they do then send 
@@ -68,7 +70,6 @@ router.get("/querySummoner", async (req, res) => {
         // get processed. If they don't exist, send back a default summoner object.
         const isNew = await checkForNewUserByPUUID(puuid);
         if (isNew) {
-            console.log("NEW USER!!!!!!!!!!!!!!!!")
             const newUserObject = await createDefaultSummoner(summoner_name, summoner_tag, region, puuid, client);
 
             console.log("(summonerRoutes.ts::querySummoner) New summoner detected. Queuing data fetch.");
@@ -84,7 +85,6 @@ router.get("/querySummoner", async (req, res) => {
 
             return res.status(200).json(newUserObject);
         } else {
-            console.log("EXISTING USER!!!!!!!!!!")
             const existingUserObject = await getExistingSummoner(puuid, region, client);
 
             console.log("(summonerRoutes.ts::querySummoner) Existing summoner detected. Queuing data fetch.");
@@ -108,6 +108,8 @@ router.get("/querySummoner", async (req, res) => {
 
 router.get("/pollSummonerStatus", async function (req, res) {
     try {
+        console.log("(summonerRoutes.ts::querySummoner) Inside pollSummonerStatus route!!!");
+
         // Grab params from client
         const { summonerName, tag } = parseSummonerInput(req.query.summonerNameAndTag);
         let region = req.query.region;
@@ -132,7 +134,7 @@ router.get("/pollSummonerStatus", async function (req, res) {
         } catch (error) {
             return res
                 .status(404)
-                .json({ error: "No PUUID associated with this summoner name and tag." });
+                .json({ error: "Polling error. No PUUID associated with this summoner name and tag." });
         }
 
         const result = await getExistingSummoner(puuid, region, client);

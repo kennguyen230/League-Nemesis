@@ -10,7 +10,7 @@ import { Enemy, User } from "../utils/Interfaces.js"
 
 async function fetchUserData(summonerName, tag, region, client, puuid) {
     try {
-        // Grab PUUID from user and attempt to find user in DB
+        // Grab PUUID and attempt to find user in DB
         const db_returnObject = await getSummonerByPUUID(puuid, region);
 
         let lastGameTimestamp;
@@ -18,14 +18,13 @@ async function fetchUserData(summonerName, tag, region, client, puuid) {
         let returnObject;
 
         if (db_returnObject) {
-            // Will default to -1 for new users
             lastGameTimestamp = db_returnObject.lastGameTimestamp;
             console.log("(SummonerController.ts) LGTS from DB: ", lastGameTimestamp);
 
             numberOfGames = db_returnObject.numberOfGames;
         }
 
-        // Fetch new data from Riot then determine which object to send to client
+        // Fetch new data from Riot
         const matchlist = await getRecentGames(puuid, lastGameTimestamp, client);
 
         // Process the data
@@ -61,7 +60,7 @@ async function fetchUserData(summonerName, tag, region, client, puuid) {
 
             // No new matches to process or sort, just update the state to 'ready' so polling stops
             await updateStateByPUUID(puuid, 'ready');
-            console.log("(SummonerController.ts) returnObject set to database data")
+            console.log("(SummonerController.ts) No new games for this user. Updating state to 'ready'.")
             return true;
         }
     } catch (error) {
@@ -115,7 +114,6 @@ function extractStatsFromDB(db) {
  * @returns Decoupled summoner name & tag
  */
 function parseSummonerInput(input) {
-    console.log("PARSING SUMMONER INPUT IN POLL:", input);
     let [summonerName, tag] = input.split('#');
     summonerName = summonerName.trim();
     return { summonerName, tag };
