@@ -14,7 +14,7 @@ const NewUserModal = () => {
           Looks like you're searching for a new user!
         </p>
         <p className="mt-2 opacity-75">
-          It takes more time to process a new user than a returning one.
+          It takes a lot more time to process a new user than a returning one.
         </p>
         <p className="mt-2 opacity-75">Thanks for being patient!</p>
       </div>

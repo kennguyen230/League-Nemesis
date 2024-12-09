@@ -9,45 +9,82 @@ import { columns } from "@/layouts/SummonerPage/ChampionsColumn";
 import { ChampionsTable } from "@/layouts/SummonerPage/ChampionsTable";
 
 import { useState, useEffect } from "react";
+import { useSummonerPolling } from "@/data/queryHooks";
+import NewUserModal from "@/layouts/NewUserModal";
+import DialogPopup from "@/layouts/DialogPopup";
 
 const SummonerPageComponent = (summoner) => {
+  const [localSummoner, setLocalSummoner] = useState(summoner.summoner);
   const [displayGameMode, setDisplayGameMode] = useState("all");
   const [displayLane, setDisplayLane] = useState("overall");
-
-  document.title = summoner.summoner.name + "#" + summoner.summoner.tag;
+  const [newUser, setNewUser] = useState(false);
 
   // Whenever the user searches for a new summoner,
   // reset the useStates back to default
   useEffect(() => {
-    setDisplayGameMode("all");
-    setDisplayLane("overall");
-    window.scrollTo(0, 0);
+    // Avoid unnecessary updates
+    if (localSummoner !== summoner.summoner) {
+      setLocalSummoner(summoner.summoner);
+      setDisplayGameMode("all");
+      setDisplayLane("overall");
+      window.scrollTo(0, 0);
+    }
   }, [summoner]);
 
+  // Responsible for displaying the popup when the user is
+  // searching for a new summoner that does not exist in the
+  // database
+  useEffect(() => {
+    if (!localSummoner || !localSummoner.games?.totalGames) {
+      setNewUser(true);
+    } else {
+      setNewUser(false);
+    }
+  }, [localSummoner]);
+
+  useSummonerPolling(
+    `${localSummoner.name}#${localSummoner.tag}`,
+    localSummoner.region,
+    localSummoner.state,
+    (newSummoner) => {
+      if (newSummoner !== localSummoner) {
+        setLocalSummoner(newSummoner);
+      }
+    }
+  );
+
+  document.title = `${localSummoner.name}#${localSummoner.tag} - League Nemesis`;
+
   // Shorthand aliases to save on typing
-  const userData = summoner.summoner.userdata.user;
-  const enemyData = summoner.summoner.userdata.enemy;
+  const userData = localSummoner.userdata?.user;
+  const enemyData = localSummoner.userdata?.enemy;
 
-  // Tracks user's most played champion in every mode
-  const mostPlayedChampion =
+  // If the selected display gamemode is aram and the data for it exists,
+  // then set the displaying array to it, otherwise set it to an empty array.
+  // If aram wasn't selected set the displaying array to the specific
+  // gamemode & lane only if the data exists, otherwise set it to an empty array
+  const userChampionData =
     displayGameMode === "aram"
-      ? userData[displayGameMode]?.[0]?.champId
-      : userData[displayGameMode]?.[displayLane]?.[0]?.champId;
+      ? userData?.[displayGameMode] ?? []
+      : userData?.[displayGameMode]?.[displayLane] ?? [];
 
-  // Tracks user's LN champion in every mode
+  // Safely access the most played champion by a user
+  const mostPlayedChampion = userChampionData[0]?.champId ?? null;
+
+  // Same idea as userChampionData but tracks enemy data
   const enemyChampionData =
     displayGameMode === "aram"
       ? enemyData?.[displayGameMode] ?? []
       : enemyData?.[displayGameMode]?.[displayLane] ?? [];
 
-  // Safely access the first champion if it exists
+  // Safely access the most lost against champion aka the League Nemesis
   const leagueNemesisChampion = enemyChampionData[0] ?? null;
 
-  // Tracks user's game count in every mode
+  // Tracks user's game count in every mode if the data is available
   const gameCount =
     displayGameMode === "all"
-      ? summoner.summoner.games.totalGames
-      : summoner.summoner.games[displayGameMode];
+      ? localSummoner.games?.totalGames || 0
+      : localSummoner.games?.[displayGameMode] || 0;
 
   return (
     <div className="bg-summoner-page-bg bg-contain h-full">
@@ -55,27 +92,17 @@ const SummonerPageComponent = (summoner) => {
 
       <div className="h-full bg-gradient-to-r from-[#182B40] from-20% to-neutral-900 md:mx-64 pb-10">
         {/* Summoner info at the top of the page */}
-        {mostPlayedChampion ? (
-          <SummonerInfo
-            summonerName={summoner.summoner.name}
-            summonerTag={summoner.summoner.tag}
-            summonerLevel={summoner.summoner.level}
-            summonerIcon={summoner.summoner.icon}
-            mostPlayedChampion={mostPlayedChampion}
-          />
-        ) : (
-          <SummonerInfo
-            summonerName={summoner.summoner.name}
-            summonerTag={summoner.summoner.tag}
-            summonerLevel={summoner.summoner.level}
-            summonerIcon={summoner.summoner.icon}
-            mostPlayedChampion={userData["all"]["overall"][0]}
-          />
-        )}
+        <SummonerInfo
+          summonerName={localSummoner.name}
+          summonerTag={localSummoner.tag}
+          summonerLevel={localSummoner.level}
+          summonerIcon={localSummoner.icon}
+          mostPlayedChampion={mostPlayedChampion}
+        />
 
         {/* ie. Normals, ARAM, Ranked, etc */}
         <GameTypeBar
-          summoner={summoner} // Pass in summoner so that the GameTypeBar resets on new search
+          summoner={localSummoner} // When this value changes it resets GameTypeBar back to default values
           setDisplayGameMode={setDisplayGameMode}
         />
 
@@ -86,19 +113,19 @@ const SummonerPageComponent = (summoner) => {
           gameCount={gameCount}
         />
 
-        {/* Statistics correlating to the LN */}
+        {/* Statistics related to the LN */}
         <LeagueNemesisStatisticsBar champion={leagueNemesisChampion} />
 
-        {/* Detailed table view of champions based off role */}
+        {/* Detailed table of champions based off the lane selected */}
         <ChampionsTable
           columns={columns}
-          data={
-            displayGameMode === "aram"
-              ? summoner.summoner.userdata.enemy[displayGameMode]
-              : summoner.summoner.userdata.enemy[displayGameMode][displayLane]
-          }
+          data={enemyChampionData}
           setDisplayLane={setDisplayLane}
         />
+
+        <DialogPopup isOpen={newUser} setIsOpen={setNewUser}>
+          <NewUserModal></NewUserModal>
+        </DialogPopup>
       </div>
       <Footer />
     </div>

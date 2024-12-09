@@ -78,10 +78,12 @@ async function createReturnObjects(
 
     await processMatchList(puuid, matchList, enemy, user, numberOfGames, client);
 
-    console.log("(DataProcessing.ts) createReturnObjects(): User");
-    console.dir(user, { depth: null });
-    console.log("(DataProcessing.ts) createReturnObjects(): Enemy");
-    console.dir(enemy, { depth: null });
+    // console.log("(DataProcessing.ts) createReturnObjects(): User");
+    // console.dir(user, { depth: null });
+    // console.log("(DataProcessing.ts) createReturnObjects(): Enemy");
+    // console.dir(enemy, { depth: null });
+
+    console.log("Finished processing enemy and user data")
 
     return { enemy, user };
 }

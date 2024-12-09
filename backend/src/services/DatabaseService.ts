@@ -4,12 +4,14 @@
 // TODO: Create better way to handle errors. Potentially want to throw the errors to SummonerRoutes page so we can send a res msg
 import { SummonerProfile } from '../models/SummonerProfileModel.js';
 
-async function saveNewSummoner(summonerName, tag, region, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
+async function saveNewSummoner(summonerName, tag, region, PUUID, lastGameTimestamp = -1,
+    numberOfGames = {}, enemyStats = {}, userStats = {}, state = 'processing') {
     try {
-        if (!summonerName || !tag || !region || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
+        if (!summonerName || !tag || !region || !PUUID) {
             throw new Error('All required fields must be provided');
         }
 
+        // Create the new summoner object with default values for optional fields
         const newSummoner = {
             summonerName,
             tag,
@@ -18,12 +20,12 @@ async function saveNewSummoner(summonerName, tag, region, PUUID, lastGameTimesta
             lastGameTimestamp,
             numberOfGames,
             enemyStats,
-            userStats
+            userStats,
+            state
         };
 
-        await SummonerProfile.create(newSummoner).then(result => {
-            console.log(result);
-        })
+        const result = await SummonerProfile.create(newSummoner);
+        console.log('New summoner saved:', result);
 
         return true;
     } catch (error) {
@@ -32,27 +34,39 @@ async function saveNewSummoner(summonerName, tag, region, PUUID, lastGameTimesta
     }
 }
 
-async function updateSummonerByPUUID(summonerName, tag, region, PUUID, lastGameTimestamp, numberOfGames, enemyStats, userStats) {
+async function updateSummonerByPUUID(
+    summonerName,
+    tag,
+    region,
+    PUUID,
+    lastGameTimestamp,
+    numberOfGames,
+    enemyStats,
+    userStats
+) {
     try {
-        if (!summonerName || !tag || !region || !PUUID || !lastGameTimestamp || !enemyStats || !userStats) {
+        if (!summonerName || !tag || !region || !PUUID || !lastGameTimestamp
+            || !numberOfGames || !enemyStats || !userStats) {
             throw new Error('All required fields must be provided');
         }
 
         const update = {
             $set: {
-                summonerName: summonerName,
-                tag: tag,
-                region: region,
-                lastGameTimestamp: lastGameTimestamp,
-                numberOfGames: numberOfGames,
-                enemyStats: enemyStats,
-                userStats: userStats
+                summonerName,
+                tag,
+                region,
+                lastGameTimestamp,
+                numberOfGames,
+                enemyStats,
+                userStats,
+                state: 'ready'
             }
         };
 
-        const options = { new: true }; // Returns the updated document instead of old doc
+        const options = { new: true }; // Return the updated document
 
         const result = await SummonerProfile.findOneAndUpdate({ PUUID }, update, options);
+
         if (result) {
             console.log('(DatabaseService.ts) Successfully updated summoner:', result);
             return result;
@@ -60,7 +74,6 @@ async function updateSummonerByPUUID(summonerName, tag, region, PUUID, lastGameT
             console.log('(DatabaseService.ts) Summoner not found in database with the given PUUID:', PUUID);
             return null;
         }
-
     } catch (error) {
         console.error('(DatabaseService.ts) Error updating summoner in database:', error.message);
         throw error;
@@ -113,7 +126,16 @@ async function deleteSummonerByPUUID(PUUID) {
 async function checkForNewUserByPUUID(PUUID) {
     try {
         if (!PUUID) throw new Error('PUUID not defined');
-        return await SummonerProfile.exists({ PUUID });
+
+        const result = await SummonerProfile.exists({ PUUID });
+
+        if (result) {
+            console.log('(DatabaseService.ts::checkForNewUserByPUUID) Found user', PUUID);
+            return false;
+        } else {
+            console.log('(DatabaseService.ts::checkForNewUserByPUUID) User not found in database.');
+            return true;
+        }
     } catch (error) {
         console.error('(DatabaseService.ts) Error searching for new summoner from database: ', error.message);
         return false;
@@ -133,4 +155,32 @@ async function findUserBySummonerName(summonerName, region) {
     }
 }
 
-export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID, findUserBySummonerName };
+async function updateStateByPUUID(puuid, newState) {
+    try {
+        // Validate newState against allowed values
+        const allowedStates = ['processing', 'ready'];
+        if (!allowedStates.includes(newState)) {
+            throw new Error(`Invalid state: ${newState}. Allowed states are: ${allowedStates.join(', ')}`);
+        }
+
+        const result = await SummonerProfile.updateOne(
+            { PUUID: puuid },
+            { $set: { state: newState } }
+        );
+
+        if (!result) {
+            console.log(`No document found with PUUID: ${puuid}`);
+            return null;
+        }
+
+        console.log(`State successfully updated to '${newState}' for PUUID: ${puuid}`);
+        return true;
+    } catch (error) {
+        console.error(`Error updating state for PUUID ${puuid}:`, error.message);
+        throw error;
+    }
+}
+
+
+
+export { saveNewSummoner, getSummonerByPUUID, updateSummonerByPUUID, deleteSummonerByPUUID, checkForNewUserByPUUID, findUserBySummonerName, updateStateByPUUID };

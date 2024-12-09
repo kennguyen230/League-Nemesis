@@ -6,7 +6,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
 
   useEffect(() => {
     setActiveButton("all");
-  }, [summoner]);
+  }, [summoner.name]);
 
   function handleGameModeClick(e) {
     const gameMode = e.target.id;
