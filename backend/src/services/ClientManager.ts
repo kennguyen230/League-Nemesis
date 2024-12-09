@@ -26,7 +26,7 @@ async function initializeClient(region) {
                 enable: {
                     api: false,
                     dragon: {
-                        champions: true,
+                        champions: false,
                         items: false,
                         runes: false,
                         summonerSpells: false,
