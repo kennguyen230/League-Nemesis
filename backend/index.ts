@@ -9,7 +9,7 @@ import summonerRoutes from './src/routes/summonerRoutes.js';
 import { connectToDatabase } from './src/db.js'
 
 import { serve } from "inngest/express"
-import { inngest, functions } from "./src/inngest/inngest.ts";
+import { inngest, functions } from "./src/inngest/inngest.js";
 
 const app = express();
 
@@ -24,9 +24,9 @@ app.use('/summoner', summonerRoutes);
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
-app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
-});
+// app.listen(3000, () => {
+//     console.log('Server running on http://localhost:3000');
+// });
 
 connectToDatabase().catch((error) => {
     console.error('Failed to connect to MongoDB', error);
