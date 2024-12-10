@@ -35,7 +35,10 @@ const SummonerPageComponent = (summoner) => {
   // searching for a new summoner that does not exist in the
   // database
   useEffect(() => {
-    if (!localSummoner || !localSummoner.games?.totalGames) {
+    if (
+      !localSummoner ||
+      (!localSummoner.games?.totalGames && localSummoner.state != "ready")
+    ) {
       setNewUser(true);
     } else {
       setNewUser(false);
