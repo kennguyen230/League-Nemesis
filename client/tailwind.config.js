@@ -4,6 +4,7 @@ export const content = [
   './components/**/*.{ts,tsx}',
   './app/**/*.{ts,tsx}',
   './src/**/*.{ts,tsx}',
+  './src/layouts/*.{ts,tsx}'
 ];
 export const theme = {
   container: {
