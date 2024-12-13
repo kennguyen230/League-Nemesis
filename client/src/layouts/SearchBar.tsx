@@ -148,7 +148,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
         <Button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="hidden sm:block bg-[#182B40] font-vollkorn md:flex md:justify-center md:items-center md:w-28 mt-2 drop-shadow-md"
+          className="hidden sm:block bg-[#182B40] font-vollkorn md:flex md:justify-center md:items-center md:w-28 mt-2 drop-shadow-md hover:bg-slate-900/90"
         >
           {isLoading ? <Loader2 className="animate-spin" /> : "Search"}
         </Button>
