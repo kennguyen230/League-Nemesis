@@ -21,7 +21,7 @@ export function DialogPopup({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="bg-[#11161D] text-white font-vollkorn-para sm:max-w-[50rem] p-14">
+      <DialogContent className="bg-[#11161D] text-white font-vollkorn-para sm:max-w-[50rem] p-14 dark:bg-[#11161D]">
         <DialogHeader>
           <DialogTitle className="text-white text-left">
             <h1 className="text-xl">{title}</h1>

@@ -59,7 +59,7 @@ export function HamburgerMenu() {
             ></i>
           </Button>
         </SheetTrigger>
-        <SheetContent className="bg-[#11161D] w-96">
+        <SheetContent className="bg-[#11161D] w-96 dark:bg-[#11161D]">
           <SheetHeader className="mt-16">
             <SheetTitle className="text-right font-vollkorn text-white pr-3 text-xl">
               League Nemesis

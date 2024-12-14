@@ -20,7 +20,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="all"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
-          ${activeButton === "all" ? "bg-[#4377B5]" : "bg-gray-400"}`}
+          ${activeButton === "all" ? "bg-[#4377B5]" : "bg-gray-400"} dark:bg-[#11161D]`}
       >
         All Matches
       </Button>
@@ -28,7 +28,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="normals"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
-          ${activeButton === "normals" ? "bg-[#4377B5] " : "bg-gray-400 "}`}
+          ${activeButton === "normals" ? "bg-[#4377B5] " : "bg-gray-400 "} dark:bg-[#11161D]`}
       >
         Normals
       </Button>
@@ -36,7 +36,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="ranked"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
-          ${activeButton === "ranked" ? "bg-[#4377B5] " : "bg-gray-400 "}`}
+          ${activeButton === "ranked" ? "bg-[#4377B5] " : "bg-gray-400 "} dark:bg-[#11161D]`}
       >
         Ranked
       </Button>
@@ -44,7 +44,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="flex"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
-          ${activeButton === "flex" ? "bg-[#4377B5] " : "bg-gray-400 "}`}
+          ${activeButton === "flex" ? "bg-[#4377B5] " : "bg-gray-400 "} dark:bg-[#11161D]`}
       >
         Flex
       </Button>
@@ -52,7 +52,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="aram"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
-          ${activeButton === "aram" ? "bg-[#4377B5] " : "bg-gray-400 "}`}
+          ${activeButton === "aram" ? "bg-[#4377B5] " : "bg-gray-400 "} dark:bg-[#11161D]`}
       >
         ARAM
       </Button>
