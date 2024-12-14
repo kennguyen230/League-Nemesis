@@ -2,7 +2,8 @@
 export const content = [
   './src/**/*.{ts,tsx,html}',
   './index.html', // Ensure the root HTML file is scanned
-  './node_modules/@shadcn/ui/**/*.js'
+  './node_modules/@shadcn/ui/**/*.js',
+  "./@/components/**/*.{ts,tsx}",
 ];
 export const theme = {
   container: {
