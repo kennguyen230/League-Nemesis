@@ -1,10 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export const content = [
-  './pages/**/*.{ts,tsx}',
-  './components/**/*.{ts,tsx}',
-  './app/**/*.{ts,tsx}',
-  './src/**/*.{ts,tsx}',
-  './src/layouts/*.{ts,tsx}'
+  './src/**/*.{ts,tsx,html}',
+  './index.html', // Ensure the root HTML file is scanned
+  './node_modules/@shadcn/ui/**/*.js'
 ];
 export const theme = {
   container: {
