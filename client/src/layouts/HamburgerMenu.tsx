@@ -52,7 +52,7 @@ export function HamburgerMenu() {
       {/* The RHS sheet menu */}
       <Sheet>
         <SheetTrigger asChild>
-          <Button className="bg-[#11161D] hover:rounded-lg hover:bg-[#182B40] dark:bg-[#11161D]">
+          <Button className="bg-[#11161D] hover:rounded-lg hover:bg-[#182B40] dark:bg-[#11161D] dark:hover:bg-[#182B40]">
             <i
               className="fa-solid fa-bars fa-xl"
               style={{ color: "#ffffff" }}
