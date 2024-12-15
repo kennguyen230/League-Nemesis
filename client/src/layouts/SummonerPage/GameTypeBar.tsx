@@ -20,7 +20,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="all"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
-          ${activeButton === "all" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
+          ${activeButton === "all" ? "bg-[#4377B5] dark:bg-[#4377B5] dark:hover:bg-transparent" : "bg-gray-400 dark:bg-gray-400 dark:hover:bg-transparent"} `}
       >
         All Matches
       </Button>
@@ -28,7 +28,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="normals"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
-          ${activeButton === "normals" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
+          ${activeButton === "normals" ? "bg-[#4377B5] dark:bg-[#4377B5] dark:hover:bg-transparent" : "bg-gray-400 dark:bg-gray-400 dark:hover:bg-transparent"} `}
       >
         Normals
       </Button>
@@ -36,7 +36,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="ranked"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
-          ${activeButton === "ranked" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
+          ${activeButton === "ranked" ? "bg-[#4377B5] dark:bg-[#4377B5] dark:hover:bg-transparent" : "bg-gray-400 dark:bg-gray-400 dark:hover:bg-transparent"} `}
       >
         Ranked
       </Button>
@@ -44,7 +44,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="flex"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
-          ${activeButton === "flex" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
+          ${activeButton === "flex" ? "bg-[#4377B5] dark:bg-[#4377B5] dark:hover:bg-transparent" : "bg-gray-400 dark:bg-gray-400 dark:hover:bg-transparent"} `}
       >
         Flex
       </Button>
@@ -52,7 +52,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
         id="aram"
         onClick={handleGameModeClick}
         className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
-          ${activeButton === "aram" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
+          ${activeButton === "aram" ? "bg-[#4377B5] dark:bg-[#4377B5] dark:hover:bg-transparent" : "bg-gray-400 dark:bg-gray-400 dark:hover:bg-transparent"} `}
       >
         ARAM
       </Button>
