@@ -52,14 +52,14 @@ export function HamburgerMenu() {
       {/* The RHS sheet menu */}
       <Sheet>
         <SheetTrigger asChild>
-          <Button className="bg-[#11161D] hover:rounded-lg hover:bg-[#182B40]">
+          <Button className="bg-[#11161D] hover:rounded-lg hover:bg-[#182B40] dark:bg-[#11161D] dark:hover:bg-[#182B40]">
             <i
               className="fa-solid fa-bars fa-xl"
               style={{ color: "#ffffff" }}
             ></i>
           </Button>
         </SheetTrigger>
-        <SheetContent className="bg-[#11161D] w-96">
+        <SheetContent className="bg-[#11161D] w-96 dark:bg-[#11161D]">
           <SheetHeader className="mt-16">
             <SheetTitle className="text-right font-vollkorn text-white pr-3 text-xl">
               League Nemesis

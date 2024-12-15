@@ -10,7 +10,7 @@ const Header = ({ showSearchBar }) => {
       <div className="flex justify-between items-center w-full md:w-auto">
         {/* Top left logo */}
         <Link to="/">
-          <img src={LNLogoSmall} alt="" className="w-20 ml-1 md:w-28" />
+          <img src={LNLogoSmall} alt="" className="w-24 ml-1 md:w-28" />
         </Link>
 
         {/* Top right hamburger menu for small screens */}

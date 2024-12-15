@@ -76,7 +76,7 @@ export function ChampionsTable<TData, TValue>({
       <div className="flex items-center py-4 gap-2">
         {/* Dropdown */}
         <Select onValueChange={setDisplayLane}>
-          <SelectTrigger className="w-[180px] text-gray-400">
+          <SelectTrigger className="w-[180px] text-gray-400 dark:bg-white">
             <SelectValue placeholder="Overall" />
           </SelectTrigger>
           <SelectContent className="font-vollkorn w-[150px]">
@@ -104,11 +104,14 @@ export function ChampionsTable<TData, TValue>({
       {/* The table itself */}
       <div className="border rounded-sm">
         <Table>
-          <TableHeader className="bg-[#3A3A3A]">
+          <TableHeader className="bg-[#3A3A3A] dark:bg-[#3A3A3A]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead className="text-white" key={header.id}>
+                  <TableHead
+                    className="text-white dark:text-white"
+                    key={header.id}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -150,12 +153,13 @@ export function ChampionsTable<TData, TValue>({
       </div>
 
       {/* Next & previous buttons */}
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2 py-4 ">
         <Button
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className="dark:bg-white"
         >
           Previous
         </Button>
@@ -164,6 +168,7 @@ export function ChampionsTable<TData, TValue>({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className="dark:bg-white"
         >
           Next
         </Button>
