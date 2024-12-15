@@ -104,12 +104,12 @@ export function ChampionsTable<TData, TValue>({
       {/* The table itself */}
       <div className="border rounded-sm">
         <Table>
-          <TableHeader className="bg-[#3A3A3A] dark:bg-[#3A3A3A]">
+          <TableHeader className="bg-[#3A3A3A] dark:bg-[#3A3A3A] dark:hover:bg-white">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
-                    className="text-white dark:text-white dark:hover:bg-white"
+                    className="text-white dark:text-white"
                     key={header.id}
                   >
                     {header.isPlaceholder
