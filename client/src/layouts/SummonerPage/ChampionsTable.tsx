@@ -104,7 +104,7 @@ export function ChampionsTable<TData, TValue>({
       {/* The table itself */}
       <div className="border rounded-sm">
         <Table>
-          <TableHeader className="bg-[#3A3A3A] dark:bg-[#3A3A3A] dark:hover:bg-white">
+          <TableHeader className="bg-[#3A3A3A] dark:bg-[#3A3A3A]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
