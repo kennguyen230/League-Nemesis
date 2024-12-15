@@ -15,11 +15,11 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
   }
 
   return (
-    <div className="flex bg-gray-600 font-vollkorn overflow-x-auto whitespace-nowrap text-white dark:text-white">
+    <div className="flex bg-gray-600 font-vollkorn overflow-x-auto whitespace-nowrap text-white">
       <Button
         id="all"
         onClick={handleGameModeClick}
-        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
+        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
           ${activeButton === "all" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
       >
         All Matches
@@ -27,7 +27,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
       <Button
         id="normals"
         onClick={handleGameModeClick}
-        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
+        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
           ${activeButton === "normals" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
       >
         Normals
@@ -35,7 +35,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
       <Button
         id="ranked"
         onClick={handleGameModeClick}
-        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
+        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
           ${activeButton === "ranked" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
       >
         Ranked
@@ -43,7 +43,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
       <Button
         id="flex"
         onClick={handleGameModeClick}
-        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
+        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
           ${activeButton === "flex" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
       >
         Flex
@@ -51,7 +51,7 @@ const GameTypeBar = ({ summoner, setDisplayGameMode }) => {
       <Button
         id="aram"
         onClick={handleGameModeClick}
-        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32
+        className={`w-28 min-w-28 h-7 text-s border border-gray-300 md:w-32 dark:text-white
           ${activeButton === "aram" ? "bg-[#4377B5] dark:bg-[#4377B5]" : "bg-gray-400 dark:bg-gray-400"} `}
       >
         ARAM
