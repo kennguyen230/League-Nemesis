@@ -8,6 +8,8 @@ export const useSummonerPolling = (
   initialState: "processing" | "ready",
   setLocalSummoner: (data: SummonerData) => void
 ) => {
+  console.log("Polling for user: ", summonerNameAndTag);
+
   // Setup a query that calls the polling route to check the status of the document.
   // This only needs to be done if the state of the document was 'processing' to begin with.
   // It will continue to poll every 5000ms and will only stop when the status of the document is 'ready'.

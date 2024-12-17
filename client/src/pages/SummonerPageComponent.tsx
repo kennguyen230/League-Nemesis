@@ -35,6 +35,9 @@ const SummonerPageComponent = (summoner) => {
   // searching for a new summoner that does not exist in the
   // database
   useEffect(() => {
+    // If localSummoner gets changed by the polling function,
+    // check to see if the user has any games. If they don't then
+    // it's likely they're a new user in the database
     if (
       !localSummoner ||
       (!localSummoner.games?.totalGames && localSummoner.state != "ready")
