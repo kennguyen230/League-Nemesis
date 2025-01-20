@@ -9,15 +9,17 @@ import RegionSelector from "./RegionSelector";
 const SearchBar = ({ height, fontSize, isHomePage }) => {
   // User search bar keyboard input
   const [summonerName, setSummonerName] = useState("");
-  // Keeps track of auto suggested users
+  // Keeps track of auto-suggested users
   const [suggestions, setSuggestions] = useState<User[]>([]);
-  // Keeps track of the current region being searched for based off the dropdown menu
+  // Keeps track of the current region being searched for based on the dropdown menu
   const [region, setRegion] = useState("na");
   // Flag for rendering spinner
   const [isLoading, setIsLoading] = useState(false);
-  // Indicates whether the autosuggest dropdown is open
+  // Indicates whether the auto-suggest dropdown is open
   const [isOpen, setIsOpen] = useState(false);
-  // Routes users to this url after hitting enter or Search
+  // Tracks the focused suggestion for keyboard navigation
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  // Routes users to this URL after hitting enter or Search
   const navigate = useNavigate({ from: "/summoner/$region/$id" });
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -27,7 +29,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
     region: string;
   }
 
-  // Auto suggest api call
+  // Auto-suggest API call
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (summonerName.length < 2) {
@@ -49,8 +51,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
     return () => clearTimeout(debounceFetch);
   }, [summonerName, region]);
 
-  // Sets state to 'loading', checks for new user for popup,
-  // and begins routing to summoner page
+  // Perform search and navigate to the summoner page
   const performSearch = async (name) => {
     setIsLoading(true);
 
@@ -64,12 +65,9 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
       });
   };
 
-  // Returns early if already loading a user, otherwise trim the
-  // input and check for a tag
+  // Handle form submission
   const handleSubmit = async (event) => {
-    if (isLoading) {
-      return;
-    }
+    if (isLoading) return;
 
     event.preventDefault();
     const trimmedName = summonerName.trim();
@@ -77,9 +75,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
     await performSearch(trimmedName);
   };
 
-  // For when the user clicks one of the suggested accounts in the
-  // auto suggest dropdown. Take the summoner in the row wholesale,
-  // close the dropdown, and begin routing
+  // Handle suggestion click
   const handleSuggestionClick = async (event, suggestion) => {
     event.preventDefault();
 
@@ -89,10 +85,48 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
     await performSearch(fullName);
   };
 
+  // Handle input change
   const handleInputChange = (event) => {
     setSummonerName(event.target.value);
+    setFocusedIndex(-1); // Reset focused index when typing
   };
 
+  // Handle key events for the search bar and suggestions
+  const handleKeyDown = (event) => {
+    if (!isOpen || suggestions.length === 0) return;
+
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        setFocusedIndex((prevIndex) =>
+          prevIndex < suggestions.length - 1 ? prevIndex + 1 : 0
+        );
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        setFocusedIndex((prevIndex) =>
+          prevIndex > 0 ? prevIndex - 1 : suggestions.length - 1
+        );
+        break;
+      case "Enter":
+        event.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < suggestions.length) {
+          const selectedUser = suggestions[focusedIndex];
+          const fullName = `${selectedUser.summonerName}#${selectedUser.tag}`;
+          setSummonerName(fullName);
+          setIsOpen(false);
+          performSearch(fullName);
+        }
+        break;
+      case "Escape":
+        setIsOpen(false);
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Close dropdown when clicking outside
   const handleClickOutside = (e) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       setIsOpen(false);
@@ -113,25 +147,30 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
       >
         <RegionSelector selectedRegion={region} setSelectedRegion={setRegion} />
 
+        {/* Search bar */}
         <form onSubmit={handleSubmit} className="w-full flex font-vollkorn">
           <Input
             placeholder="Summoner Name #Tag"
             className={`${fontSize} border-none w-full h-full rounded-none rounded-r-md focus-visible:ring-offset-0 focus-visible:ring-0`}
             onChange={handleInputChange}
             value={summonerName}
+            onKeyDown={handleKeyDown} // Handle key presses
           />
         </form>
 
+        {/* Auto-suggestion popup */}
         {isOpen && suggestions.length > 0 && (
           <div
             ref={dropdownRef}
             className="absolute top-full left-16 md:left-24 w-full max-w-[18rem] md:max-w-md bg-white border border-gray-200 rounded-md shadow-md overflow-y-auto max-h-48 z-10 no-scrollbar mt-1"
           >
-            {suggestions.map((user) => (
+            {suggestions.map((user, index) => (
               <button
                 key={user.summonerName + user.tag}
                 onClick={(event) => handleSuggestionClick(event, user)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left font-vollkorn border-b"
+                className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left font-vollkorn border-b ${
+                  index === focusedIndex ? "bg-gray-200" : ""
+                }`}
                 role="menuitem"
               >
                 <div className="border rounded-sm inline bg-[#182B40] mr-1">
@@ -144,6 +183,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
         )}
       </div>
 
+      {/* Search button or loader for homepage only, not for the header */}
       {isHomePage && (
         <Button
           onClick={handleSubmit}
@@ -154,6 +194,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
         </Button>
       )}
 
+      {/* Spinner for header */}
       {isLoading && (
         <Loader2
           className={`${isHomePage ? "md:hidden" : "visible"} mt-3 md:mt-0 animate-spin text-white`}
