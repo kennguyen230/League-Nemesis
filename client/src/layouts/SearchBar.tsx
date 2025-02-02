@@ -5,6 +5,11 @@ import { autoSuggestUsers } from "@/data/api";
 import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import RegionSelector from "./RegionSelector";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const SearchBar = ({ height, fontSize, isHomePage }) => {
   // User search bar keyboard input
@@ -185,13 +190,29 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
 
       {/* Search button or loader for homepage only, not for the header */}
       {isHomePage && (
-        <Button
-          onClick={handleSubmit}
-          disabled={isLoading}
-          className="hidden sm:block bg-[#182B40] font-vollkorn md:flex md:justify-center md:items-center md:w-28 mt-2 drop-shadow-md hover:bg-slate-900/90 dark:bg-[#182B40] dark:hover:bg-slate-900/90 dark:text-white"
-        >
-          {isLoading ? <Loader2 className="animate-spin" /> : "Search"}
-        </Button>
+        <div className="flex gap-2 justify-center items-center mt-2">
+          <Button
+            onClick={handleSubmit}
+            disabled={isLoading}
+            className="hidden sm:block bg-[#182B40] font-vollkorn md:flex md:justify-center md:items-center md:w-28 drop-shadow-md hover:bg-slate-900/90 dark:bg-[#182B40] dark:hover:bg-slate-900/90 dark:text-white"
+          >
+            {isLoading ? <Loader2 className="animate-spin" /> : "Search"}
+          </Button>
+          <Popover>
+            <PopoverTrigger>
+              <div className="w-6 h-6 bg-[#182B40] rounded-xl flex items-center justify-center hover:bg-slate-900/90 dark:bg-[#182B40] dark:hover:bg-slate-900/90 dark:text-white">
+                <i className="fa-sharp fa-solid fa-question fa-sm text-white"></i>
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="bg-[#182B40] font-vollkorn-para text-white text-xs mt-3 p-5 border-[#182B40] opacity-95 tracking-wider">
+              Type in your Summoner Name plus your Tag and select the
+              appropriate region.
+              <br></br>
+              <br></br>
+              Eg. Doublelift #NA1
+            </PopoverContent>
+          </Popover>
+        </div>
       )}
 
       {/* Spinner for header */}

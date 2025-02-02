@@ -29,7 +29,7 @@ const SummonerInfo: React.FC<SummonerInfoProps> = ({
         {/* Summoner Icon */}
         <img
           src={summonerIcon}
-          alt="summonerIcon"
+          alt={"icon"}
           className="w-16 rounded-md border md:w-24"
         />
 
