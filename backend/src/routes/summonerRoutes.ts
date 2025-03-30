@@ -5,7 +5,7 @@
 import express from 'express';
 import { checkForNewUserByPUUID, findUserBySummonerName } from '../services/DatabaseService.js';
 import { parseSummonerInput, createDefaultSummoner, getExistingSummoner } from '../controllers/SummonerController.js';
-import { getPUUID, getPlayerInfo } from '../services/RiotGamesService.js';
+import { getPlayerInfo } from '../services/RiotGamesService.js';
 import { getClient } from '../services/ClientManager.js'
 import { inngest } from '../inngest/inngest.js';
 
@@ -23,6 +23,47 @@ router.get('/autoSuggestUsers', async (req, res) => {
         res.json(suggestions);
     } catch (error) {
         res.status(500).json({ error: "Server error" });
+    }
+})
+
+router.get("/testQuerySummoner", async (req, res) => {
+    try {
+        console.log("(summonerRoutes.ts::testQuerySummoner) Inside testQuerySummoner route!!!");
+
+        // Grab params from client
+        const { summonerName, tag } = parseSummonerInput(req.query.summonerNameAndTag);
+        let region = req.query.region;
+
+        // Validate input for proper summoner name and tag lengths
+        const summonerNameRegex = /^[a-zA-Z0-9 ]{3,16}$/;
+        const tagRegex = /^[a-zA-Z0-9]{2,5}$/;
+        if (!summonerName || !tag || !summonerNameRegex.test(summonerName) || !tagRegex.test(tag)) {
+            console.log("(summonerRoutes.ts::testQuerySummoner) Invalid summoner name or tag");
+            return res.status(400).json({ error: "Invalid summoner name or tag." });
+        }
+        if (typeof region !== 'string') {
+            return res.status(400).send('Invalid region input');
+        }
+        region = region.toLowerCase();
+
+        // Get player info from Riot, including the summoner name and tag
+        // that way the capitalization is correct
+        let puuid;
+        let summoner_name;
+        let summoner_tag;
+        try {
+            const playerInfoObject = await getPlayerInfo(summonerName, tag, region);
+            summoner_name = playerInfoObject.gameName;
+            summoner_tag = playerInfoObject.tagLine;
+            puuid = playerInfoObject.puuid;
+        } catch (error) {
+            return res
+                .status(404)
+                .json({ error: "Querying error. No PUUID associated with this summoner name and tag." });
+        }
+    } catch (error) {
+        console.error("(summonerRoutes.ts::testQuerySummoner) Unexpected error:", error);
+        return res.status(500).json({ error: "An unexpected error occurred." });
     }
 })
 
@@ -44,10 +85,7 @@ router.get("/querySummoner", async (req, res) => {
         if (typeof region !== 'string') {
             return res.status(400).send('Invalid region input');
         }
-        region = region.toLowerCase(); // Shieldbow only works with lowercase region names
-
-        // Get an instance of the client
-        const client = await getClient(region);
+        region = region.toLowerCase();
 
         // Get player info from Riot, including the summoner name and tag
         // that way the capitalization is correct
@@ -55,10 +93,10 @@ router.get("/querySummoner", async (req, res) => {
         let summoner_name;
         let summoner_tag;
         try {
-            const playerInfo = await getPlayerInfo(summonerName, tag, client);
-            summoner_name = playerInfo.username;
-            summoner_tag = playerInfo.userTag;
-            puuid = playerInfo.playerId;
+            const playerInfoObject = await getPlayerInfo(summonerName, tag, region);
+            summoner_name = playerInfoObject.gameName;
+            summoner_tag = playerInfoObject.tagLine;
+            puuid = playerInfoObject.puuid;
         } catch (error) {
             return res
                 .status(404)
@@ -72,7 +110,7 @@ router.get("/querySummoner", async (req, res) => {
         if (isNew) {
             const newUserObject = await createDefaultSummoner(summoner_name, summoner_tag, region, puuid, client);
 
-            console.log("(summonerRoutes.ts::querySummoner) New summoner detected. Queuing data fetch.");
+            console.log("(summonerRoutes.ts::querySummoner) New summoner detected. Queing data fetching.");
             await inngest.send({
                 name: "fetchdata",
                 data: {
@@ -87,7 +125,7 @@ router.get("/querySummoner", async (req, res) => {
         } else {
             const existingUserObject = await getExistingSummoner(puuid, region, client);
 
-            console.log("(summonerRoutes.ts::querySummoner) Existing summoner detected. Queuing data fetch.");
+            console.log("(summonerRoutes.ts::querySummoner) Existing summoner detected. Queuing data fetching.");
             await inngest.send({
                 name: "fetchdata",
                 data: {

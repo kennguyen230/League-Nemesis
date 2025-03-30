@@ -26,7 +26,7 @@ async function initializeClient(region) {
                 enable: {
                     api: false,
                     dragon: {
-                        champions: false,
+                        champions: true,
                         items: false,
                         runes: false,
                         summonerSpells: false,
@@ -34,17 +34,17 @@ async function initializeClient(region) {
                 }
             },
             fetch: {
-                champions: false,
+                champions: true,
                 items: false,
                 runes: false,
                 summonerSpells: false
             },
-            version: "14.22",
+            // version: "14.22",
         });
         // Store the initialized client in the clientsByRegion object
         clientsByRegion[region] = client;
 
-        await client.updatePatch('14.22', false);
+        // await client.updatePatch('14.22', false);
     }
     // Return the client instance for the requested region
     return clientsByRegion[region];

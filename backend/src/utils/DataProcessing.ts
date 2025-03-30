@@ -78,11 +78,6 @@ async function createReturnObjects(
 
     await processMatchList(puuid, matchList, enemy, user, numberOfGames, client);
 
-    // console.log("(DataProcessing.ts) createReturnObjects(): User");
-    // console.dir(user, { depth: null });
-    // console.log("(DataProcessing.ts) createReturnObjects(): Enemy");
-    // console.dir(enemy, { depth: null });
-
     console.log("Finished processing enemy and user data")
 
     return { enemy, user };
@@ -227,6 +222,9 @@ async function processMatchList(
             )
         );
 
+        console.log("@TEST matchDetails size: ", matchDetails.length);
+
+        let i = 0;
         matchDetails.forEach((match) => {
             if (!match) return; // Skip if match details couldn't be fetched
 
@@ -348,6 +346,9 @@ async function processMatchList(
                         break;
                 }
             });
+
+            console.log("@TEST i: ", i);
+            i++;
         });
     } catch (error) {
         console.error("(DataProcessing.ts) Error in processMatchList", error);

@@ -22,6 +22,10 @@ async function fetchUserData(summonerName, tag, region, client, puuid) {
             console.log("(SummonerController.ts) LGTS from DB: ", lastGameTimestamp);
 
             numberOfGames = db_returnObject.numberOfGames;
+            console.log("@TEST numberOfGames:", numberOfGames);
+        }
+        else {
+            return false;
         }
 
         // Fetch new data from Riot

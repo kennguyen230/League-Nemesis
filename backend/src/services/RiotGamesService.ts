@@ -3,36 +3,42 @@
  */
 
 /* CONSTANTS */
-const COUNT = 50; // How many game we fetch per call
-const NEW_USER_ML_SIZE = 50; // How many games we hope to fetch for a new user's match list array
-
-async function getPUUID(summonerName, tag, client) {
-    try {
-        const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
-        return summoner.playerId;
-    } catch (error) {
-        console.error("(RiotGamesService.ts) Error in getPUUID(). Error:", error);
-        throw new Error(`Error retrieving account information for ${summonerName}`);
-    }
+import axios from "axios";
+const COUNT = 20; // How many game we fetch per call
+const NEW_USER_ML_SIZE = 20; // How many games we hope to fetch for a new user's match list array
+const regionUrlMap = {
+    "na": "https://americas.api.riotgames.com",
+    "lan": "https://americas.api.riotgames.com",
+    "las": "https://american.api.riotgames.com",
+    "br": "https://americas.api.riotgames.com",
+    "euw": "https://europe.api.riotgames.com",
+    "eune": "https://europe.api.riotgames.com",
+    "tr": "https://europe.api.riotgames.com",
+    "ru": "https://europe.api.riotgames.com",
+    "kr": "https://asia.api.riotgames.com",
+    "jp": "https://asia.api.riotgames.com",
+    "tw": "https://asia.api.riotgames.com",
+    "oce": "https://asia.api.riotgames.com",
+    "sg": "https://asia.api.riotgames.com",
+    "th": "https://asia.api.riotgames.com",
+    "vn": "https://asia.api.riotgames.com",
+    "ph": "https://asia.api.riotgames.com",
+    "pbe": "https://americas.api.riotgames.com"
 }
 
-async function getPlayerInfo(summonerName, tag, client) {
-    try {
-        const summoner = await client.accounts.fetchByNameAndTag(summonerName, tag);
+async function getPlayerInfo(summonerName, tag, region) {
+    const APICallString =
+        regionUrlMap[region] + "/riot/account/v1/accounts/by-riot-id/" + summonerName + "/" + tag;
 
-        if (!summoner || !summoner.username || !summoner.userTag || !summoner.playerId) {
-            throw new Error(`Incomplete data for summoner ${summonerName}`);
-        }
-
-        return {
-            username: summoner.username,
-            userTag: summoner.userTag,
-            playerId: summoner.playerId,
-        };
-    } catch (error) {
-        console.error(`(RiotGamesService.ts) Error in getPUUID(). Error:`, error);
-        throw new Error(`Error retrieving account information for ${summonerName}`);
-    }
+    return axios
+        .get(APICallString)
+        .then(response => {
+            return response.data
+        })
+        .catch(function (error) {
+            console.error(`(RiotGamesService.ts) Error in getPUUID(). Error:`, error.code);
+            throw new Error(`Error retrieving account information for ${summonerName}`);
+        })
 }
 
 async function getPlayerIcon(puuid, client) {
@@ -125,7 +131,9 @@ async function getNewUserMatchlist(puuid, client) {
 
         let matchList = await summoner.fetchMatchList({ count: COUNT });
         let length = matchList.length;
+        console.log("@TEST matchlist length: ", length);
         let lastMatchInList = await client.matches.fetch(matchList[length - 1]);
+        console.log("@TEST last match in list: ", lastMatchInList);
         let currLastGameTimestamp = Math.trunc(lastMatchInList.endTimestamp / 1000);
 
         // This loop iterates until we've fetched NEW_USER_ML_SIZE number of games for a new user
@@ -147,7 +155,7 @@ async function getNewUserMatchlist(puuid, client) {
                     console.error("(RiotGamesService.ts) Fetched an invalid match. Exiting with remaining match list.", innerError)
                     break;
                 } else {
-                    throw innerError; // Rethrows error we encountered an erorr that wasnt 404
+                    throw innerError; // Rethrows error we encountered an error that wasnt 404
                 }
             }
         }
@@ -176,6 +184,6 @@ async function getLastGameTimestamp(matchList, client) {
     }
 }
 
-export { getPUUID, getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel, getPlayerInfo }
+export { getRecentGames, getLastGameTimestamp, getPlayerIcon, getPlayerLevel, getPlayerInfo }
 
 
