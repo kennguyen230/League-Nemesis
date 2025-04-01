@@ -209,7 +209,7 @@ const SearchBar = ({ height, fontSize, isHomePage }) => {
               appropriate region.
               <br></br>
               <br></br>
-              Eg. Doublelift #NA1
+              Eg. Doublelift #NA01
             </PopoverContent>
           </Popover>
         </div>
